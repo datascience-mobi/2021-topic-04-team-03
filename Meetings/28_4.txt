@@ -1,3 +1,4 @@
 Fragen:
 
 1. Woher kommen die Datensätze? Gibt es Papers dazu? Wie wurden die Bilder erzeugt?
+2. Müssen wir unsere Besprechungsdateien auch auf github hochladen?
