@@ -3,6 +3,7 @@ import numpy
 from matplotlib import pyplot as plt
 
 #open image using Pillow
+#you probably have to alter the path to the image
 image44 = Image.open('dna-44.png')
 
 #make numpy array
