@@ -4,5 +4,10 @@
 
 #image.show()
 
+#To open tif (but also png) images
+
+import skimage.io
+img = skimage.io.imread('your/path/to/img.tif')
+imshow(img)
 
 
