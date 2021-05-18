@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 #open image using Pillow
 #you probably have to alter the path to the image
 
-##Dataset 1
+#Dataset 1
 N2DH_GOWT1_t01 = Image.open('t01.jpg')
 N2DH_GOWT1_t21 = Image.open('t21.jpg')
 N2DH_GOWT1_t31 = Image.open('t31.jpg')
@@ -13,7 +13,7 @@ N2DH_GOWT1_t39 = Image.open('t39.jpg')
 N2DH_GOWT1_t52 = Image.open('t52.jpg')
 N2DH_GOWT1_t72 = Image.open('t72.jpg')
 
-##Dataset 1 gt
+#Dataset 1 gt
 N2DH_GOWT1_gt01 = Image.open('man_seg01.jpg')
 N2DH_GOWT1_gt21 = Image.open('man_seg21.jpg')
 N2DH_GOWT1_gt31 = Image.open('man_seg31.jpg')
@@ -21,19 +21,19 @@ N2DH_GOWT1_gt39 = Image.open('man_seg39.jpg')
 N2DH_GOWT1_gt52 = Image.open('man_seg52.jpg')
 N2DH_GOWT1_gt72 = Image.open('man_seg72.jpg')
 
-##Dataset 2
+#Dataset 2
 N2DL_HeLa_t13 = Image.open('t13.jpg')
 N2DL_HeLa_t52 = Image.open('t52.jpg')
 N2DL_HeLa_t75 = Image.open('t75.jpg')
 N2DL_HeLa_t79 = Image.open('t79.jpg')
 
-##Dataset 2 gt
+#Dataset 2 gt
 N2DL_HeLa_gt13 = Image.open('man_seg13.jpg')
 N2DL_HeLa_gt52 = Image.open('man_seg52.jpg')
 N2DL_HeLa_gt75 = Image.open('man_seg75.jpg')
 N2DL_HeLa_gt79 = Image.open('man_seg79.jpg')
 
-##Dataset 3
+#Dataset 3
 NIH3T3_dna_0 = Image.open('dna-0.jpg')
 NIH3T3_dna_1 = Image.open('dna-1.jpg')
 NIH3T3_dna_26 = Image.open('dna-26.jpg')
@@ -53,7 +53,7 @@ NIH3T3_dna_46 = Image.open('dna-46.jpg')
 NIH3T3_dna_47 = Image.open('dna-47.jpg')
 NIH3T3_dna_49 = Image.open('dna-49.jpg')
 
-##Dataset 3 gt
+#Dataset 3 gt
 NIH3T3_dna_gt0 = Image.open('0.jpg')
 NIH3T3_dna_gt1 = Image.open('1.jpg')
 NIH3T3_dna_gt26 = Image.open('26.jpg')
@@ -73,23 +73,23 @@ NIH3T3_dna_gt46 = Image.open('46.jpg')
 NIH3T3_dna_gt47 = Image.open('47.jpg')
 NIH3T3_dna_gt49 = Image.open('49.jpg')
 
-##iterate over alle images with the following code...tbd
+#iterate over alle images with the following code...tbd
 
 #make numpy array
-imarray44 = numpy.array(image44)
+imarray_N2DH_GOWT1_t01 = numpy.array(N2DH_GOWT1_t01)
 
 #flatten the array
-imflat44 = imarray44.flatten()
+imflat_N2DH_GOWT1_t01 = imarray_N2DH_GOWT1_t01.flatten()
 
 
 #We are using discrete values - so let's align..
-d = numpy.diff(numpy.unique(imflat44)).min()
-left_of_first_bin = imflat44.min() - float(d)/2
-right_of_last_bin = imflat44.max() + float(d)/2
+d = numpy.diff(numpy.unique(imflat_N2DH_GOWT1_t01)).min()
+left_of_first_bin = imflat_N2DH_GOWT1_t01.min() - float(d)/2
+right_of_last_bin = imflat_N2DH_GOWT1_t01.max() + float(d)/2
 
 
 #Plot the histogram
-plt.hist(imflat44, numpy.arange(left_of_first_bin,right_of_last_bin+d,1), color = 'steelblue', ec = 'steelblue' )
+plt.hist(imflat_N2DH_GOWT1_t01, numpy.arange(left_of_first_bin,right_of_last_bin+d,1), color = 'steelblue', ec = 'steelblue' )
 
 #customize x-ticks
 plt.xticks(numpy.arange(0,256,15), fontsize = 7)
