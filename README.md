@@ -1,4 +1,2 @@
-Test
-Test Test
-Final test
+print(Hello world)
 Hola 
