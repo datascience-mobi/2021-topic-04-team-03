@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 #open image using Pillow
 #you probably have to alter the path to the image
-image44 = Image.open('C:\Users\hanna\PycharmProjects\2021-topic-04-team-03\Data\NIH3T3\im\dna-44.png')
+image44 = Image.open('man_seg01.tif')
 
 #make numpy array
 imarray44 = numpy.array(image44)
@@ -30,5 +30,4 @@ plt.title('Gray-value histogram')
 plt.xlabel('Intensity', fontsize = 9)
 plt.ylabel('Frequency', fontsize = 9)
 
-#plt.show()
 plt.show()
