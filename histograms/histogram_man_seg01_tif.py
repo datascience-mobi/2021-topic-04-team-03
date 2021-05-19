@@ -39,7 +39,7 @@ plt.xticks(range(1,25), fontsize = 7)
 
 plt.show()
 
-#plt.hist(imflat, bins=range(0,25))
-#plt.show()
+# plt.hist(imflat, bins=range(0,25))
+# plt.show()
 
 print(d)
