@@ -5,7 +5,10 @@ from matplotlib import pyplot as plt
 #open image using Pillow
 #you probably have to alter the path to the image
 
+
 #Dataset 1
+
+N2DH_GOWT1_list = list[]
 N2DH_GOWT1_t01 = Image.open('t01.jpg')
 N2DH_GOWT1_t21 = Image.open('t21.jpg')
 N2DH_GOWT1_t31 = Image.open('t31.jpg')
