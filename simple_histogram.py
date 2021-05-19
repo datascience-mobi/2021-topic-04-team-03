@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 #open image using Pillow
 #you probably have to alter the path to the image
-image44 = Image.open('dna-44.png')
+image44 = Image.open('C:\Users\hanna\PycharmProjects\2021-topic-04-team-03\Data\NIH3T3\im\dna-44.png')
 
 #make numpy array
 imarray44 = numpy.array(image44)
