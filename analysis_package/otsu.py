@@ -11,8 +11,6 @@ def otsu (image):
     w = np.zeros(256)
     #mean value
     m = np.zeros(256)
-    #Total variance
-    #sigma_tot = 0
     # total mean value
     m_tot = np.mean(img)
     #iterate over all thresholds
@@ -21,19 +19,14 @@ def otsu (image):
         m[t] = np.sum(img[img<=t]) / N
         #calculate probabilty of class occurency for pixels below t
         w[t] = np.sum(np.where(img <= t, 1, 0)) / N
-        #total variance
-        #sigma_tot += ((t-m_tot)**2)*(np.sum(np.where(img == t, 1, 0)) / N)
 
-    zero_index = sum(np.where(w == 0, 1, 0))
-    m = m[w != 0]
-    w = w[w != 0]
-    m = m[w != 1]
-    w = w[w != 1]
-    #in-between class variance
-    sigma_b = (m_tot*w - m)**2/(w*(1-w))
+    # ignoring error because of division with 0
+    with np.errstate(all='ignore'):
+        # in-between class variance
+        sigma_b = (m_tot*w - m)**2/(w*(1-w))
+
     #optimal threshold
-    #threshold = np.where(sigma_b == max(sigma_b))[0][0]
-    threshold = np.argmax(sigma_b) + zero_index
+    threshold = np.nanargmax(sigma_b)
     #total variance (same for every threshold)
     sigma_tot = np.var(img)
     goodness = sigma_b[threshold]/sigma_tot
@@ -53,16 +46,14 @@ def otsu_faster(image, intensity_lvls = 256):
     # total mean value
     m_tot = np.mean(img)
 
-    zero_index = sum(np.where(w == 0, 1, 0))
-    m = m[w != 0]
-    w = w[w != 0]
-    m = m[w != 1]
-    w = w[w != 1]
-    # in-between class variance
-    sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
+    # ignoring error because of division with 0
+    with np.errstate(all='ignore'):
+        # in-between class variance
+        sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
+
     # optimal threshold
     # threshold = np.where(sigma_b == max(sigma_b))[0][0]
-    threshold = np.argmax(sigma_b) + zero_index
+    threshold = np.nanargmax(sigma_b)
     # total variance (same for every threshold)
     sigma_tot = np.var(img)
     goodness = sigma_b[threshold] / sigma_tot
@@ -146,7 +137,7 @@ def clipping (img,threshold):
     return workimg
 
 ### Just for testing. Delete later ###
-r'''
+
 image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
 threshold, goodness = otsu_faster(image_test)
 clipped_img = clipping(image_test, threshold)
@@ -168,4 +159,4 @@ from skimage.filters import threshold_multiotsu
 t_twolevel_skimage = threshold_multiotsu(image_test)
 
 print(t_twolevel_skimage)
-'''
+
