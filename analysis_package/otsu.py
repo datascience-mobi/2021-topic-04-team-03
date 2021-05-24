@@ -101,6 +101,40 @@ def otsuna (image):
     goodness = sigma_b[threshold] / sigma_tot
     return(threshold,goodness)
 
+def otsu_twolevel (img):
+    # compute histogram of img
+    hist = np.histogram(img, bins=np.arange(257), density=True)
+
+    #zeroth_order moment = wk
+    zeroth_order = hist[0]
+
+    #first_order moment = mu(k) of the kth class
+    first_order = hist[0] * np.arange(256)
+
+    # Zeroth order moment P(u,v) and First order moment S(u,v) are stored in tables for all possible combinations of u and v
+    P = np.zeros((256, 256))
+    S = np.zeros((256, 256))
+
+    for u in range(256):
+        for v in range(u, 256):
+            P[u, v] = np.sum(zeroth_order[0:v + 1]) - np.sum(zeroth_order[0:u])
+            if P[u, v] == 0:
+                P[u, v] = np.nan
+            S[u, v] = np.sum(first_order[0:v + 1]) - np.sum(first_order[0:u])
+
+    #Calculate the in between class variance using the values in the Tables P and S
+    sigma = np.zeros((256, 256))
+    for s in range(255):
+        for t in range(s + 1, 255):
+            sigma[s, t] = S[0, s] ** 2 / P[0, s] + S[s + 1, t] ** 2 / P[s + 1, t] + S[t + 1, 255] ** 2 / P[t + 1, 255]
+
+    # Compute the maximum variance
+    max = np.nanargmax(sigma)
+    # Get postition of maximum ( = optimal Threshold values)
+    thresholds = np.unravel_index(max, sigma.shape)
+    return(thresholds)
+
+
 
 def clipping (img,threshold):
     #Copy of Image
@@ -127,5 +161,11 @@ plt.show()
 from skimage.filters import threshold_otsu
 t_skimage = threshold_otsu(image_test)
 
-print(threshold, t_skimage)'''
+print(threshold, t_skimage)
 
+# Testing whether twolevel_otsu is the same as the skimage funktion
+from skimage.filters import threshold_multiotsu
+t_twolevel_skimage = threshold_multiotsu(image_test)
+
+print(t_twolevel_skimage)
+'''
