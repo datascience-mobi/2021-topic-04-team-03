@@ -38,8 +38,14 @@ for t in range(0,256):
 sigma_b = w_lower*((m_lower-m_tot)**2) + w_middle*((m_middle-m_tot)**2) + w_upper*((m_upper-m_tot)**2)
 #determine position of max variance
 maxvariance = np.nanargmax(sigma_b)
+print(maxvariance)
 #get position of max variance as a tuple of both thresholds
 thresholds = np.unravel_index(maxvariance, sigma_b.shape)
 
 # The thresholds are not equal to the thresholds computed by the skimage function, so theres something wrong with the code
 print(thresholds)
+
+from skimage.filters import threshold_multiotsu
+t_skimage = threshold_multiotsu(img)
+print(t_skimage)
+print('done')
