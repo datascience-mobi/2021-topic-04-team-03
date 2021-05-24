@@ -44,12 +44,12 @@ def otsu_faster(image, intensity_lvls = 256):
     # Number of pixels
     N = img.size
     # image histogram
-    hist = np.histogram(img, bins = np.arange(intensity_lvls + 1))
+    hist = np.histogram(img, bins = np.arange(intensity_lvls + 1), density = True)
 
     # probability of class occurence
-    w = np.cumsum(hist[0]) / N
+    w = np.cumsum(hist[0])
     # mean value
-    m = np.cumsum(hist[0]*np.arange(intensity_lvls)) / N
+    m = np.cumsum(hist[0]*np.arange(intensity_lvls))
     # total mean value
     m_tot = np.mean(img)
 
