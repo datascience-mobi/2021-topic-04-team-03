@@ -31,14 +31,13 @@ def otsu (image):
     w = w[w != 1]
     #in-between class variance
     sigma_b = (m_tot*w - m)**2/(w*(1-w))
-    print(sigma_b)
     #optimal threshold
     #threshold = np.where(sigma_b == max(sigma_b))[0][0]
     threshold = np.argmax(sigma_b) + zero_index
     #total variance (same for every threshold)
     sigma_tot = np.var(img)
     goodness = sigma_b[threshold]/sigma_tot
-    return threshold, goodness, sigma_b
+    return threshold, goodness
 
 
 def otsuna (image):
@@ -72,7 +71,7 @@ def otsuna (image):
     #Calculate the goodness of our computet threshold
     sigma_tot = np.var(img)
     goodness = sigma_b[threshold] / sigma_tot
-    return(threshold,sigma_b,goodness)
+    return(threshold,goodness)
 
 
 def clipping (img,threshold):
@@ -84,7 +83,8 @@ def clipping (img,threshold):
     workimg[workimg > threshold] = 1
     return workimg
 
-image_test = imread(r'''..\Data\NIH3T3\im\dna-27.png''')
+r'''
+image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
 threshold, goodness, s = otsu(image_test)
 clipped_img = clipping(image_test, threshold)
 
@@ -94,4 +94,9 @@ plt.show()
 plt.imshow(image_test, 'gray')
 plt.show()
 
-print(threshold)
+# Testing whether the output is the same as in the skimage function
+from skimage.filters import threshold_otsu
+t_skimage = threshold_otsu(image_test)
+
+print(threshold, t_skimage)
+'''
