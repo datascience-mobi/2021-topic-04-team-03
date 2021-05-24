@@ -39,6 +39,34 @@ def otsu (image):
     goodness = sigma_b[threshold]/sigma_tot
     return threshold, goodness
 
+def otsu_faster(image, intensity_lvls = 256):
+    img = image.copy().flatten()
+    # Number of pixels
+    N = img.size
+    # image histogram
+    hist = np.histogram(img, bins = np.arange(intensity_lvls + 1))
+
+    # probability of class occurence
+    w = np.cumsum(hist[0]) / N
+    # mean value
+    m = np.cumsum(hist[0]*np.arange(intensity_lvls)) / N
+    # total mean value
+    m_tot = np.mean(img)
+
+    zero_index = sum(np.where(w == 0, 1, 0))
+    m = m[w != 0]
+    w = w[w != 0]
+    m = m[w != 1]
+    w = w[w != 1]
+    # in-between class variance
+    sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
+    # optimal threshold
+    # threshold = np.where(sigma_b == max(sigma_b))[0][0]
+    threshold = np.argmax(sigma_b) + zero_index
+    # total variance (same for every threshold)
+    sigma_tot = np.var(img)
+    goodness = sigma_b[threshold] / sigma_tot
+    return threshold, goodness
 
 def otsuna (image):
     img = image.copy().flatten()
@@ -83,9 +111,10 @@ def clipping (img,threshold):
     workimg[workimg > threshold] = 1
     return workimg
 
+### Just for testing. Delete later ###
 r'''
 image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
-threshold, goodness, s = otsu(image_test)
+threshold, goodness = otsu_faster(image_test)
 clipped_img = clipping(image_test, threshold)
 
 
@@ -98,5 +127,5 @@ plt.show()
 from skimage.filters import threshold_otsu
 t_skimage = threshold_otsu(image_test)
 
-print(threshold, t_skimage)
-'''
+print(threshold, t_skimage)'''
+
