@@ -44,6 +44,8 @@ def IoU(otsu_thresholding, picture_name, dataset)
     """Calculation of the Intersection-Over-Union (IoU), also known as Jaccard Index.
     
         The IoU calculates the Area of Overlap divided by the Area of Union between our images derived from Otsu with the ground truth images.
+        It is very similar to Dice, although the received value is always lower, so the IoU considers a higher discrepancy. 
+        The other way round, the Dice score is less sensitive to outliers.
         """
 
     intersection = np.sum(otsu_thresholding*gt_img)
