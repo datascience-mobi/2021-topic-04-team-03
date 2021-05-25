@@ -52,7 +52,6 @@ def otsu_faster(image, intensity_lvls = 256):
         sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
 
     # optimal threshold
-    # threshold = np.where(sigma_b == max(sigma_b))[0][0]
     threshold = np.nanargmax(sigma_b)
     # total variance (same for every threshold)
     sigma_tot = np.var(img)
@@ -83,8 +82,7 @@ def otsuna (image):
         else:
             m_lower[t] = np.nan
             m_lower[t] = np.nan
-        #total variance
-        #sigma_tot += ((t-m_tot)**2)*(np.sum(np.where(img == t, 1, 0)) / N)
+
     sigma_b = w_lower*(w_upper)*((m_upper-m_lower)**2)
     threshold = np.nanargmax(sigma_b)
     #Calculate the goodness of our computet threshold
@@ -138,7 +136,7 @@ def clipping (img,threshold):
 
 ### Just for testing. Delete later ###
 
-image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
+r'''image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
 threshold, goodness = otsu_faster(image_test)
 clipped_img = clipping(image_test, threshold)
 
@@ -158,5 +156,5 @@ print(threshold, t_skimage)
 from skimage.filters import threshold_multiotsu
 t_twolevel_skimage = threshold_multiotsu(image_test)
 
-print(t_twolevel_skimage)
+print(t_twolevel_skimage)'''
 

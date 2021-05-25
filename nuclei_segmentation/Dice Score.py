@@ -29,3 +29,8 @@ def dice_score(otsu_thresholding, picture_name, dataset):
 
     if dataset == "otsu_data":
         return dsc
+
+    # tp = np.sum(otsu_thresholding*gt_img)
+    # tp = tp + 1
+
+
