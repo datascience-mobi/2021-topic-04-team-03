@@ -6,7 +6,7 @@ import numpy as np
 
 # from our data.path import list
 
-def dice_score(otsu_thresholding, ground_truth, dataset):
+def dice_score(otsu_thresholding, ground_truth):
     """Calculation of the Dice Score.
 
         The DSC, also known as F1 score, calculates the True Positive (tp), False Negative (fn) and False Positives (fp) by using a specific formula.
