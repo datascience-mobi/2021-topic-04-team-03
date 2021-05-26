@@ -30,7 +30,7 @@ def dice_score(otsu_thresholding, ground_truth, dataset):
     if dataset == "otsu_data":
         return dsc
 
-def dice_score_faster (otsu_thresholding, ground_truth)
+def dice_score_faster (otsu_thresholding, ground_truth):
     # dice score without for-loop
 
     intersection = np.sum(otsu_thresholding*ground_truth)
@@ -40,7 +40,7 @@ def dice_score_faster (otsu_thresholding, ground_truth)
 
     return dsc
 
-def IoU(otsu_thresholding, ground_truth)
+def IoU(otsu_thresholding, ground_truth):
     """Calculation of the Intersection-Over-Union (IoU), also known as Jaccard Index.
     
         The IoU calculates the Area of Overlap divided by the Area of Union between our images derived from Otsu with the ground truth images.
