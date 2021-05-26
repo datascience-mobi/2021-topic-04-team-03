@@ -8,30 +8,33 @@ def pathlist(loadpath, searchstring_list):
     @return: list of paths to pictures with one of the elements in searchstring_list in filename.
     """
 
-    path_list = []
+    pathlist = []
 
     for searchstring in searchstring_list:
         for element in Path(loadpath).rglob(searchstring):
-            path_list.append(element)
+            pathlist.append(element)
 
-    return path_list
+    return pathlist
 
 
-if __name__ == "_main_":
-    N2DH_GOWT1_gt_list = pathlist("../Data/N2DH-GOWT1", "man_seg")
+if __name__ == "__main__":
+    N2DH_GOWT1_gt_list = pathlist("../Data/N2DH-GOWT1/gt", ".tif")
     print(N2DH_GOWT1_gt_list)
-    N2DH_GOWT1_img_list = pathlist("../Data/N2DH-GOWT1", "t")
+    N2DH_GOWT1_img_list = pathlist("../Data/N2DH-GOWT1/img", ".tif")
     print(N2DH_GOWT1_img_list)
 
-    N2DL_HeLa_gt_list = pathlist("../Data/N2DL-HeLa", "man_seg")
+    N2DL_HeLa_gt_list = pathlist("../Data/N2DL-HeLa/gt", "m.tif")
     print(N2DL_HeLa_gt_list)
-    N2DL_HeLa_img_list = pathlist("../Data/N2DL-HeLa", "t")
+    N2DL_HeLa_img_list = pathlist("../Data/N2DL-HeLa/img", ".tif")
     print(N2DL_HeLa_img_list)
 
-    NIH3T3_gt_list = pathlist("../Data/NIH3T3", ".png")
+    NIH3T3_gt_list = pathlist("../Data/NIH3T3/gt", ".png")
     print(NIH3T3_gt_list)
-    NIH3T3_img_list = pathlist("../Data/NIH3T3", "dna-")
+    NIH3T3_img_list = pathlist("../Data/NIH3T3/im", ".png")
     print(NIH3T3_img_list)
+
+
+
 
 
 
