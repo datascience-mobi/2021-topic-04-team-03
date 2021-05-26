@@ -30,7 +30,7 @@ def dice_score(otsu_thresholding, dataset):
     if dataset == "otsu_data":
         return dsc
 
-def dice_score_faster (ostu_thresholding, picture_name, dataset)
+def dice_score_faster (ostu_thresholding, dataset)
     # dice score without for-loop
 
     intersection = np.sum(otsu_thresholding*gt_img)
