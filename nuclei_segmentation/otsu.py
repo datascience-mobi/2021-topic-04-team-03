@@ -4,6 +4,11 @@ from skimage.io import imshow
 from matplotlib import pyplot as plt
 
 def otsu (image):
+    """
+
+    :param image:
+    :return:
+    """
     img = image.copy().flatten()
     #Number of pixels
     N = img.size
