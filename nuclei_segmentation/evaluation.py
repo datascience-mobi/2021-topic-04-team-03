@@ -6,7 +6,7 @@ import numpy as np
 
 # from our data.path import list
 
-def dice_score(otsu_thresholding, picture_name, dataset):
+def dice_score(otsu_thresholding, ground_truth, dataset):
     """Calculation of the Dice Score.
 
         The DSC, also known as F1 score, calculates the True Positive (tp), False Negative (fn) and False Positives (fp) by using a specific formula.
@@ -17,12 +17,12 @@ def dice_score(otsu_thresholding, picture_name, dataset):
     fp = 0
     fn = 0
 
-    for p in np.ndindex(otsu_thresholding):
-        if otsu_thresholding[p] == True and gt_img[p] == True:
+    for p in np.ndindex(otsu_thresholding,ground_truth ):
+        if otsu_thresholding[p] == True and ground_truth[p] == True:
             tp = tp + 1
-        if otsu_thresholding[p] == True and gt_img[p] == False:
+        if otsu_thresholding[p] == True and ground_truth[p] == False:
             fp = fp + 1
-        if otsu_thresholding[p] == False and gt_img[p] == True:
+        if otsu_thresholding[p] == False and ground_truth[p] == True:
             fn = fn + 1
 
     dsc = (2 * tp) / (2 * tp + fp + fn)
@@ -30,17 +30,17 @@ def dice_score(otsu_thresholding, picture_name, dataset):
     if dataset == "otsu_data":
         return dsc
 
-def dice_score_faster (ostu_thresholding, picture_name, dataset)
+def dice_score_faster (otsu_thresholding, ground_truth)
     # dice score without for-loop
 
-    intersection = np.sum(otsu_thresholding*gt_img)
-    union = np.sum(otsu_thresholding) + np.sum(gt_img)
+    intersection = np.sum(otsu_thresholding*ground_truth)
+    union = np.sum(otsu_thresholding) + np.sum(ground_truth)
 
     dsc = np.sum(2 * intersection) / np.sum(union)
 
     return dsc
 
-def IoU(otsu_thresholding, picture_name, dataset)
+def IoU(otsu_thresholding, ground_truth)
     """Calculation of the Intersection-Over-Union (IoU), also known as Jaccard Index.
     
         The IoU calculates the Area of Overlap divided by the Area of Union between our images derived from Otsu with the ground truth images.
@@ -48,8 +48,8 @@ def IoU(otsu_thresholding, picture_name, dataset)
         The other way round, the Dice score is less sensitive to outliers.
         """
 
-    intersection = np.sum(otsu_thresholding*gt_img)
-    union = np.sum(otsu_thresholding) + np.sum(gt_img) - intersection
+    intersection = np.sum(otsu_thresholding*ground_truth)
+    union = np.sum(otsu_thresholding) + np.sum(ground_truth) - intersection
 
     IoU = np.mean(intersection) / (union)
 
