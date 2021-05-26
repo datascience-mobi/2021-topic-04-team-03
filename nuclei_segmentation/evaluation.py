@@ -6,7 +6,7 @@ import numpy as np
 
 # from our data.path import list
 
-def dice_score(otsu_thresholding, ground_truth, dataset):
+def dice_score(clipped_image, ground_truth):
     """Calculation of the Dice Score.
 
         The DSC, also known as F1 score, calculates the True Positive (tp), False Negative (fn) and False Positives (fp) by using a specific formula.
@@ -21,20 +21,19 @@ def dice_score(otsu_thresholding, ground_truth, dataset):
     fp = 0
     fn = 0
 
-    for p in np.ndindex(otsu_thresholding, ground_truth ):
-        if otsu_thresholding[p] == True and ground_truth[p] == True:
+    for p in np.ndindex(clipped_image.shape):
+        if clipped_image[p] == True and ground_truth[p] == True:
             tp = tp + 1
-        if otsu_thresholding[p] == True and ground_truth[p] == False:
+        if clipped_image[p] == True and ground_truth[p] == False:
             fp = fp + 1
-        if otsu_thresholding[p] == False and ground_truth[p] == True:
+        if clipped_image[p] == False and ground_truth[p] == True:
             fn = fn + 1
 
     dsc = (2 * tp) / (2 * tp + fp + fn)
+    # if dataset == "otsu_data":
+    return dsc
 
-    if dataset == "otsu_data":
-        return dsc
-
-def dice_score_faster (otsu_thresholding, ground_truth):
+def dice_score_faster (clipped_image, ground_truth):
     """This is a version of the Dice score, that should be working faster.
 
     :param otsu_thresholding: image derived after Otsu thresholding
@@ -43,14 +42,14 @@ def dice_score_faster (otsu_thresholding, ground_truth):
     """
     # dice score without for-loop
 
-    intersection = np.sum(otsu_thresholding*ground_truth)
-    union = np.sum(otsu_thresholding) + np.sum(ground_truth)
+    intersection = np.sum(clipped_image*ground_truth)
+    union = np.sum(clipped_image) + np.sum(ground_truth)
 
     dsc = np.sum(2 * intersection) / np.sum(union)
-
     return dsc
 
-def IoU(otsu_thresholding, ground_truth):
+def iou (clipped_image, ground_truth):
+
     """Calculation of the Intersection-Over-Union (IoU), also known as Jaccard Index.
     
         The IoU calculates the Area of Overlap divided by the Area of Union between our images derived from Otsu with the ground truth images.
@@ -61,9 +60,9 @@ def IoU(otsu_thresholding, ground_truth):
         :return: IoU coefficient
         """
 
-    intersection = np.sum(otsu_thresholding*ground_truth)
-    union = np.sum(otsu_thresholding) + np.sum(ground_truth) - intersection
+    intersection = np.sum(clipped_image*ground_truth)
+    union = np.sum(clipped_image) + np.sum(ground_truth) - intersection
 
-    IoU = np.mean(intersection) / (union)
+    iou = np.mean(intersection) / union
 
-    return IoU
+    return iou
