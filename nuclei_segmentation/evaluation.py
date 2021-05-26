@@ -17,7 +17,7 @@ def dice_score(otsu_thresholding, ground_truth, dataset):
     fp = 0
     fn = 0
 
-    for p in np.ndindex(otsu_thresholding,ground_truth ):
+    for p in np.ndindex(otsu_thresholding, ground_truth ):
         if otsu_thresholding[p] == True and ground_truth[p] == True:
             tp = tp + 1
         if otsu_thresholding[p] == True and ground_truth[p] == False:
