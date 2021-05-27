@@ -9,8 +9,8 @@ import numpy as np
 
 
 
-col_dir_img = [r'''..\Data\NIH3T3\im\*.png''']
-col_dir_gt = [r'''..\Data\NIH3T3\gt\*.png''']
+col_dir_img = [r'''..\Data\N2DL-HeLa\img\*.tif''']
+col_dir_gt = [r'''..\Data\N2DL-HeLa\gt\*.tif''']
 
 col_img = imread_collection(col_dir_img )
 col_gt = imread_collection(col_dir_gt)
@@ -26,11 +26,20 @@ for i in col_img:
     threshold, goodness = otsu.otsu_faster(i)
     clipped_list.append(otsu.clipping(i,threshold))
 
-
-
 for i in col_gt:
     gt_list.append(i)
+
 
 for i in range(len(clipped_list)):
     print(evaluation.dice_score_faster(clipped_list[i], gt_list[i]))
 
+r'''
+gt = gt_list[6]
+im = col_img[6]
+
+from skimage.filters import threshold_otsu
+t_skimage = threshold_otsu(im)
+print(t_skimage)
+
+print(otsu.otsu_faster(im))
+'''
