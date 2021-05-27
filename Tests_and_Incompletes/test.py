@@ -26,8 +26,6 @@ for i in col_img:
     threshold, goodness = otsu.otsu_faster(i)
     clipped_list.append(otsu.clipping(i,threshold))
 
-
-
 for i in col_gt:
     gt_list.append(i)
 
