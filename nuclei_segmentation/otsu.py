@@ -37,7 +37,7 @@ def otsu (image):
     goodness = sigma_b[threshold]/sigma_tot
     return threshold, goodness
 
-def otsu_faster(image, intensity_lvls = 256):
+def otsu_faster(image, intensity_lvls = 2**16):
     img = image.copy().flatten()
     # Number of pixels
     N = img.size

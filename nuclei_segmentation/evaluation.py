@@ -41,11 +41,17 @@ def dice_score_faster (clipped_image, ground_truth):
     :return: dice score coefficient
     """
     # dice score without for-loop
+    work_clipped = clipped_image.copy()
+    work_gt = ground_truth.copy()
+    work_clipped[work_clipped != 0] = 1
+    work_gt[work_gt != 0] = 1
 
-    intersection = np.sum(clipped_image*ground_truth)
-    union = np.sum(clipped_image) + np.sum(ground_truth)
+    intersection = np.sum(work_clipped*work_gt)
 
-    dsc = np.sum(2 * intersection) / np.sum(union)
+    union = np.sum(work_clipped) + np.sum(work_gt)
+
+    dsc = (2 * intersection) / union
+
     return dsc
 
 def iou (clipped_image, ground_truth):
@@ -63,6 +69,6 @@ def iou (clipped_image, ground_truth):
     intersection = np.sum(clipped_image*ground_truth)
     union = np.sum(clipped_image) + np.sum(ground_truth) - intersection
 
-    iou = np.mean(intersection) / union
+    iou = intersection / union
 
     return iou
