@@ -4,12 +4,13 @@ from skimage.io import imshow
 from matplotlib import pyplot as plt
 
 
-def otsu(image):
+def otsu(image, intesity_lvls = 256):
     """
     This function takes an image and calculates the probability of class occurrence
     and the mean value for all pixels to calculate the threshold according to the formula
     of Otsu Thresholding.
     Also it calculates the total variance and uses it to calculate the goodness of the threshold.
+
     Source:
     Otsu, N. "A threshold selection method from gray-level histograms."
     IEEE Transactions on Systems, Man, and Cybernetics 9:1 (1979), pp 62-66.
@@ -17,33 +18,26 @@ def otsu(image):
     :param image: image out of Data
     :return: threshold and goodness of the image
     """
+
     img = image.copy().flatten()
-    # Number of pixels
-    N = img.size
-    # probability of class occurrence
-    w = np.zeros(256)
-    # mean value
-    m = np.zeros(256)
-    # total mean value
-    m_tot = np.mean(img)
-    # iterate over all thresholds
-    for t in range(256):
-        # calculate mu of pixels below t
-        m[t] = np.sum(img[img <= t]) / N
-        # calculate probabilty of class occurency for pixels below t
-        w[t] = np.sum(np.where(img <= t, 1, 0)) / N
+    number_of_pixels = img.size
+    class_probability = np.zeros(256)
+    class_mean = np.zeros(256)
+    total_mean = np.mean(img)
+
+    for threshold in range(intesity_lvls):
+
+        class_mean[threshold] = np.sum(img[img <= threshold]) / number_of_pixels
+        class_probability[threshold] = np.sum(np.where(img <= threshold, 1, 0)) / number_of_pixels
 
     # ignoring error because of division with 0
     with np.errstate(all='ignore'):
-        # in-between class variance
-        sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
+        inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (class_probability * (1 - class_probability))
 
-    # optimal threshold
-    threshold = np.nanargmax(sigma_b)
-    # total variance (same for every threshold)
-    sigma_tot = np.var(img)
-    goodness = sigma_b[threshold] / sigma_tot
-    return threshold, goodness
+    optimal_threshold = np.nanargmax(inbetween_variance)
+    total_variance = np.var(img)
+    goodness = inbetween_variance[optimal_threshold] / total_variance
+    return optimal_threshold, goodness
 
 
 def otsu_faster(image, intensity_lvls=256):
@@ -55,111 +49,58 @@ def otsu_faster(image, intensity_lvls=256):
     :param intensity_lvls:
     :return: threshold and goodness of the image
     """
-    img = image.copy().flatten()
-    # Number of pixels
-    N = img.size
-    # image histogram
-    hist = np.histogram(img, bins=np.arange(intensity_lvls + 1), density=True)
 
-    # probability of class occurence
-    w = np.cumsum(hist[0])
-    # mean value
-    m = np.cumsum(hist[0] * np.arange(intensity_lvls))
-    # total mean value
-    m_tot = np.mean(img)
+    img = image.copy().flatten()
+    histogram = np.histogram(img, bins=np.arange(intensity_lvls + 1), density=True)
+
+    class_probability = np.cumsum(histogram[0])
+    class_mean = np.cumsum(histogram[0] * np.arange(intensity_lvls))
+    total_mean = np.mean(img)
 
     # ignoring error because of division with 0
     with np.errstate(all='ignore'):
-        # in-between class variance
-        sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
 
-    # optimal threshold
-    threshold = np.nanargmax(sigma_b)
-    # total variance (same for every threshold)
-    sigma_tot = np.var(img)
-    goodness = sigma_b[threshold] / sigma_tot
-    return threshold, goodness
+        inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (class_probability * (1 - class_probability))
 
+    optimal_threshold = np.nanargmax(inbetween_variance)
+    total_variance = np.var(img)
+    goodness = inbetween_variance[optimal_threshold] / total_variance
 
-def otsuna(image):
-    """
-This function takes an image and calculates the probability of class occurrence and the mean value for all pixels for both classes to
-     calculate the threshold according to the formula of Otsu Thresholding.
-     Also it calculates the total variance and uses it to calculate the goodness of the threshold.
-
-    :param image: image out of Data
-    :return: threshold and goodness of the image
-    """
-    img = image.copy().flatten()
-    # Number of pixels
-    N = img.size
-    # probability of class occurence
-    w_lower = np.zeros(256)
-    w_upper = np.zeros(256)
-    # mean value
-    m_lower = np.zeros(256)
-    m_upper = np.zeros(256)
-    # total mean value
-    m_tot = np.mean(img)
-    # iterate over all thresholds
-    for t in range(256):
-        # calculate probabilty of class occurency for pixels below or equal/above t
-        w_lower[t] = np.sum(np.where(img <= t, 1, 0)) / N
-        w_upper[t] = np.sum(np.where(img > t, 1, 0)) / N
-        # Calculate mu of both classes, considering that you cannot divide with zero
-        if w_lower[t] > 0 and w_upper[t] > 0:
-            m_lower[t] = np.sum(img[img <= t]) / (w_lower[t] * N)
-            m_upper[t] = np.sum(img[img > t]) / (w_upper[t] * N)
-        else:
-            m_lower[t] = np.nan
-            m_lower[t] = np.nan
-
-    sigma_b = w_lower * (w_upper) * ((m_upper - m_lower) ** 2)
-    threshold = np.nanargmax(sigma_b)
-    # Calculate the goodness of our computet threshold
-    sigma_tot = np.var(img)
-    goodness = sigma_b[threshold] / sigma_tot
-    return (threshold, goodness)
+    return optimal_threshold, goodness
 
 
-def otsu_twolevel(img):
+def otsu_twolevel(img, intensity_lvls=256):
     """
     This function takes an image and calculates two thresholds according to the formula of two-level Otsu Thresholding.
 
     :param img: image out of Data
     :return: threshold of the image
     """
-    # compute histogram of img
-    hist = np.histogram(img, bins=np.arange(257), density=True)
 
-    # zeroth_order moment = wk
-    zeroth_order = hist[0]
+    histogram = np.histogram(img, bins=np.arange(intensity_lvls+1), density=True)
 
-    # first_order moment = mu(k) of the kth class
-    first_order = hist[0] * np.arange(256)
+    class_probability = histogram[0]
+    class_mean = histogram[0] * np.arange(intensity_lvls)
 
-    # Zeroth order moment P(u,v) and First order moment S(u,v) are stored in tables for all possible combinations of u and v
-    P = np.zeros((256, 256))
-    S = np.zeros((256, 256))
+    Probabilities = np.zeros((intensity_lvls, intensity_lvls))
+    Means = np.zeros((intensity_lvls, intensity_lvls))
 
-    for u in range(256):
-        for v in range(u, 256):
-            P[u, v] = np.sum(zeroth_order[0:v + 1]) - np.sum(zeroth_order[0:u])
-            if P[u, v] == 0:
-                P[u, v] = np.nan
-            S[u, v] = np.sum(first_order[0:v + 1]) - np.sum(first_order[0:u])
+    # Calculate class probability and mean for all possible intervals
+    for lower_border in range(intensity_lvls):
+        for upper_border in range(lower_border, intensity_lvls):
+            Probabilities[lower_border, upper_border] = np.sum(class_probability[0:upper_border + 1]) - np.sum(class_probability[0:lower_border])
+            Means[lower_border, upper_border] = np.sum(class_mean[0:upper_border + 1]) - np.sum(class_mean[0:lower_border])
 
-    # Calculate the in between class variance using the values in the Tables P and S
-    sigma = np.zeros((256, 256))
-    for s in range(255):
-        for t in range(s + 1, 255):
-            sigma[s, t] = S[0, s] ** 2 / P[0, s] + S[s + 1, t] ** 2 / P[s + 1, t] + S[t + 1, 255] ** 2 / P[t + 1, 255]
+    inbetween_variance = np.zeros((intensity_lvls, intensity_lvls))
+    for first_threshold in range(intensity_lvls):
+        for second_threshold in range(first_threshold + 1, intensity_lvls-1):
+            with np.errstate(all='ignore'):
+                inbetween_variance[first_threshold, second_threshold] = Means[0, first_threshold] ** 2 / Probabilities[0, first_threshold] + Means[first_threshold + 1, second_threshold] ** 2 / Probabilities[first_threshold + 1, second_threshold] + Means[second_threshold + 1, intensity_lvls-1] ** 2 / Probabilities[second_threshold + 1, intensity_lvls-1]
 
-    # Compute the maximum variance
-    max = np.nanargmax(sigma)
-    # Get position of maximum ( = optimal Threshold values)
-    thresholds = np.unravel_index(max, sigma.shape)
-    return (thresholds)
+    maximal_variance = np.nanargmax(inbetween_variance)
+    optimal_thresholds = np.unravel_index(maximal_variance, inbetween_variance.shape)
+
+    return (optimal_thresholds)
 
 
 def clipping(img, threshold):
@@ -171,12 +112,11 @@ def clipping(img, threshold):
     :param threshold: uses the threshold derived from Otsu Thresholding
     :return: workimg that has been clipped
     """
-    # Copy of Image
+
     workimg = img.copy()
-    # All pixels with intensity below theshold to 0
     workimg[workimg <= threshold] = 0
-    # All pixels abow threshold to 1
     workimg[workimg > threshold] = 1
+
     return workimg
 
 
@@ -195,12 +135,13 @@ def intensity_value(path_to_image_collection):
         intensity = 256
     else:
         raise Exception('Not a tif or png!')
+
     return intensity
 
 
 ### Just for testing. Delete later ###
 
-r'''image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
+image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
 threshold, goodness = otsu_faster(image_test)
 clipped_img = clipping(image_test, threshold)
 
@@ -218,6 +159,6 @@ print(threshold, t_skimage)
 
 # Testing whether twolevel_otsu is the same as the skimage funktion
 from skimage.filters import threshold_multiotsu
-t_twolevel_skimage = threshold_multiotsu(image_test)
+t_twolevel_skimage = otsu_twolevel(image_test)
 
-print(t_twolevel_skimage)'''
+print(t_twolevel_skimage)
