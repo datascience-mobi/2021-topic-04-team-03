@@ -37,7 +37,7 @@ def otsu (image):
     goodness = sigma_b[threshold]/sigma_tot
     return threshold, goodness
 
-def otsu_faster(image, intensity_lvls = 2**16):
+def otsu_faster(image, intensity_lvls = 256):
     img = image.copy().flatten()
     # Number of pixels
     N = img.size
@@ -57,7 +57,7 @@ def otsu_faster(image, intensity_lvls = 2**16):
         sigma_b = (m_tot * w - m) ** 2 / (w * (1 - w))
 
     # optimal threshold
-    threshold = np.nanargmax(sigma_b)
+    threshold = np.argmax(sigma_b)
     # total variance (same for every threshold)
     sigma_tot = np.var(img)
     goodness = sigma_b[threshold] / sigma_tot
