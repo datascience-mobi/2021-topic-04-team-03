@@ -1,7 +1,4 @@
 import numpy as np
-from skimage.io import imread
-from skimage.io import imshow
-from matplotlib import pyplot as plt
 
 
 def otsu(image, intesity_lvls=256):
@@ -100,13 +97,18 @@ def otsu_twolevel(img, intensity_lvls=256):
     for first_threshold in range(intensity_lvls):
         for second_threshold in range(first_threshold + 1, intensity_lvls - 1):
             with np.errstate(all='ignore'):
-                inbetween_variance[first_threshold, second_threshold] = Means[0, first_threshold] ** 2 / Probabilities[
-                    0, first_threshold] + Means[first_threshold + 1, second_threshold] ** 2 / Probabilities[
-                                                                            first_threshold + 1, second_threshold] + \
-                                                                        Means[
-                                                                            second_threshold + 1, intensity_lvls - 1] ** 2 / \
-                                                                        Probabilities[
-                                                                            second_threshold + 1, intensity_lvls - 1]
+
+                means_c1 = Means[0, first_threshold]
+                means_c2 = Means[first_threshold + 1, second_threshold]
+                means_c3 = Means[second_threshold + 1, intensity_lvls - 1]
+
+                probs_c1 = Probabilities[0, first_threshold]
+                probs_c2 = Probabilities[first_threshold + 1, second_threshold]
+                probs_c3 = Probabilities[second_threshold + 1, intensity_lvls - 1]
+
+                inbetween_variance[first_threshold, second_threshold] = means_c1 ** 2 / probs_c1 + \
+                                                                        means_c2 ** 2 / probs_c2 + \
+                                                                        means_c3 ** 2 / probs_c3
 
     maximal_variance = np.nanargmax(inbetween_variance)
     optimal_thresholds = np.unravel_index(maximal_variance, inbetween_variance.shape)
@@ -150,8 +152,12 @@ def intensity_value(path_to_image_collection):
     return intensity
 
 
-### Just for testing. Delete later ###
-'''
+# Just for testing. Delete later #
+r'''
+from skimage.io import imread
+from skimage.io import imshow
+from matplotlib import pyplot as plt
+
 image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
 threshold, goodness = otsu_faster(image_test)
 clipped_img = clipping(image_test, threshold)
