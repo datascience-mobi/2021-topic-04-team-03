@@ -5,14 +5,16 @@ from matplotlib import pyplot as plt
 
 def otsu (image):
     """
-
-    :param image:
-    :return:
+    This function takes an image and calculates the probability of class occurrence and the mean value for all pixels to
+     calculate the threshold according to the formula of Otsu Thresholding.
+     Also it calculates the total variance and uses it to calculate the goodness of the threshold.
+    :param image: image out of Data
+    :return: threshold and goodness of the image
     """
     img = image.copy().flatten()
     #Number of pixels
     N = img.size
-    #probability of class occurence
+    #probability of class occurrence
     w = np.zeros(256)
     #mean value
     m = np.zeros(256)
@@ -38,6 +40,14 @@ def otsu (image):
     return threshold, goodness
 
 def otsu_faster(image, intensity_lvls = 256):
+    """
+    This function takes an image and calculates the probability of class occurrence and the mean value for all pixels to
+     calculate the threshold according to the formula of Otsu Thresholding without using a for loop.
+     Also it calculates the total variance and uses it to calculate the goodness of the threshold.
+    :param image: image out of Data
+    :param intensity_lvls:
+    :return: threshold and goodness of the image
+    """
     img = image.copy().flatten()
     # Number of pixels
     N = img.size
@@ -64,6 +74,14 @@ def otsu_faster(image, intensity_lvls = 256):
     return threshold, goodness
 
 def otsuna (image):
+    """
+This function takes an image and calculates the probability of class occurrence and the mean value for all pixels for both classes to
+     calculate the threshold according to the formula of Otsu Thresholding.
+     Also it calculates the total variance and uses it to calculate the goodness of the threshold.
+
+    :param image: image out of Data
+    :return: threshold and goodness of the image
+    """
     img = image.copy().flatten()
     #Number of pixels
     N = img.size
@@ -96,6 +114,12 @@ def otsuna (image):
     return(threshold,goodness)
 
 def otsu_twolevel (img):
+    """
+    This function takes an image and calculates two thresholds according to the formula of two-level Otsu Thresholding.
+
+    :param img: image out of Data
+    :return: threshold of the image
+    """
     # compute histogram of img
     hist = np.histogram(img, bins=np.arange(257), density=True)
 
@@ -124,13 +148,21 @@ def otsu_twolevel (img):
 
     # Compute the maximum variance
     max = np.nanargmax(sigma)
-    # Get postition of maximum ( = optimal Threshold values)
+    # Get position of maximum ( = optimal Threshold values)
     thresholds = np.unravel_index(max, sigma.shape)
     return(thresholds)
 
 
 
 def clipping (img,threshold):
+    """
+    This function takes the intensity of every pixel and sets its value to 0 if the threshold is equal or smaller 0.
+    If the intensity value is greater than the threshold, the value is set to 1.
+
+    :param img: image out of Data
+    :param threshold: uses the threshold derived from Otsu Thresholding
+    :return: workimg that has been clipped
+    """
     #Copy of Image
     workimg = img.copy()
     #All pixels with intensity below theshold to 0
