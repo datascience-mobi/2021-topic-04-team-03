@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def otsu(image, intesity_lvls=256):
+def otsu(image, intensity_lvls=256):
     """
     This function takes an image and calculates the probability of class occurrence
     and the mean value for all pixels to calculate the threshold according to the formula
@@ -12,7 +12,7 @@ def otsu(image, intesity_lvls=256):
     Otsu, N. "A threshold selection method from gray-level histograms."
     IEEE Transactions on Systems, Man, and Cybernetics 9:1 (1979), pp 62-66.
 
-    :param intesity_lvls: The total number of intensity levels
+    :param intensity_lvls: The total number of intensity levels
     :param image: Input image
     :return: Threshold and goodness of segmentation
     """
@@ -20,10 +20,10 @@ def otsu(image, intesity_lvls=256):
     img = image.copy().flatten()
     number_of_pixels = img.size
     class_probability = np.zeros(intensity_lvls)
-    class_mean = np.zeros(intesity_lvls)
+    class_mean = np.zeros(intensity_lvls)
     total_mean = np.mean(img)
 
-    for threshold in range(intesity_lvls):
+    for threshold in range(intensity_lvls):
         class_mean[threshold] = np.sum(img[img <= threshold]) / number_of_pixels
         class_probability[threshold] = np.sum(np.where(img <= threshold, 1, 0)) / number_of_pixels
 

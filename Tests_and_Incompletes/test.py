@@ -1,3 +1,5 @@
+import nuclei_segmentation
+
 
 from skimage.io import imread_collection
 from nuclei_segmentation import otsu
@@ -10,12 +12,19 @@ import numpy as np
 import os
 
 
-col_dir_img = [r'''..\Data\N2DL-HeLa\img\*.tif''']
-col_dir_gt = [r'''..\Data\N2DL-HeLa\gt\*.tif''']
+col_dir_img = [r'..\Data\N2DL-HeLa\img\*.tif']
+col_dir_gt = [r'..\Data\N2DL-HeLa\gt\*.tif']
 
-col_img = imread_collection(col_dir_img)
+col_dir_img_a = [r'..\Data\NIH3T3\im\*.png']
+col_dir_gt = [r'..\Data\NIH3T3\gt\*.png']
+
+col_img = imread_collection(col_dir_img, col_dir_img_a)
 col_gt = imread_collection(col_dir_gt)
 
+print(col_img)
+
+
+r'''
 print(col_img)
 
 clipped_list = []
@@ -24,6 +33,7 @@ gt_list = []
 for i in col_img:
     threshold, goodness = otsu.otsu_faster(i)
     clipped_list.append(otsu.clipping(i, threshold))
+    print(threshold)
 
 for i in col_gt:
     gt_list.append(i)
@@ -61,7 +71,6 @@ def pipeline_assembly():
                 print(evaluation.dice_score_faster(clipped_list_dataset[img], gt_list_dataset[img]))
 
 
-r'''
 gt = gt_list[6]
 im = col_img[6]
 
@@ -70,4 +79,5 @@ t_skimage = threshold_otsu(im)
 print(t_skimage)
 
 print(otsu.otsu_faster(im))
+
 '''
