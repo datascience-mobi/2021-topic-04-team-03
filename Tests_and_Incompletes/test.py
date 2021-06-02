@@ -18,10 +18,10 @@ col_dir_gt = [r'..\Data\N2DL-HeLa\gt\*.tif']
 col_dir_img_a = [r'..\Data\NIH3T3\im\*.png']
 col_dir_gt = [r'..\Data\NIH3T3\gt\*.png']
 
-col_img = imread_collection(col_dir_img, col_dir_img_a)
+col_img = imread_collection(r'..\Data\N2DL-HeLa\img\*.tif')
 col_gt = imread_collection(col_dir_gt)
 
-print(col_img)
+print(np.shape(col_img[0]))
 
 
 r'''

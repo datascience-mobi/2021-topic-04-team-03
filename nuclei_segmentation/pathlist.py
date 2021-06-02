@@ -1,5 +1,6 @@
 from pathlib import Path
 
+
 def pathlist(loadpath, searchstring_list):
     """Picture search.
 
@@ -32,9 +33,3 @@ if __name__ == "__main__":
     print(NIH3T3_gt_list)
     NIH3T3_img_list = pathlist("../Data/NIH3T3/im", ".png")
     print(NIH3T3_img_list)
-
-
-
-
-
-

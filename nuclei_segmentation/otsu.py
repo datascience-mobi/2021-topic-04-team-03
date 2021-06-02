@@ -136,7 +136,7 @@ def clipping(img, threshold):
 def intensity_value(path_to_image_collection):
     """
     This function returns the total number of possible intensity values
-     for an image depending on the image type. Only supports .png and .tif.
+    for an image depending on the image type. Only supports .png and .tif.
 
     :return: The total number of intensity values
     :param path_to_image_collection: Path to image collection as a string in a list.
