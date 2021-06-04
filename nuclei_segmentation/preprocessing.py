@@ -43,8 +43,8 @@ def gaussian_kernel(length = 5, sigma = 1):
     if length % 2 == 0:
         raise Exception('Only odd numbers!')
 
-    N = length//2
-    kernel_1D = np.linspace(-N, N, length)
+    border_distance = length//2
+    kernel_1D = np.linspace(-border_distance, border_distance, length)
     xx, yy = np.meshgrid(kernel_1D, kernel_1D)
     kernel_2D = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
     kernel_normalized = kernel_2D / np.sum(kernel_2D)
@@ -63,15 +63,15 @@ def convolution(image, kernel):
     :return: Filtered Image
     """
 
-    N = np.shape(kernel)[0]//2
-    padded_picture = np.pad(image, (N, N), 'reflect')
+    border_distance = np.shape(kernel)[0]//2
+    padded_picture = np.pad(image, (border_distance, border_distance), 'reflect')
     filtered_image = np.zeros(padded_picture.shape)
     for p in np.ndindex(padded_picture.shape):
-        if p[0] >= N and p[0] < padded_picture.shape[0] - N and p[1] >= N and p[1] < padded_picture.shape[1] - N:
-            neighborhood = padded_picture[p[0] - N:p[0] + N + 1, p[1] - N:p[1] + N + 1]
+        if p[0] >= border_distance and p[0] < padded_picture.shape[0] - border_distance and p[1] >= border_distance and p[1] < padded_picture.shape[1] - border_distance:
+            neighborhood = padded_picture[p[0] - border_distance:p[0] + border_distance + 1, p[1] - border_distance:p[1] + border_distance + 1]
             neighborhood_array = neighborhood * kernel
             filtered_image[p] = np.sum(neighborhood_array)
-    final_image = filtered_image[N:filtered_image.shape[0] - N, N:filtered_image.shape[1] - N]
+    final_image = filtered_image[border_distance:filtered_image.shape[0] - border_distance, border_distance:filtered_image.shape[1] - border_distance]
     return final_image
 
 
