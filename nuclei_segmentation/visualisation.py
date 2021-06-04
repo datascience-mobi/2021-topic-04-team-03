@@ -1,6 +1,16 @@
 import matplotlib.pyplot as plt
 
 def border_image(image, border_pixels, width):
+    '''
+    This Function takes a binary image and a list with the position of the border pixels of the image
+    and plots an image with cell borders of custom width.
+    To recieve the border pixels use 'find_border' in metrics
+
+    :param image: Ground truth image
+    :param border_pixels: List of border pixels of input image
+    :param width: border width
+    :return:Plots the imag with cell borders
+    '''
 
     half_width = width//2
 
