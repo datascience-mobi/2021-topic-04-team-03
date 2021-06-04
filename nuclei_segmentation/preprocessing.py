@@ -55,7 +55,7 @@ def gaussian_kernel(length = 5, sigma = 1):
 
 def convolution(image, kernel):
     """
-    This function takes an image and an filter mask as Input and returns the filtered image.
+    This function takes an image and a filter mask as Input and returns the filtered image.
     Only square shaped filter masks are possible
 
     :param image: Input Image
@@ -75,27 +75,50 @@ def convolution(image, kernel):
     return final_image
 
 
+def median_filter(img, filter_size):
+    '''
+    This function applies median filter to a given image.
+    To calculate the values for border pixels, the image array is extended by reflecting the values.
 
-r'''
-png = imread(r'..\Data\NIH3T3\im\dna-0.png')
-image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
+    :param img: Input image
+    :param filter_size: The length of the square filter mask
+    :return: Filtered image
+    '''
 
-stretchy = stretch(image_test_png, 256)
+    workimg = img.copy()
+    workimg = np.pad(workimg, pad_width=filter_size // 2, mode='reflect')
+    workimg = np.array([np.median(workimg[x:x + filter_size, y:y + filter_size].flatten())
+                        for x, y in np.ndindex(img.shape)])
+    workimg.reshape(img.shape)
 
-plt.imshow(image_test_png, 'gray')
-plt.show()
+    return workimg
 
-plt.imshow(stretchy, 'gray')
-plt.show()
+#
+# png = imread(r'..\Data\NIH3T3\im\dna-0.png')
+# image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
+#
+# stretchy = stretch(image_test_png, 256)
+#
+# plt.imshow(image_test_png, 'gray')
+# plt.show()
+#
+# plt.imshow(stretchy, 'gray')
+# plt.show()
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-from skimage.io import imread
+# from skimage.io import imread
+#
+# x = gaussian_kernel(21,10)
+# png = imread(r'..\Data\NIH3T3\img\dna-26.png')
+# conv = convolution(png,x)
+#
+# print(conv.shape)
+# print(png.shape)
 
-x = gaussian_kernel(21,10)
-png = imread(r'..\Data\NIH3T3\img\dna-0.png')
-conv = convolution(png,x)
+# Testing median filter
+# from scipy import ndimage
+# ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
+# test_median = median_filter(png, 3)
 
-print(conv.shape)
-print(png.shape)
-'''
+
