@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from matplotlib import colors
+import numpy as np
 
 def border_image(image, border_pixels, width):
     '''
@@ -25,4 +27,25 @@ def border_image(image, border_pixels, width):
     plt.imshow(border_image, 'PiYG')
     plt.show()
 
-def overlay (test_image, gorund_thruth):
+def overlay (test_image, ground_thruth):
+    # does not work
+    false_pixels = np.ma.masked_where(ground_thruth == test_image, test_image)
+    gt_0 = np.ma.masked_where(ground_thruth == 0, false_pixels)
+    false_negatives = np.ma.mask_or(false_pixels, gt_0)
+    gt_1 = np.ma.masked_where(ground_thruth == 1, false_pixels)
+    false_positives = np.ma.mask_or(false_pixels, gt_1)
+
+    plt.figure()
+    plt.imshow(test_image, 'gray', interpolation='none')
+    plt.imshow(false_negatives, 'jet', interpolation='none')
+    plt.imshow(false_positives, 'gnuplot', interpolation='none')
+    plt.show()
+#
+# from nuclei_segmentation import otsu
+# from skimage.io import imread
+#
+# img = imread(r'..\Data\NIH3T3\img\dna-0.png')
+# our_img = otsu.otsu(img)
+# gt = imread(r'..\Data\NIH3T3\gt\0.png')
+#
+# overlay(img, gt)
