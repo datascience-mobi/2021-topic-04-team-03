@@ -1,26 +1,16 @@
 import math
-
 import numpy as np
-def cell_counting (img):
-    # select border pixels
-    border_pixels = []
+
+def find_border(img):
+    edge_pixels = []
     for index in np.ndindex(img.shape):
         if img[index[0]][index[1]] == 255:
-            if 0 in img[(index[0]-1):(index[0]+2), (index[1]-1):(index[1]+2)]:
-                border_pixels.append(index)
+            if 0 in img[(index[0] - 1):(index[0] + 2), (index[1] - 1):(index[1] + 2)]:
+                edge_pixels.append(index)
+    return edge_pixels
 
-    # group border pixels
-    # pixel_groups = []
-    # for start_pixel in border_pixels:
-    #     single_group = [start_pixel]
-    #     for other_pixel in border_pixels:
-    #         if other_pixel != start_pixel and math.dist(other_pixel, start_pixel) < 2:
-    #             single_group.append(other_pixel)
-    #             border_pixels.remove(other_pixel)
-    #     border_pixels.remove(start_pixel)
-    #     pixel_groups.append(single_group)
-
-
+def group_border(border_pixels):
+    all_groups = []
     for start_pixel in border_pixels:
         old_group = [start_pixel]
         new_group = []
@@ -34,7 +24,24 @@ def cell_counting (img):
                     if math.dist(pixel, other_pixel) < 2:
                         new_group.append(other_pixel)
                         border_pixels.remove(other_pixel)
-                border_pixels.remove(pixel)
+                if pixel in border_pixels:
+                    border_pixels.remove(pixel)
+        all_groups.append(new_group)
+    return all_groups
+
+def cell_counting (img):
+    border = find_border(img)
+    cells = group_border(border)
+    return len(cells)
 
 
-    return pixel_groups
+
+from matplotlib import pyplot as plt
+from skimage.io import imread
+from skimage.io import imshow
+import matplotlib as mpl # big plots
+mpl.rcParams['figure.dpi'] = 10000
+img = imread (r'..\Data\NIH3T3\gt\0.png')
+# fig, ax = plt.subplots(figsize=(10.24, 13.44))
+plt.imshow(img, 'gray')
+plt.show()
