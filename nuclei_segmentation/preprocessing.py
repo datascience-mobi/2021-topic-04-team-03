@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def stretch(img, intensity_lvls=256, quantile = 2):
+def stretch(img, intensity_lvls=256, quantile=2):
     """
     This function peforms histogram stretching and ignores the outliers (below lower and above upper quantile).
     The minimum intensity of the stretched image is zero, the maximum intensity is 256 (.png) or 2**16 (.tif)
@@ -23,14 +23,13 @@ def stretch(img, intensity_lvls=256, quantile = 2):
     min_intensity_input = int(np.min(workimg))
     max_intensity_input = int(np.max(workimg))
 
-    stretched_image = (workimg - min_intensity_input) * (max_intensity_output - min_intensity_output) /\
+    stretched_image = (workimg - min_intensity_input) * (max_intensity_output - min_intensity_output) / \
                       (max_intensity_input - min_intensity_input)
 
     return stretched_image
 
 
-
-def gaussian_kernel(length = 5, sigma = 1):
+def gaussian_kernel(length=5, sigma=1):
     """
     The function returns a square shaped Gaussian filter mask of desired size and standard deviation.
     Only odd values for the filter size are possible.
@@ -43,14 +42,13 @@ def gaussian_kernel(length = 5, sigma = 1):
     if length % 2 == 0:
         raise Exception('Only odd numbers!')
 
-    border_distance = length//2
+    border_distance = length // 2
     kernel_1D = np.linspace(-border_distance, border_distance, length)
     xx, yy = np.meshgrid(kernel_1D, kernel_1D)
     kernel_2D = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
     kernel_normalized = kernel_2D / np.sum(kernel_2D)
 
     return kernel_normalized
-
 
 
 def convolution(image, kernel):
@@ -63,15 +61,18 @@ def convolution(image, kernel):
     :return: Filtered Image
     """
 
-    border_distance = np.shape(kernel)[0]//2
+    border_distance = np.shape(kernel)[0] // 2
     padded_picture = np.pad(image, (border_distance, border_distance), 'reflect')
     filtered_image = np.zeros(padded_picture.shape)
     for p in np.ndindex(padded_picture.shape):
-        if p[0] >= border_distance and p[0] < padded_picture.shape[0] - border_distance and p[1] >= border_distance and p[1] < padded_picture.shape[1] - border_distance:
-            neighborhood = padded_picture[p[0] - border_distance:p[0] + border_distance + 1, p[1] - border_distance:p[1] + border_distance + 1]
+        if p[0] >= border_distance and p[0] < padded_picture.shape[0] - border_distance and p[1] >= border_distance and \
+                p[1] < padded_picture.shape[1] - border_distance:
+            neighborhood = padded_picture[p[0] - border_distance:p[0] + border_distance + 1,
+                           p[1] - border_distance:p[1] + border_distance + 1]
             neighborhood_array = neighborhood * kernel
             filtered_image[p] = np.sum(neighborhood_array)
-    final_image = filtered_image[border_distance:filtered_image.shape[0] - border_distance, border_distance:filtered_image.shape[1] - border_distance]
+    final_image = filtered_image[border_distance:filtered_image.shape[0] - border_distance,
+                  border_distance:filtered_image.shape[1] - border_distance]
     return final_image
 
 
@@ -90,6 +91,28 @@ def median_filter(img, filter_size):
     workimg = np.array([np.median(workimg[x:x + filter_size, y:y + filter_size].flatten())
                         for x, y in np.ndindex(img.shape)])
     workimg.reshape(img.shape)
+
+    return workimg
+
+
+def two_level_reflection(img, thresholds):
+    '''
+    This function corrects bright reflections on image by setting pixels
+    with intensity above the higher threshold black. Thresholds can be obtained
+    by two-level Otsu algorithm.
+
+    :param img: Image to be processed
+    :param thresholds: List/array containing two thresholds
+    :return: Corrected image
+    '''
+
+    workimg = img.copy()
+    threshold_1 = min(thresholds)
+    threshold_2 = max(thresholds)
+
+    workimg[workimg <= threshold_1] = 0
+    workimg[workimg > threshold_1] = 1
+    workimg[workimg > threshold_2] = 0
 
     return workimg
 
@@ -120,5 +143,3 @@ def median_filter(img, filter_size):
 # from scipy import ndimage
 # ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
 # test_median = median_filter(png, 3)
-
-

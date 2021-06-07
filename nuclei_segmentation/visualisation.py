@@ -40,7 +40,7 @@ def overlay (test_image, ground_thruth):
     plt.imshow(false_negatives, 'jet', interpolation='none')
     plt.imshow(false_positives, 'gnuplot', interpolation='none')
     plt.show()
-#
+
 # from nuclei_segmentation import otsu
 # from skimage.io import imread
 #
@@ -48,4 +48,4 @@ def overlay (test_image, ground_thruth):
 # our_img = otsu.otsu(img)
 # gt = imread(r'..\Data\NIH3T3\gt\0.png')
 #
-# overlay(img, gt)
+# overlay(our_img, gt)
