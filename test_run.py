@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from nuclei_segmentation import otsu
 from nuclei_segmentation import preprocessing
 from nuclei_segmentation import evaluation
+from nuclei_segmentation import metrics
+from nuclei_segmentation import visualisation
 
 img_NIH3T3 = imread(r'Data\NIH3T3\img\dna-42.png')
 gt_NIH3T3 = imread(r'Data\NIH3T3\gt\42.png')
@@ -122,3 +124,12 @@ plt.show()
 
 dc_stretched_median_GOWT1 = evaluation.dice(stretched_median_GOWT1_segmented, gt_GOWT1)
 print('GOWT1 histogram stretching after median filter: ' + str(dc_stretched_median_GOWT1))
+
+# -------
+# Cell counting
+
+cell_number = metrics.cell_counting(gt_NIH3T3)
+print('There are ' + str(cell_number) + ' cells on the NIH3T3 image.')
+
+border_pixels_NIH3T3 = metrics.find_border(gt_NIH3T3)
+visualisation.border_image(gt_NIH3T3, border_pixels_NIH3T3, 5)
