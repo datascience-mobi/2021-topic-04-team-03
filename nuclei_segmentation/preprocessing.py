@@ -76,7 +76,7 @@ def convolution(image, kernel):
     return final_image
 
 
-def median_filter(img, filter_size):
+def median_filter(img, filter_size=5):
     '''
     This function applies median filter to a given image.
     To calculate the values for border pixels, the image array is extended by reflecting the values.
@@ -90,7 +90,7 @@ def median_filter(img, filter_size):
     workimg = np.pad(workimg, pad_width=filter_size // 2, mode='reflect')
     workimg = np.array([np.median(workimg[x:x + filter_size, y:y + filter_size].flatten())
                         for x, y in np.ndindex(img.shape)])
-    workimg.reshape(img.shape)
+    workimg = workimg.reshape(img.shape)
 
     return workimg
 

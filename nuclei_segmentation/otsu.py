@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def otsu(image, intensity_lvls=256):
     """
     This function takes an image and calculates the probability of class occurrence
@@ -132,6 +131,17 @@ def clipping(img, threshold):
 
     return workimg
 
+def complete_segmentation (img, intensity_lvls=256):
+    '''
+    Performs complete image segmentation using Otsu threshold.
+
+    :param img: Image to be segmented
+    :return: Segmented binary image
+    '''
+    threshold, goodness = otsu_faster(img, intensity_lvls)
+    workimg = clipping(img, threshold)
+
+    return workimg
 
 def intensity_value(path_to_image_collection):
     """
