@@ -1,4 +1,6 @@
+import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 
 def stretch(img, intensity_lvls=256, quantile=2):
@@ -29,50 +31,53 @@ def stretch(img, intensity_lvls=256, quantile=2):
     return stretched_image
 
 
-def gaussian_kernel(length=5, sigma=1):
+def gaussian_kernel(length = 5, sigma = 1):
     """
-    The function returns a square shaped Gaussian filter mask of desired size and standard deviation.
+    The function returns a square shaped gaussian filter mask of desired size and standard deviation.
     Only odd values for the filter size are possible.
 
-    :param length: Side length of the gaussian kernel (only odd numbers)
-    :param sigma: Standard deviation of the gaussian distribution
-    :return: Square shaped Gaussian kernel
+    :param length: side length of the gaussian kernel (only odd numbers)
+    :param sigma: standard deviation of the gaussian distribution
+    :return: square shaped gaussian kernel
     """
-
     if length % 2 == 0:
         raise Exception('Only odd numbers!')
 
-    border_distance = length // 2
-    kernel_1D = np.linspace(-border_distance, border_distance, length)
+    border_width = length//2
+    kernel_1D = np.linspace(-border_width, border_width, length)
     xx, yy = np.meshgrid(kernel_1D, kernel_1D)
     kernel_2D = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
-    kernel_normalized = kernel_2D / np.sum(kernel_2D)
+
+    kernel_normalized = kernel_2D/np.sum(kernel_2D)
 
     return kernel_normalized
 
 
 def convolution(image, kernel):
     """
-    This function takes an image and a filter mask as Input and returns the filtered image.
+    This function takes an image and an filter mask as Input and returns the filtered image.
     Only square shaped filter masks are possible
 
     :param image: Input Image
-    :param kernel: Filter mask
+    :param kernel: filter mask
     :return: Filtered Image
     """
 
-    border_distance = np.shape(kernel)[0] // 2
-    padded_picture = np.pad(image, (border_distance, border_distance), 'reflect')
+    border_width = np.shape(kernel)[0]//2
+
+    padded_picture = np.pad(image, (border_width, border_width), 'reflect')
+
     filtered_image = np.zeros(padded_picture.shape)
+
     for p in np.ndindex(padded_picture.shape):
-        if p[0] >= border_distance and p[0] < padded_picture.shape[0] - border_distance and p[1] >= border_distance and \
-                p[1] < padded_picture.shape[1] - border_distance:
-            neighborhood = padded_picture[p[0] - border_distance:p[0] + border_distance + 1,
-                           p[1] - border_distance:p[1] + border_distance + 1]
+
+        if p[0] >= border_width and p[0] < padded_picture.shape[0] - border_width and p[1] >= border_width and p[1] < padded_picture.shape[1] - border_width:
+            neighborhood = padded_picture[p[0] - border_width:p[0] + border_width + 1, p[1] - border_width:p[1] + border_width + 1]
             neighborhood_array = neighborhood * kernel
-            filtered_image[p] = np.sum(neighborhood_array)
-    final_image = filtered_image[border_distance:filtered_image.shape[0] - border_distance,
-                  border_distance:filtered_image.shape[1] - border_distance]
+            filtered_image[p] = int(math.floor(np.sum(neighborhood_array)))
+
+    final_image = filtered_image[border_width:filtered_image.shape[0] - border_width, border_width:filtered_image.shape[1] - border_width]
+
     return final_image
 
 
@@ -132,9 +137,18 @@ def two_level_reflection(img, thresholds):
 
 # from skimage.io import imread
 #
-# x = gaussian_kernel(21,10)
-# png = imread(r'..\Data\NIH3T3\img\dna-26.png')
-# conv = convolution(png,x)
+
+#import matplotlib.pyplot as plt
+#import numpy as np
+#from skimage.io import imread
+
+#x = gaussian_kernel(21,10)
+#png = imread(r'..\Data\NIH3T3\img\dna-26.png')
+#conv = convolution(png,x)
+
+#plt.imshow(conv)
+#plt.show()
+
 #
 # print(conv.shape)
 # print(png.shape)
