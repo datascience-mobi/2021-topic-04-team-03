@@ -80,7 +80,6 @@ print("GOWT1 histogram stretched: " + str(dc_stretched_GOWT1))
 # Preprocessing with filters
 # gauss filter
 
-### DOESN'T WORK
 gauss_kernel = preprocessing.gaussian_kernel(length=5, sigma=1)
 gauss_GOWT1 = preprocessing.convolution(img_GOWT1, gauss_kernel)
 gauss_GOWT1_segmented = otsu.complete_segmentation(gauss_GOWT1, 2**16)
@@ -133,3 +132,8 @@ print('There are ' + str(cell_number) + ' cells on the NIH3T3 image.')
 
 border_pixels_NIH3T3 = metrics.find_border(gt_NIH3T3)
 visualisation.border_image(gt_NIH3T3, border_pixels_NIH3T3, 5)
+
+#----
+#Overlay of ground truth and test images
+
+visualisation.overlay(median_GOWT1_segmented, gt_GOWT1, intensity_lvls=2**16)
