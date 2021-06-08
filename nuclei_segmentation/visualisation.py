@@ -27,25 +27,51 @@ def border_image(image, border_pixels, width):
     plt.imshow(border_image, 'PiYG')
     plt.show()
 
-def overlay (test_image, ground_thruth):
-    # does not work
-    false_pixels = np.ma.masked_where(ground_thruth == test_image, test_image)
-    gt_0 = np.ma.masked_where(ground_thruth == 0, false_pixels)
-    false_negatives = np.ma.mask_or(false_pixels, gt_0)
-    gt_1 = np.ma.masked_where(ground_thruth == 1, false_pixels)
-    false_positives = np.ma.mask_or(false_pixels, gt_1)
+def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of groundtruth and test image'):
+    '''
+    This function plots overlay of ground truth and a test image.
+    False negatives are shown in red, while false positives in blue.
+
+    :param test_image: Image to be compared with ground truth
+    :param ground_truth: Ground truth image
+    :param intensity_lvls: Total number of intensity levels of the images
+    :param title: Title of the plot
+    :return: None
+    '''
+    test_image_corrected = test_image.copy()*intensity_lvls
+    false_pixels = np.ma.masked_where(ground_truth == test_image_corrected, test_image_corrected)
+    false_negatives = np.ma.masked_where(ground_truth == 0, false_pixels)
+    false_positives = np.ma.masked_where(ground_truth == intensity_lvls - 1, false_pixels)
+
+    cmap_false_negatives = colors.ListedColormap(['red', 'none'])
+    cmap_false_positives = colors.ListedColormap(['blue', 'none'])
 
     plt.figure()
-    plt.imshow(test_image, 'gray', interpolation='none')
-    plt.imshow(false_negatives, 'jet', interpolation='none')
-    plt.imshow(false_positives, 'gnuplot', interpolation='none')
+
+    plt.imshow(test_image_corrected, 'gray', alpha=0.8)
+    plt.imshow(false_negatives, cmap=cmap_false_negatives)
+    plt.imshow(false_positives, cmap=cmap_false_positives)
+
+    plt.plot(0, 0, ".", c='red', label='False negatives')
+    plt.plot(0, 0, ".", c='blue', label='False positives')
+    plt.legend()
+
+    plt.title(title)
+
     plt.show()
+
 
 # from nuclei_segmentation import otsu
 # from skimage.io import imread
 #
 # img = imread(r'..\Data\NIH3T3\img\dna-0.png')
-# our_img = otsu.otsu(img)
+# our_img = otsu.complete_segmentation(img)
 # gt = imread(r'..\Data\NIH3T3\gt\0.png')
 #
 # overlay(our_img, gt)
+#
+# plt.imshow(our_img)
+# plt.show()
+#
+# plt.imshow(gt)
+# plt.show()
