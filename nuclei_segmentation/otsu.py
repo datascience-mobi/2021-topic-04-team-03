@@ -55,10 +55,11 @@ def otsu_faster(image, intensity_lvls=256):
     class_mean = np.cumsum(histogram[0] * np.arange(intensity_lvls))
     total_mean = np.mean(img)
 
-    # ignoring error because of division with 0
-    with np.errstate(all='ignore'):
+    try:
         inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
                     class_probability * (1 - class_probability))
+    except ZeroDivisionError:
+        inbetween_variance = np.nan
 
     optimal_threshold = np.nanargmax(inbetween_variance)
     total_variance = np.var(img)
@@ -168,14 +169,17 @@ from skimage.io import imread
 from skimage.io import imshow
 from matplotlib import pyplot as plt
 
-image_test = imread(r'..\Data\NIH3T3\im\dna-27.png')
+image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
 threshold, goodness = otsu_faster(image_test)
 clipped_img = clipping(image_test, threshold)
+print(threshold,goodness)
+
 
 plt.imshow(clipped_img, 'gray')
 plt.show()
 plt.imshow(image_test, 'gray')
 plt.show()
+
 
 # Testing whether the output is the same as in the skimage function
 from skimage.filters import threshold_otsu

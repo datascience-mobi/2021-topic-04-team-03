@@ -71,7 +71,7 @@ def surface_distance(clipped_image, ground_truth, pixel_size=1, connectivity=1):
 
     return surf_dist
 
-
+r'''
 from nuclei_segmentation import otsu
 from skimage.io import imread
 
@@ -89,3 +89,4 @@ msd = surface_distance_applied.mean()
 print(msd)
 hd = surface_distance_applied.max()
 print(hd)
+'''
