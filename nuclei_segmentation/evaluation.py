@@ -64,26 +64,28 @@ def surface_distance(clipped_image, ground_truth, pixel_size=1, connectivity=1):
     surface = clipped - morphology.binary_erosion(clipped, conn)
     surface_prime = gt - morphology.binary_erosion(gt, conn)
 
-    distance_1 = morphology.distance_transform_edt(~clipped, pixel_size)
+    distance_1 = morphology.distance_transform_edt(~surface, pixel_size)
     distance_2 = morphology.distance_transform_edt(~surface_prime, pixel_size)
 
-    surface_dist = np.concatenate([np.ravel(distance_1[surface_prime != 0]), np.ravel(distance_2[surface != 0])])
+    surf_dist = np.concatenate([np.ravel(distance_1[surface_prime != 0]), np.ravel(distance_2[surface != 0])])
 
-    return surface_dist
+    return surf_dist
 
 
-def mean_surface_distance(clipped_image, ground_truth, surface_dist):
-    """
-    This function applies the surface distance function to our images and returns its mean.
+from nuclei_segmentation import otsu
+from skimage.io import imread
 
-    :param clipped_image: Segmented (binary) image
-    :param ground_truth: Ground truth image
-    :param surface_dist: Use our implemented function surface_dist to calculate the surface distances of our images.
-    :return: msd: mean surface distance
-    """
-    surf_dist = surface_dist(clipped_image(clipped_image == 1), 
-                             ground_truth(ground_truth == 1), pixel_size=1, connectivity=1)
+img = imread(r'..\Data\NIH3T3\img\dna-0.png')
+our_img = otsu.complete_segmentation(img)
+gt = imread(r'..\Data\NIH3T3\gt\0.png')
 
-    msd = surf_dist.mean()
+#msd_hd = surface_distance_functions(our_img, gt, [1344, 1024], 1)
+#print(msd_hd)
 
-    return msd
+surface_distance_applied = surface_distance(our_img, gt, pixel_size=[1024, 1344], connectivity=1)
+
+#weird values
+msd = surface_distance_applied.mean()
+print(msd)
+hd = surface_distance_applied.max()
+print(hd)
