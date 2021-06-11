@@ -56,37 +56,37 @@ def surface_distance(clipped_image, ground_truth, pixel_size=1, connectivity=1):
     for neighbouring pixels, default is a six-neighborhood kernel
     :return: surface distance between the clipped and the ground truth image
     """
-    clipped = np.atleast_1d(clipped_image)
-    gt = np.atleast_1d(ground_truth)
+    clipped = np.atleast_1d(clipped_image.astype(np.bool_))
+    gt = np.atleast_1d(ground_truth.astype(np.bool_))
 
     conn = morphology.generate_binary_structure(clipped.ndim, connectivity)
 
-    surface = clipped - morphology.binary_erosion(clipped, conn)
-    surface_prime = gt - morphology.binary_erosion(gt, conn)
+    surface = np.subtract(clipped, morphology.binary_erosion(clipped, conn), dtype=np.float32)
+    surface_prime = np.subtract(gt, morphology.binary_erosion(gt, conn), dtype=np.float32)
 
-    distance_1 = morphology.distance_transform_edt(~surface, pixel_size)
-    distance_2 = morphology.distance_transform_edt(~surface_prime, pixel_size)
+# not sure if ~ and 1-surface are the same in this case
+    distance_1 = morphology.distance_transform_edt(1-surface, pixel_size)
+    distance_2 = morphology.distance_transform_edt(1-surface_prime, pixel_size)
 
     surf_dist = np.concatenate([np.ravel(distance_1[surface_prime != 0]), np.ravel(distance_2[surface != 0])])
 
     return surf_dist
 
-r'''
-from nuclei_segmentation import otsu
-from skimage.io import imread
+if __name__ == "__main__":
+    from nuclei_segmentation import otsu
+    from skimage.io import imread
 
-img = imread(r'..\Data\NIH3T3\img\dna-0.png')
-our_img = otsu.complete_segmentation(img)
-gt = imread(r'..\Data\NIH3T3\gt\0.png')
+    img = imread(r'..\Data\NIH3T3\img\dna-0.png')
+    our_img = otsu.complete_segmentation(img)
+    gt = imread(r'..\Data\NIH3T3\gt\0.png')
 
-#msd_hd = surface_distance_functions(our_img, gt, [1344, 1024], 1)
-#print(msd_hd)
+    #msd_hd = surface_distance_functions(our_img, gt, [1344, 1024], 1)
+    #print(msd_hd)
 
-surface_distance_applied = surface_distance(our_img, gt, pixel_size=[1024, 1344], connectivity=1)
+    surface_distance_applied = surface_distance(our_img, gt, pixel_size=[1024, 1344], connectivity=1)
 
-#weird values
-msd = surface_distance_applied.mean()
-print(msd)
-hd = surface_distance_applied.max()
-print(hd)
-'''
+    #weird values
+    msd = surface_distance_applied.mean()
+    print(msd)
+    hd = surface_distance_applied.max()
+    print(hd)

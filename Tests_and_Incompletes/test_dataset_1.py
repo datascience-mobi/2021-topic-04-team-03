@@ -9,42 +9,6 @@ from nuclei_segmentation import evaluation
 from nuclei_segmentation import metrics
 from nuclei_segmentation import visualisation
 
-img_NIH3T3 = imread(str(pl.Path(r'Data\NIH3T3\img\dna-42.png')))
-gt_NIH3T3 = imread(str(pl.Path(r'Data\NIH3T3\gt\42.png')))
-
-plt.imshow(img_NIH3T3)
-plt.title ("Original")
-plt.show()
-
-plt.imshow(gt_NIH3T3)
-plt.title ("Ground truth")
-plt.show()
-
-# One level Otsu
-threshold_NIH3T3, goodness = otsu.otsu_faster(img_NIH3T3)
-clipped_NIH3T3 = otsu.clipping(img_NIH3T3, threshold_NIH3T3)
-
-dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)
-print("One level Otsu: " + str(dc_clipped_NIH3T3))
-
-plt.imshow(clipped_NIH3T3)
-plt.title ("One level clipped")
-plt.show()
-
-# Two level Otsu for reflection correction
-
-two_level_thresholds = otsu.otsu_twolevel(img_NIH3T3)
-two_level_clipped_NIH3T3 = preprocessing.two_level_reflection(img_NIH3T3, two_level_thresholds)
-
-dc_two_level_NIH3T3 = evaluation.dice(two_level_clipped_NIH3T3, gt_NIH3T3)
-print("Two level Otsu (reflection correction): " + str(dc_two_level_NIH3T3))
-
-plt.imshow(two_level_clipped_NIH3T3)
-plt.title ("Two level clipped")
-plt.show()
-
-# ----------
-# Other dataset
 
 img_GOWT1 = imread(str(pl.Path(r'Data\N2DH-GOWT1\img\t01.tif')))
 gt_GOWT1 = imread(str(pl.Path(r'Data/N2DH-GOWT1/gt/man_seg01.tif')))
@@ -78,7 +42,6 @@ plt.show()
 dc_stretched_GOWT1 = evaluation.dice(stretched_GOWT1_segmented, gt_GOWT1)
 print("GOWT1 histogram stretched: " + str(dc_stretched_GOWT1))
 
-# Preprocessing with filters
 # gauss filter
 
 gauss_kernel = preprocessing.gaussian_kernel(length=5, sigma=1)
@@ -125,16 +88,6 @@ plt.show()
 dc_stretched_median_GOWT1 = evaluation.dice(stretched_median_GOWT1_segmented, gt_GOWT1)
 print('GOWT1 histogram stretching after median filter: ' + str(dc_stretched_median_GOWT1))
 
-# -------
-# Cell counting
-
-cell_number = metrics.cell_counting(gt_NIH3T3)
-print('There are ' + str(cell_number) + ' cells on the NIH3T3 image.')
-
-border_pixels_NIH3T3 = metrics.find_border(gt_NIH3T3)
-visualisation.border_image(gt_NIH3T3, border_pixels_NIH3T3, 5)
-
-#----
 #Overlay of ground truth and test images
 
 visualisation.overlay(median_GOWT1_segmented, gt_GOWT1, intensity_lvls=2**16)
