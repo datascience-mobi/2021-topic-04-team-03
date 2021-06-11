@@ -10,8 +10,8 @@ from nuclei_segmentation import metrics
 from nuclei_segmentation import visualisation
 
 
-img_GOWT1 = imread(str(pl.Path(r'Data\N2DH-GOWT1\img\t01.tif')))
-gt_GOWT1 = imread(str(pl.Path(r'Data/N2DH-GOWT1/gt/man_seg01.tif')))
+img_GOWT1 = imread(str(pl.Path(r'..\Data\N2DH-GOWT1\img\t01.tif')))
+gt_GOWT1 = imread(str(pl.Path(r'../Data/N2DH-GOWT1/gt/man_seg01.tif')))
 
 plt.imshow(img_GOWT1, 'gray')
 plt.title ("GOWT1 original")
