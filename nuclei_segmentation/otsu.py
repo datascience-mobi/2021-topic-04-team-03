@@ -29,7 +29,7 @@ def otsu(image, intensity_lvls=256):
     total_variance = np.var(image)
     goodness = inbetween_variance[optimal_threshold] / total_variance
 
-    return optimal_threshold, goodness
+    return optimal_threshold
 
 
 def otsu_twolevel(img, intensity_lvls=256):
@@ -40,7 +40,7 @@ def otsu_twolevel(img, intensity_lvls=256):
     :param img: Input image
     :return: Threshold of the image
     """
-
+    intensity_lvls = intensity_lvls - 1
     histogram = np.histogram(img, bins=np.arange(intensity_lvls + 1), density=True)
 
     class_probability = histogram[0]
@@ -125,6 +125,37 @@ def intensity_value(path_to_image_collection):
 
     return intensity
 
+def alternative_reflection_otsu(img, intensity_lvls = 256):
+    '''
+    This is alternative for handling reflections in the images.
+    It first calculates two thresholds with two-level Otsu.
+    Than the values below the lower and above the higher threshold
+    are set to the value of the lower threshold.
+    The image is than stretched. A new threshold is calculated with one-level Otsu.
+    The image is clipped with the new threshold.
+
+    :param img: Input image
+    :return: Segmented image
+    '''
+    two_lvl_thresholds = otsu_twolevel(img)
+    threshold1, threshold2 = min(two_lvl_thresholds), max(two_lvl_thresholds)
+
+    workimg = img.copy()
+    workimg[workimg < threshold1] = threshold1
+    workimg[workimg > threshold2] = threshold1
+
+    min_intensity_output = 0
+    max_intensity_output = intensity_lvls
+    min_intensity_input = int(np.min(workimg))
+    max_intensity_input = int(np.max(workimg))
+
+    stretched_image = (workimg - min_intensity_input) * (max_intensity_output - min_intensity_output) / \
+                      (max_intensity_input - min_intensity_input)
+
+    one_lvl_threshold = otsu(stretched_image)
+    img_clipped = clipping(stretched_image, one_lvl_threshold)
+
+    return img_clipped
 
 # Just for testing. Delete later #
 if __name__ == '__main__':
