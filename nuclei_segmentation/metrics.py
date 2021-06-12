@@ -12,10 +12,12 @@ def find_border(img):
     """
 
     edge_pixels = []
+    workimg = np.zeros(img.shape)
+    workimg[img > 0] = 1
 
     for index in np.ndindex(img.shape):
-        if img[index[0]][index[1]] == 255:
-            if 0 in img[(index[0] - 1):(index[0] + 2), (index[1] - 1):(index[1] + 2)]:
+        if workimg[index[0]][index[1]] == 1:
+            if 0 in workimg[(index[0] - 1):(index[0] + 2), (index[1] - 1):(index[1] + 2)]:
                 edge_pixels.append(index)
 
     return edge_pixels

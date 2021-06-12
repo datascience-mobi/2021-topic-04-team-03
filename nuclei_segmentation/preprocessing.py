@@ -120,6 +120,18 @@ def two_level_reflection(img, thresholds):
 
     return workimg
 
+def binarize(img):
+    '''
+    Transforms non-binary images to binary by setting values above 0 to 1.
+
+    :param img: Image to be transformed
+    :return: Transformed image
+    '''
+
+    workimg = img.copy()
+    workimg [img > 0] = 1
+    return workimg
+
 if __name__ == '__main__':
     from skimage.io import imread
     png = imread(r'..\Data\NIH3T3\im\dna-0.png')

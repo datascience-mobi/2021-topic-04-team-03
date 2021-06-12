@@ -131,8 +131,8 @@ print('GOWT1 histogram stretching after median filter: ' + str(dc_stretched_medi
 cell_number = metrics.cell_counting(gt_NIH3T3)
 print('There are ' + str(cell_number) + ' cells on the NIH3T3 image.')
 
-border_pixels_NIH3T3 = metrics.find_border(gt_NIH3T3)
-visualisation.border_image(gt_NIH3T3, border_pixels_NIH3T3, 5)
+border_pixels_NIH3T3 = metrics.find_border(gt_GOWT1)
+visualisation.border_image(gt_GOWT1, border_pixels_NIH3T3, 5)
 
 #----
 #Overlay of ground truth and test images
