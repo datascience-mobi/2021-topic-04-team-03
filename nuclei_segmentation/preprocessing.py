@@ -141,9 +141,10 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
     import numpy as np
     from skimage.io import imread
+    import pathlib as pl
 
     x = gaussian_kernel(21,10)
-    png = imread(r'..\Data\NIH3T3\img\dna-26.png')
+    png = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-26.png')))
     conv = convolution(png,x)
 
     plt.imshow(conv)

@@ -73,8 +73,9 @@ if __name__ == '__main__':
     from skimage.io import imread
     from skimage.io import imshow
     import matplotlib as mpl # big plots
+    import pathlib as pl
     mpl.rcParams['figure.dpi'] = 10000
-    img = imread(r'..\Data\NIH3T3\gt\0.png')
+    img = imread(str(pl.Path(r'..\Data\NIH3T3\gt\0.png')))
     fig, ax = plt.subplots(figsize=(10.24, 13.44))
     plt.imshow(img, 'gray')
     plt.show()

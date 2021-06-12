@@ -1,8 +1,10 @@
-N2DL_HeLa_im = [r'..\Data\N2DL-HeLa\img\*.tif']
-N2DL_HeLa_gt = [r'..\Data\N2DL-HeLa\gt\*.tif']
+import pathlib as pl
 
-NIH3T3_im = [r'..\Data\NIH3T3\img\*.png']
-NIH3T3_gt = [r'..\Data\NIH3T3\gt\*.png']
+N2DL_HeLa_im = [str(pl.Path(r'..\Data\N2DL-HeLa\img\*.tif'))]
+N2DL_HeLa_gt = [str(pl.Path(r'..\Data\N2DL-HeLa\gt\*.tif'))]
 
-N2DH_GOWT1_im = [r'..\Data\N2DH_GOWT1\img\*.tif']
-N2DH_GOWT1_gt = [r'..\Data\N2DH_GOWT1\gt\*.tif']
+NIH3T3_im = [str(pl.Path(r'..\Data\NIH3T3\img\*.png'))]
+NIH3T3_gt = [str(pl.Path(r'..\Data\NIH3T3\gt\*.png'))]
+
+N2DH_GOWT1_im = [str(pl.Path(r'..\Data\N2DH_GOWT1\img\*.tif'))]
+N2DH_GOWT1_gt = [str(pl.Path(r'..\Data\N2DH_GOWT1\gt\*.tif'))]

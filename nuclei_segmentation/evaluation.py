@@ -75,10 +75,11 @@ def surface_distance(clipped_image, ground_truth, pixel_size=1, connectivity=1):
 if __name__ == "__main__":
     from nuclei_segmentation import otsu
     from skimage.io import imread
+    import pathlib as pl
 
-    img = imread(r'..\Data\NIH3T3\img\dna-0.png')
+    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-0.png')))
     our_img = otsu.complete_segmentation(img)
-    gt = imread(r'..\Data\NIH3T3\gt\0.png')
+    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\0.png')))
 
     #msd_hd = surface_distance_functions(our_img, gt, [1344, 1024], 1)
     #print(msd_hd)

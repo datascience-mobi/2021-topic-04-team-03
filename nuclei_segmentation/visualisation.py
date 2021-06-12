@@ -63,10 +63,11 @@ def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of 
 if __name__ == '__main__':
     from nuclei_segmentation import otsu
     from skimage.io import imread
+    import pathlib as pl
 
-    img = imread(r'..\Data\NIH3T3\img\dna-0.png')
+    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-0.png')))
     our_img = otsu.complete_segmentation(img)
-    gt = imread(r'..\Data\NIH3T3\gt\0.png')
+    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\0.png')))
 
     overlay(our_img, gt)
 
