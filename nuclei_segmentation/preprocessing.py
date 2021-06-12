@@ -154,7 +154,7 @@ if __name__ == '__main__':
     print(conv.shape)
     print(png.shape)
 
-    Testing median filter
-    from scipy import ndimage
-    ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
-    test_median = median_filter(png, 3)
+    #Testing median filter
+    #from scipy import ndimage
+    #ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
+    #test_median = median_filter(png, 3)

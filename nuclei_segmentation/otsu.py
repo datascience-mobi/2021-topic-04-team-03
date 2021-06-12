@@ -12,12 +12,12 @@ def otsu(image, intensity_lvls=256):
     :return: Threshold and goodness of the image
     """
 
-    img = image.copy().flatten()
-    histogram = np.histogram(img, bins=np.arange(intensity_lvls + 1), density=True)
+    #img = image.copy().flatten()
+    histogram = np.histogram(image, bins=np.arange(intensity_lvls + 1), density=True)
 
     class_probability = np.cumsum(histogram[0])
     class_mean = np.cumsum(histogram[0] * np.arange(intensity_lvls))
-    total_mean = np.mean(img)
+    total_mean = np.mean(image)
 
     try:
         inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
@@ -26,7 +26,7 @@ def otsu(image, intensity_lvls=256):
         inbetween_variance = np.nan
 
     optimal_threshold = np.nanargmax(inbetween_variance)
-    total_variance = np.var(img)
+    total_variance = np.var(image)
     goodness = inbetween_variance[optimal_threshold] / total_variance
 
     return optimal_threshold, goodness
@@ -90,9 +90,8 @@ def clipping(img, threshold):
     :return: Clipped image
     """
 
-    workimg = img.copy()
-    workimg[workimg <= threshold] = 0
-    workimg[workimg > threshold] = 1
+    workimg = np.zeros(img.shape)
+    workimg[img > threshold] = 1
 
     return workimg
 
