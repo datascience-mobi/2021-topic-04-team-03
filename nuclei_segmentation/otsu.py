@@ -23,8 +23,7 @@ def otsu(image, intensity_lvls=256):
         inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
                 class_probability * (1 - class_probability))
     except ZeroDivisionError:
-        inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
-                class_probability * (1 - class_probability))
+        inbetween_variance = np.nan
 
     optimal_threshold = np.nanargmax(inbetween_variance)
     total_variance = np.var(img)
