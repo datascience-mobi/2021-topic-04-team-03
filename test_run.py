@@ -21,7 +21,7 @@ plt.title ("Ground truth")
 plt.show()
 
 # One level Otsu
-threshold_NIH3T3, goodness = otsu.otsu_faster(img_NIH3T3)
+threshold_NIH3T3, goodness = otsu.otsu(img_NIH3T3)
 clipped_NIH3T3 = otsu.clipping(img_NIH3T3, threshold_NIH3T3)
 
 dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)

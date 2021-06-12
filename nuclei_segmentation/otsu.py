@@ -1,43 +1,7 @@
 import numpy as np
+from contextlib import suppress
 
 def otsu(image, intensity_lvls=256):
-    """
-    This function takes an image and calculates the probability of class occurrence
-    and the mean value for all pixels to calculate the threshold according to the formula
-    of Otsu Thresholding.
-    Also it calculates the total variance and uses it to calculate the goodness of the threshold.
-
-    Source:
-    Otsu, N. "A threshold selection method from gray-level histograms."
-    IEEE Transactions on Systems, Man, and Cybernetics 9:1 (1979), pp 62-66.
-
-    :param intensity_lvls: The total number of intensity levels
-    :param image: Input image
-    :return: Threshold and goodness of segmentation
-    """
-
-    img = image.copy().flatten()
-    number_of_pixels = img.size
-    class_probability = np.zeros(intensity_lvls)
-    class_mean = np.zeros(intensity_lvls)
-    total_mean = np.mean(img)
-
-    for threshold in range(intensity_lvls):
-        class_mean[threshold] = np.sum(img[img <= threshold]) / number_of_pixels
-        class_probability[threshold] = np.sum(np.where(img <= threshold, 1, 0)) / number_of_pixels
-
-    # ignoring error because of division with 0
-    with np.errstate(all='ignore'):
-        inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
-                    class_probability * (1 - class_probability))
-
-    optimal_threshold = np.nanargmax(inbetween_variance)
-    total_variance = np.var(img)
-    goodness = inbetween_variance[optimal_threshold] / total_variance
-    return optimal_threshold, goodness
-
-
-def otsu_faster(image, intensity_lvls=256):
     """
     This function takes an image and calculates the probability of class occurrence and the mean value for all pixels to
      calculate the threshold according to the formula of Otsu Thresholding without using a for loop.
@@ -59,7 +23,9 @@ def otsu_faster(image, intensity_lvls=256):
         inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
                     class_probability * (1 - class_probability))
     except ZeroDivisionError:
-        inbetween_variance = np.nan
+        with suppress (RuntimeWarning):
+            inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
+                    class_probability * (1 - class_probability))
 
     optimal_threshold = np.nanargmax(inbetween_variance)
     total_variance = np.var(img)
@@ -139,7 +105,7 @@ def complete_segmentation (img, intensity_lvls=256):
     :param img: Image to be segmented
     :return: Segmented binary image
     '''
-    threshold, goodness = otsu_faster(img, intensity_lvls)
+    threshold, goodness = otsu(img, intensity_lvls)
     workimg = clipping(img, threshold)
 
     return workimg
@@ -164,34 +130,33 @@ def intensity_value(path_to_image_collection):
 
 
 # Just for testing. Delete later #
-r'''
-from skimage.io import imread
-from skimage.io import imshow
-from matplotlib import pyplot as plt
-
-image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
-threshold, goodness = otsu_faster(image_test)
-clipped_img = clipping(image_test, threshold)
-print(threshold,goodness)
-
-
-plt.imshow(clipped_img, 'gray')
-plt.show()
-plt.imshow(image_test, 'gray')
-plt.show()
+if __name__ == '__main__':
+    from skimage.io import imread
+    from skimage.io import imshow
+    from matplotlib import pyplot as plt
+    import pathlib
+    image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
+    threshold, goodness = otsu(image_test)
+    clipped_img = clipping(image_test, threshold)
+    print(threshold,goodness)
 
 
-# Testing whether the output is the same as in the skimage function
-from skimage.filters import threshold_otsu
+    plt.imshow(clipped_img, 'gray')
+    plt.show()
+    plt.imshow(image_test, 'gray')
+    plt.show()
 
-t_skimage = threshold_otsu(image_test)
 
-print(threshold, t_skimage)
+    # Testing whether the output is the same as in the skimage function
+    from skimage.filters import threshold_otsu
 
-# Testing whether twolevel_otsu is the same as the skimage funktion
-from skimage.filters import threshold_multiotsu
+    t_skimage = threshold_otsu(image_test)
 
-t_twolevel_skimage = otsu_twolevel(image_test)
+    print(threshold, t_skimage)
 
-print(t_twolevel_skimage)
-'''
+    # Testing whether twolevel_otsu is the same as the skimage funktion
+    from skimage.filters import threshold_multiotsu
+
+    t_twolevel_skimage = otsu_twolevel(image_test)
+
+    print(t_twolevel_skimage)
