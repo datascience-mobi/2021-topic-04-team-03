@@ -68,14 +68,13 @@ def cell_counting (img):
 
     return len(cells)
 
-
-
-from matplotlib import pyplot as plt
-#from skimage.io import imread
-from skimage.io import imshow
-import matplotlib as mpl # big plots
-#mpl.rcParams['figure.dpi'] = 10000
-#img = imread(r'..\Data\NIH3T3\gt\0.png')
-# fig, ax = plt.subplots(figsize=(10.24, 13.44))
-#plt.imshow(img, 'gray')
-#plt.show()
+if __name__ == '__main__':
+    from matplotlib import pyplot as plt
+    from skimage.io import imread
+    from skimage.io import imshow
+    import matplotlib as mpl # big plots
+    mpl.rcParams['figure.dpi'] = 10000
+    img = imread(r'..\Data\NIH3T3\gt\0.png')
+    fig, ax = plt.subplots(figsize=(10.24, 13.44))
+    plt.imshow(img, 'gray')
+    plt.show()

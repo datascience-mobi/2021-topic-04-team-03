@@ -60,18 +60,18 @@ def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of 
 
     plt.show()
 
+if __name__ == '__main__':
+    from nuclei_segmentation import otsu
+    from skimage.io import imread
 
-# from nuclei_segmentation import otsu
-# from skimage.io import imread
-#
-# img = imread(r'..\Data\NIH3T3\img\dna-0.png')
-# our_img = otsu.complete_segmentation(img)
-# gt = imread(r'..\Data\NIH3T3\gt\0.png')
-#
-# overlay(our_img, gt)
-#
-# plt.imshow(our_img)
-# plt.show()
-#
-# plt.imshow(gt)
-# plt.show()
+    img = imread(r'..\Data\NIH3T3\img\dna-0.png')
+    our_img = otsu.complete_segmentation(img)
+    gt = imread(r'..\Data\NIH3T3\gt\0.png')
+
+    overlay(our_img, gt)
+
+    plt.imshow(our_img)
+    plt.show()
+
+    plt.imshow(gt)
+    plt.show()

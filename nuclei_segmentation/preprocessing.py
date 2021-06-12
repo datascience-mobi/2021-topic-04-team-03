@@ -121,39 +121,39 @@ def two_level_reflection(img, thresholds):
 
     return workimg
 
-#
-# png = imread(r'..\Data\NIH3T3\im\dna-0.png')
-# image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
-#
-# stretchy = stretch(image_test_png, 256)
-#
-# plt.imshow(image_test_png, 'gray')
-# plt.show()
-#
-# plt.imshow(stretchy, 'gray')
-# plt.show()
+if __name__ == '__main__':
+    png = imread(r'..\Data\NIH3T3\im\dna-0.png')
+    image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
 
-# import matplotlib.pyplot as plt
+    stretchy = stretch(image_test_png, 256)
 
-# from skimage.io import imread
-#
+    plt.imshow(image_test_png, 'gray')
+    plt.show()
 
-#import matplotlib.pyplot as plt
-#import numpy as np
-#from skimage.io import imread
+    plt.imshow(stretchy, 'gray')
+    plt.show()
 
-#x = gaussian_kernel(21,10)
-#png = imread(r'..\Data\NIH3T3\img\dna-26.png')
-#conv = convolution(png,x)
+    import matplotlib.pyplot as plt
 
-#plt.imshow(conv)
-#plt.show()
+    from skimage.io import imread
 
-#
-# print(conv.shape)
-# print(png.shape)
 
-# Testing median filter
-# from scipy import ndimage
-# ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
-# test_median = median_filter(png, 3)
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from skimage.io import imread
+
+    x = gaussian_kernel(21,10)
+    png = imread(r'..\Data\NIH3T3\img\dna-26.png')
+    conv = convolution(png,x)
+
+    plt.imshow(conv)
+    plt.show()
+
+
+    print(conv.shape)
+    print(png.shape)
+
+    Testing median filter
+    from scipy import ndimage
+    ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
+    test_median = median_filter(png, 3)
