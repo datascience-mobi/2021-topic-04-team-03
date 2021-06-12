@@ -111,23 +111,23 @@ def two_level_reflection(img, thresholds):
     :return: Corrected image
     '''
 
-    workimg = img.copy()
+    workimg = np.zeros(img.shape)
     threshold_1 = min(thresholds)
     threshold_2 = max(thresholds)
 
-    workimg[workimg <= threshold_1] = 0
-    workimg[workimg > threshold_1] = 1
-    workimg[workimg > threshold_2] = 0
+    workimg[img > threshold_1] = 1
+    workimg[img > threshold_2] = 0
 
     return workimg
 
 if __name__ == '__main__':
+    from skimage.io import imread
     png = imread(r'..\Data\NIH3T3\im\dna-0.png')
     image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
 
-    stretchy = stretch(image_test_png, 256)
+    stretchy = stretch(image_test_tif, 256)
 
-    plt.imshow(image_test_png, 'gray')
+    plt.imshow(image_test_tif, 'gray')
     plt.show()
 
     plt.imshow(stretchy, 'gray')

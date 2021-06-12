@@ -11,11 +11,12 @@ def dice(clipped_image, ground_truth):
     :return: Dice Score Coefficient
     """
 
-    work_clipped = clipped_image.copy()
-    work_gt = ground_truth.copy()
+    work_clipped = np.zeros(clipped_image.shape)
+    work_gt = np.zeros(ground_truth.shape)
 
     # Assign 1 to all pixels, that have a non-zero intensity
-    work_gt[work_gt != 0] = 1
+    work_gt[ground_truth!= 0] = 1
+    work_clipped[clipped_image != 0] = 1
 
     intersection = np.sum(work_clipped * work_gt)
     sum_all = np.sum(work_clipped) + np.sum(work_gt)
@@ -32,6 +33,13 @@ def iou(clipped_image, ground_truth):
     :param ground_truth: Ground truth image
     :return: Intersection-Over-Union
     """
+
+    work_clipped = np.zeros(clipped_image.shape)
+    work_gt = np.zeros(ground_truth.shape)
+
+    # Assign 1 to all pixels, that have a non-zero intensity
+    work_gt[ground_truth!= 0] = 1
+    work_clipped[clipped_image != 0] = 1
 
     intersection = np.sum(clipped_image * ground_truth)
     union = np.sum(clipped_image) + np.sum(ground_truth) - intersection
