@@ -102,7 +102,7 @@ def complete_segmentation (img, intensity_lvls=256):
     :param img: Image to be segmented
     :return: Segmented binary image
     '''
-    threshold, goodness = otsu(img, intensity_lvls)
+    threshold = otsu(img, intensity_lvls)
     workimg = clipping(img, threshold)
 
     return workimg

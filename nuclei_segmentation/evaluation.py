@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.ndimage import morphology
-
+from scipy import spatial
 
 def dice(clipped_image, ground_truth):
     """
@@ -80,22 +80,72 @@ def surface_distance(clipped_image, ground_truth, pixel_size=1, connectivity=1):
 
     return surf_dist
 
+def msd(segmentation,ground_truth):
+    '''
+    This function computes Mean surface distance between the segmentation and the ground truth.
+    To accelerate the process, we used scipy.spatial.KDTree:
+    'This class provides an index into a set of k-dimensional points which can be used to rapidly look up the nearest neighbors of any point.'
+
+    :param segmentation: Segmented, binary picture
+    :param ground_truth: Ground Truth
+    :return: Mean surface distance
+    '''
+    seg_pixels = []
+    for index in np.ndindex(segmentation.shape):
+        if segmentation[index[0]][index[1]] != 0:
+            seg_pixels.append(index)
+
+    gt_pixels = []
+    for index1 in np.ndindex(ground_truth.shape):
+        if ground_truth[index1[0]][index1[1]] != 0:
+            gt_pixels.append(index1)
+
+    seg_array = np.array(seg_pixels)
+    gt_array = np.array(gt_pixels)
+
+    # calculate minimum distances for each point in seg to the sets of points in gt
+    tree_seg_gt = spatial.cKDTree(gt_array)
+    mindist_seg_gt, minid_seg_gt = tree_seg_gt.query(seg_array)
+
+    # calculate sum and length of arrays with minimal distances
+    sum_seg_gt = np.sum(mindist_seg_gt)
+    size_seg_gt = len(mindist_seg_gt)
+
+
+    # calculate minimum distances for each point in gt to the sets of points in seg
+    tree_gt_seg = spatial.cKDTree(seg_array)
+    mindist_gt_seg, minid_gt_seg = tree_gt_seg.query(gt_array)
+
+    # calculate sum and length of arrays with minimal distances
+    sum_gt_seg = np.sum(mindist_gt_seg)
+    size_gt_seg = len(mindist_gt_seg)
+
+    msd = (1/(size_gt_seg+size_seg_gt))*(sum_gt_seg + sum_seg_gt)
+
+    return msd
+
+
 if __name__ == "__main__":
     from nuclei_segmentation import otsu
     from skimage.io import imread
     import pathlib as pl
 
-    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-0.png')))
+    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-29.png')))
     our_img = otsu.complete_segmentation(img)
-    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\0.png')))
+    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\29.png')))
+
+    mean_surface_dist = msd(our_img,gt)
+    print(mean_surface_dist)
+
+
 
     #msd_hd = surface_distance_functions(our_img, gt, [1344, 1024], 1)
     #print(msd_hd)
 
-    surface_distance_applied = surface_distance(our_img, gt, pixel_size=[1024, 1344], connectivity=1)
+    #surface_distance_applied = surface_distance(our_img, gt, pixel_size=[1024, 1344], connectivity=1)
 
     #weird values
-    msd = surface_distance_applied.mean()
-    print(msd)
-    hd = surface_distance_applied.max()
-    print(hd)
+    #msd = surface_distance_applied.mean()
+    #print(msd)
+    #hd = surface_distance_applied.max()
+    #print(hd)
