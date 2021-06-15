@@ -120,9 +120,51 @@ def msd(segmentation,ground_truth):
     sum_gt_seg = np.sum(mindist_gt_seg)
     size_gt_seg = len(mindist_gt_seg)
 
-    msd = (1/(size_gt_seg+size_seg_gt))*(sum_gt_seg + sum_seg_gt)
+    mean_surface_distance = (1/(size_gt_seg+size_seg_gt))*(sum_gt_seg + sum_seg_gt)
 
-    return msd
+    return mean_surface_distance
+
+def haussdorf(segmentation,ground_truth):
+    '''
+    This function computes Mean surface distance between the segmentation and the ground truth.
+    To accelerate the process, we used scipy.spatial.KDTree:
+    'This class provides an index into a set of k-dimensional points which can be used to rapidly look up the nearest neighbors of any point.'
+
+    :param segmentation: Segmented, binary picture
+    :param ground_truth: Ground Truth
+    :return: Mean surface distance
+    '''
+    seg_pixels = []
+    for index in np.ndindex(segmentation.shape):
+        if segmentation[index[0]][index[1]] != 0:
+            seg_pixels.append(index)
+
+    gt_pixels = []
+    for index1 in np.ndindex(ground_truth.shape):
+        if ground_truth[index1[0]][index1[1]] != 0:
+            gt_pixels.append(index1)
+
+    seg_array = np.array(seg_pixels)
+    gt_array = np.array(gt_pixels)
+
+    # calculate minimum distances for each point in seg to the sets of points in gt
+    tree_seg_gt = spatial.cKDTree(gt_array)
+    mindist_seg_gt, minid_seg_gt = tree_seg_gt.query(seg_array)
+
+    # maximum value in set of minimal distances
+    max_seg_gt = np.max(mindist_seg_gt)
+
+
+    # calculate minimum distances for each point in gt to the sets of points in seg
+    tree_gt_seg = spatial.cKDTree(seg_array)
+    mindist_gt_seg, minid_gt_seg = tree_gt_seg.query(gt_array)
+
+    # maximum value in set of minimal distances
+    max_gt_seg = np.max(mindist_gt_seg)
+
+    haussdorf_distance = max(max_gt_seg,max_seg_gt)
+
+    return haussdorf_distance
 
 
 if __name__ == "__main__":
@@ -135,6 +177,8 @@ if __name__ == "__main__":
     gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\29.png')))
 
     mean_surface_dist = msd(our_img,gt)
+    hd = haussdorf(our_img,gt)
+    print(hd)
     print(mean_surface_dist)
 
 
