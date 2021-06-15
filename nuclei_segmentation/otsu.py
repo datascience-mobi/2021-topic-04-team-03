@@ -25,6 +25,8 @@ def otsu(image, intensity_lvls=256):
     except ZeroDivisionError:
         inbetween_variance = np.nan
 
+    # Inf values are invalid
+    inbetween_variance[inbetween_variance == np.inf] = np.nan
     optimal_threshold = np.nanargmax(inbetween_variance)
     total_variance = np.var(image)
     goodness = inbetween_variance[optimal_threshold] / total_variance
