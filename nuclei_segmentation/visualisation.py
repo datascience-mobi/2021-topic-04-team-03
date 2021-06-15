@@ -59,9 +59,9 @@ if __name__ == '__main__':
     from skimage.io import imread
     import pathlib as pl
 
-    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-0.png')))
+    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-47.png')))
     our_img = otsu.complete_segmentation(img)
-    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\0.png')))
+    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\47.png')))
 
     overlay(our_img, gt)
 
