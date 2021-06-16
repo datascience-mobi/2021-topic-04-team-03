@@ -126,13 +126,13 @@ def msd(segmentation,ground_truth):
 
 def haussdorf(segmentation,ground_truth):
     '''
-    This function computes Mean surface distance between the segmentation and the ground truth.
+    This function computes Haussdorf distance between the segmentation and the ground truth.
     To accelerate the process, we used scipy.spatial.KDTree:
     'This class provides an index into a set of k-dimensional points which can be used to rapidly look up the nearest neighbors of any point.'
 
     :param segmentation: Segmented, binary picture
     :param ground_truth: Ground Truth
-    :return: Mean surface distance
+    :return: Haussdorf Distance
     '''
     seg_pixels = []
     for index in np.ndindex(segmentation.shape):
