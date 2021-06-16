@@ -172,9 +172,9 @@ if __name__ == "__main__":
     from skimage.io import imread
     import pathlib as pl
 
-    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-29.png')))
+    img = imread(str(pl.Path('Data/NIH3T3/img/dna-29.png')))
     our_img = otsu.complete_segmentation(img)
-    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\29.png')))
+    gt = imread(str(pl.Path('/Data/NIH3T3/gt/29.png')))
 
     mean_surface_dist = msd(our_img,gt)
     hd = haussdorf(our_img,gt)

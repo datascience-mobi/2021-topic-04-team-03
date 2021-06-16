@@ -6,8 +6,8 @@ from nuclei_segmentation import otsu
 from nuclei_segmentation import preprocessing
 from nuclei_segmentation import evaluation
 
-img_HeLa = imread(str(pl.Path(r'..\Data\N2DL-HeLa\img\t13.tif')))
-gt_HeLa = imread(str(pl.Path(r'..\Data\N2DL-HeLa\gt\man_seg13.tif')))
+img_HeLa = imread(str(pl.Path('Data/N2DL-HeLa/img/t13.tif')))
+gt_HeLa = imread(str(pl.Path('Data/N2DL-HeLa/gt/man_seg13.tif')))
 
 plt.imshow(img_HeLa, 'gray')
 plt.title("HeLa original")
