@@ -17,7 +17,7 @@ plt.imshow(gt_HeLa, 'gray')
 plt.title("HeLa ground truth")
 plt.show()
 
-HeLa_segmented = otsu.complete_segmentation(img_HeLa)
+HeLa_segmented = otsu.complete_segmentation(img_HeLa, intensity_lvls=2**16)
 
 plt.imshow(HeLa_segmented, 'gray')
 plt.title("HeLa original, segmented")
