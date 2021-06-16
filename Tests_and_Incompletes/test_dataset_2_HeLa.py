@@ -1,6 +1,5 @@
-import numpy as np
+
 from skimage.io import imread
-from skimage.io import imshow
 import matplotlib.pyplot as plt
 import pathlib as pl
 from nuclei_segmentation import otsu
@@ -15,10 +14,10 @@ plt.title("HeLa original")
 plt.show()
 
 plt.imshow(gt_HeLa, 'gray')
-plt.title("HeLa groundtruth")
+plt.title("HeLa ground truth")
 plt.show()
 
-HeLa_segmented = otsu.complete_segmentation(img_HeLa, 2 * 16)
+HeLa_segmented = otsu.complete_segmentation(img_HeLa)
 
 plt.imshow(HeLa_segmented, 'gray')
 plt.title("HeLa original, segmented")
@@ -31,7 +30,7 @@ print('Original HeLa: ' + str(dc_HeLa_segmented))
 
 gauss_kernel = preprocessing.gaussian_kernel(length=5, sigma=1)
 gauss_HeLa = preprocessing.convolution(img_HeLa, gauss_kernel)
-gauss_HeLa_segmented = otsu.complete_segmentation(gauss_HeLa, 2**16)
+gauss_HeLa_segmented = otsu.complete_segmentation(gauss_HeLa)
 
 plt.imshow(gauss_HeLa_segmented, 'gray')
 plt.title ("HeLa Gaussian filter, segmented")
@@ -42,11 +41,11 @@ print("HeLa Gaussian filter: " + str(dc_gauss_HeLa))
 
 # median filter
 median_HeLa = preprocessing.median_filter(img_HeLa)
-median_HeLa_segmented = otsu.complete_segmentation(median_HeLa, 2**16)
+median_HeLa_segmented = otsu.complete_segmentation(median_HeLa)
 
 plt.imshow(median_HeLa_segmented, 'gray')
 plt.title("HeLa median filter, segmented")
 plt.show()
 
-dc_median_GOWT1 = evaluation.dice(median_GOWT1_segmented, gt_HeLa)
+dc_median_GOWT1 = evaluation.dice(median_HeLa_segmented, gt_HeLa)
 print("GOWT1 median filter: " + str(dc_median_GOWT1))
