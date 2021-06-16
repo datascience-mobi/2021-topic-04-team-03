@@ -30,7 +30,7 @@ print('Original HeLa: ' + str(dc_HeLa_segmented))
 
 gauss_kernel = preprocessing.gaussian_kernel(length=5, sigma=1)
 gauss_HeLa = preprocessing.convolution(img_HeLa, gauss_kernel)
-gauss_HeLa_segmented = otsu.complete_segmentation(gauss_HeLa)
+gauss_HeLa_segmented = otsu.complete_segmentation(gauss_HeLa, intensity_lvls=2**16)
 
 plt.imshow(gauss_HeLa_segmented, 'gray')
 plt.title ("HeLa Gaussian filter, segmented")
@@ -41,7 +41,7 @@ print("HeLa Gaussian filter: " + str(dc_gauss_HeLa))
 
 # median filter
 median_HeLa = preprocessing.median_filter(img_HeLa)
-median_HeLa_segmented = otsu.complete_segmentation(median_HeLa)
+median_HeLa_segmented = otsu.complete_segmentation(median_HeLa, intensity_lvls=2**16)
 
 plt.imshow(median_HeLa_segmented, 'gray')
 plt.title("HeLa median filter, segmented")
