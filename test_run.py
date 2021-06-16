@@ -9,8 +9,8 @@ from nuclei_segmentation import evaluation
 from nuclei_segmentation import metrics
 from nuclei_segmentation import visualisation
 
-img_NIH3T3 = imread(str(pl.Path(r'Data\NIH3T3\img\dna-42.png')))
-gt_NIH3T3 = imread(str(pl.Path(r'Data\NIH3T3\gt\42.png')))
+img_NIH3T3 = imread(str(pl.Path('Data/NIH3T3/img/dna-42.png')))
+gt_NIH3T3 = imread(str(pl.Path('Data/NIH3T3/gt/42.png')))
 
 plt.imshow(img_NIH3T3)
 plt.title ("Original")
@@ -21,7 +21,7 @@ plt.title ("Ground truth")
 plt.show()
 
 # One level Otsu
-threshold_NIH3T3, goodness = otsu.otsu(img_NIH3T3)
+threshold_NIH3T3 = otsu.otsu(img_NIH3T3)
 clipped_NIH3T3 = otsu.clipping(img_NIH3T3, threshold_NIH3T3)
 
 dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)
@@ -46,8 +46,8 @@ plt.show()
 # ----------
 # Other dataset
 
-img_GOWT1 = imread(str(pl.Path(r'Data\N2DH-GOWT1\img\t01.tif')))
-gt_GOWT1 = imread(str(pl.Path(r'Data/N2DH-GOWT1/gt/man_seg01.tif')))
+img_GOWT1 = imread(str(pl.Path('Data/N2DH-GOWT1/img/t01.tif')))
+gt_GOWT1 = imread(str(pl.Path('Data/N2DH-GOWT1/gt/man_seg01.tif')))
 
 plt.imshow(img_GOWT1, 'gray')
 plt.title ("GOWT1 original")
