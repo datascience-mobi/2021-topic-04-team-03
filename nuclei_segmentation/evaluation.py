@@ -49,37 +49,6 @@ def iou(clipped_image, ground_truth):
     return iou_score
 
 
-def surface_distance(clipped_image, ground_truth, pixel_size=1, connectivity=1):
-    """
-    This function calculates the surface distance between the pixels of the clipped and the ground truth image.
-    It therefore creates a kernel to detect the edges of the segmentations, named conn, and then removes the outermost
-    pixels from the edges to receive a single-pixel-wide surface.
-    Then the distances between the surfaces are calculated and the surface distance is returned.
-
-
-    :param clipped_image: Segmented (binary) image
-    :param ground_truth: Ground truth image
-    :param pixel_size: the pixel resolution or pixel size, entered as a 2D vector, default value is one
-    :param connectivity: creates a 2D matrix defining the neighborhood around which the function looks
-    for neighbouring pixels, default is a six-neighborhood kernel
-    :return: surface distance between the clipped and the ground truth image
-    """
-    clipped = np.atleast_1d(clipped_image.astype(np.bool_))
-    gt = np.atleast_1d(ground_truth.astype(np.bool_))
-
-    conn = morphology.generate_binary_structure(clipped.ndim, connectivity)
-
-    surface = np.subtract(clipped, morphology.binary_erosion(clipped, conn), dtype=np.float32)
-    surface_prime = np.subtract(gt, morphology.binary_erosion(gt, conn), dtype=np.float32)
-
-# not sure if ~ and 1-surface are the same in this case
-    distance_1 = morphology.distance_transform_edt(1-surface, pixel_size)
-    distance_2 = morphology.distance_transform_edt(1-surface_prime, pixel_size)
-
-    surf_dist = np.concatenate([np.ravel(distance_1[surface_prime != 0]), np.ravel(distance_2[surface != 0])])
-
-    return surf_dist
-
 def msd(segmentation,ground_truth):
     '''
     This function computes Mean surface distance between the segmentation and the ground truth.
@@ -172,24 +141,12 @@ if __name__ == "__main__":
     from skimage.io import imread
     import pathlib as pl
 
-    img = imread(str(pl.Path('Data/NIH3T3/img/dna-29.png')))
+    img = imread(str(pl.Path('../Data/NIH3T3/img/dna-29.png')))
     our_img = otsu.complete_segmentation(img)
-    gt = imread(str(pl.Path('/Data/NIH3T3/gt/29.png')))
+    gt = imread(str(pl.Path('../Data/NIH3T3/gt/29.png')))
 
     mean_surface_dist = msd(our_img,gt)
     hd = haussdorf(our_img,gt)
     print(hd)
     print(mean_surface_dist)
 
-
-
-    #msd_hd = surface_distance_functions(our_img, gt, [1344, 1024], 1)
-    #print(msd_hd)
-
-    #surface_distance_applied = surface_distance(our_img, gt, pixel_size=[1024, 1344], connectivity=1)
-
-    #weird values
-    #msd = surface_distance_applied.mean()
-    #print(msd)
-    #hd = surface_distance_applied.max()
-    #print(hd)
