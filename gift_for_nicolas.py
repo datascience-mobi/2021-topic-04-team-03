@@ -130,3 +130,4 @@ print("Two level Otsu (reflection correction): " + str(dc_two_level_NIH3T3))
 plt.imshow(two_level_clipped_NIH3T3)
 plt.title("Two level clipped")
 plt.show()
+
