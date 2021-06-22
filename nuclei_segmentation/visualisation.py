@@ -56,24 +56,8 @@ def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of 
 
     plt.show()
 
-if __name__ == '__main__':
-    from nuclei_segmentation import otsu
-    from skimage.io import imread
-    import pathlib as pl
 
-    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-47.png')))
-    our_img = otsu.complete_segmentation(img)
-    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\47.png')))
-
-    overlay(our_img, gt)
-
-    plt.imshow(our_img)
-    plt.show()
-
-    plt.imshow(gt)
-    plt.show()
-
-def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH']):
+def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH'], y_label = 'Dice Score'):
     '''
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
@@ -98,6 +82,27 @@ def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'M
                      showcaps=False,
                      ax=ax)
     ax.set(xlabel='Preprocessing',
-           ylabel='Dice Score',
+           ylabel=y_label,
            title='Comparison of different preprocessing methods')
     plt.show()
+
+
+
+
+if __name__ == '__main__':
+    from nuclei_segmentation import otsu
+    from skimage.io import imread
+    import pathlib as pl
+
+    img = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-47.png')))
+    our_img = otsu.complete_segmentation(img)
+    gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\47.png')))
+
+    overlay(our_img, gt)
+
+    plt.imshow(our_img)
+    plt.show()
+
+    plt.imshow(gt)
+    plt.show()
+
