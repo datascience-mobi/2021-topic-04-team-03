@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 
-def stretch(img, intensity_lvls=256, quantile=2):
+def histogram_stretching(img, intensity_lvls=256, quantile=2):
     """
     This function peforms histogram stretching and ignores the outliers (below lower and above upper quantile).
     The minimum intensity of the stretched image is zero, the maximum intensity is 256 (.png) or 2**16 (.tif)
