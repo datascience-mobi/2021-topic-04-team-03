@@ -87,7 +87,39 @@ border = metrics.find_border(cell_counting_sample)
 visualisation.border_image(cell_counting_sample, border, width= 0.3)
 
 
+# plot of original and ground truth
 
+plt.imshow(img_NIH3T3)
+plt.title("Original")
+plt.show()
+
+plt.imshow(gt_NIH3T3)
+plt.title("Ground truth")
+plt.show()
+
+# One level Otsu
+
+threshold_NIH3T3 = otsu.otsu(img_NIH3T3)
+clipped_NIH3T3 = otsu.clipping(img_NIH3T3, threshold_NIH3T3)
+
+dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)
+print("One level Otsu: " + str(dc_clipped_NIH3T3))
+
+plt.imshow(clipped_NIH3T3)
+plt.title("One level clipped")
+plt.show()
+
+# Two level Otsu for reflection correction
+
+two_level_threshold_NIH3T3 = otsu.otsu_twolevel(img_NIH3T3)
+two_level_clipped_NIH3T3 = otsu.clipping_twolevel(img_NIH3T3, two_level_threshold_NIH3T3)
+
+dc_two_level_NIH3T3 = evaluation.dice(two_level_clipped_NIH3T3, gt_NIH3T3)
+print("Two level Otsu (reflection correction): " + str(dc_two_level_NIH3T3))
+
+plt.imshow(two_level_clipped_NIH3T3)
+plt.title("Two level clipped")
+plt.show()
 
 
 

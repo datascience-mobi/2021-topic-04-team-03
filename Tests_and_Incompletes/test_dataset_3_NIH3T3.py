@@ -29,7 +29,7 @@ dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)
 print("One level Otsu: " + str(dc_clipped_NIH3T3))
 
 plt.imshow(clipped_NIH3T3)
-plt.title ("One level clipped")
+plt.title("One level clipped")
 plt.show()
 
 # Two level Otsu for reflection correction
