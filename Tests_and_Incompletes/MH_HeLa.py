@@ -22,10 +22,12 @@ def comparison_plot (image, image_seg, gt, dice_score):
     ax[1].set_title('Segmented image')
     ax[2].imshow(gt)
     ax[2].set_title('Ground truth')
+    for ax_i in ax.ravel():
+        ax_i.set_axis_off()
     fig.show()
 
-HeLa_img_collection = io.imread_collection(str(pl.Path('Data/N2DL-HeLa/img/*.tif')))
-HeLa_gt_collection = io.imread_collection(str(pl.Path('Data/N2DL-HeLa/gt/*.tif')))
+HeLa_img_collection = io.imread_collection(str(pl.Path('../Data/N2DL-HeLa/img/*.tif')))
+HeLa_gt_collection = io.imread_collection(str(pl.Path('../Data/N2DL-HeLa/gt/*.tif')))
 
 dice_list = []
 hausdorff_list = []
