@@ -146,7 +146,7 @@ if __name__ == "__main__":
     gt = imread(str(pl.Path('../Data/NIH3T3/gt/29.png')))
 
     mean_surface_dist = msd(our_img,gt)
-    hd = haussdorf(our_img,gt)
+    hd = hausdorff(our_img,gt)
     print(hd)
     print(mean_surface_dist)
 
