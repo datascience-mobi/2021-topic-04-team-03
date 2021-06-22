@@ -47,32 +47,35 @@ def otsu_twolevel(img, intensity_lvls=256):
     class_probability = histogram[0]
     class_mean = histogram[0] * np.arange(intensity_lvls)
 
-    Probabilities = np.zeros((intensity_lvls, intensity_lvls))
-    Means = np.zeros((intensity_lvls, intensity_lvls))
+    probabilities = np.zeros((intensity_lvls, intensity_lvls))
+    means = np.zeros((intensity_lvls, intensity_lvls))
 
     # Calculate class probability and mean for all possible intervals
     for lower_border in range(intensity_lvls):
         for upper_border in range(lower_border, intensity_lvls):
-            Probabilities[lower_border, upper_border] = np.sum(class_probability[0:upper_border + 1]) - np.sum(
+            probabilities[lower_border, upper_border] = np.sum(class_probability[0:upper_border + 1]) - np.sum(
                 class_probability[0:lower_border])
-            Means[lower_border, upper_border] = np.sum(class_mean[0:upper_border + 1]) - np.sum(
+            means[lower_border, upper_border] = np.sum(class_mean[0:upper_border + 1]) - np.sum(
                 class_mean[0:lower_border])
 
     inbetween_variance = np.zeros((intensity_lvls, intensity_lvls))
+
     for first_threshold in range(intensity_lvls):
         for second_threshold in range(first_threshold + 1, intensity_lvls - 1):
-            means_c1 = Means[0, first_threshold]
-            means_c2 = Means[first_threshold + 1, second_threshold]
-            means_c3 = Means[second_threshold + 1, intensity_lvls - 1]
+            means_c1 = means[0, first_threshold]
+            means_c2 = means[first_threshold + 1, second_threshold]
+            means_c3 = means[second_threshold + 1, intensity_lvls - 1]
 
-            probs_c1 = Probabilities[0, first_threshold]
-            probs_c2 = Probabilities[first_threshold + 1, second_threshold]
-            probs_c3 = Probabilities[second_threshold + 1, intensity_lvls - 1]
+            probs_c1 = probabilities[0, first_threshold]
+            probs_c2 = probabilities[first_threshold + 1, second_threshold]
+            probs_c3 = probabilities[second_threshold + 1, intensity_lvls - 1]
 
             with np.errstate(divide='ignore'):
                 inbetween_variance[first_threshold, second_threshold] = means_c1 ** 2 / probs_c1 + \
                                                                         means_c2 ** 2 / probs_c2 + \
                                                                         means_c3 ** 2 / probs_c3
+    # Inf values are invalid
+    inbetween_variance[inbetween_variance == np.inf] = np.nan
 
     maximal_variance = np.nanargmax(inbetween_variance)
     optimal_thresholds = np.unravel_index(maximal_variance, inbetween_variance.shape)
