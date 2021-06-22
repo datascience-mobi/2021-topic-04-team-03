@@ -13,36 +13,20 @@ col_gt = imread_collection(col_dir_gt)
 
 kernel = preprocessing.gaussian_kernel(11, 5)
 
-gauss_list = []
-a = 0
-for image in col_img:
-    gauss_list.append(preprocessing.convolution(image, kernel))
-    print(a)
-
-print(len(gauss_list))
-
-clipped_images = []
-
-for gauss_img in gauss_list:
-    thresholds = otsu.otsu_twolevel(gauss_img)
-    clipped_images.append(otsu.clipping_twolevel(gauss_img, thresholds))
-
-print(len(clipped_images))
-
-gt_list = []
-
-for gt_image in col_gt:
-    gt_list.append(gt_image)
-
 
 dice = []
 msd = []
 hausdorff_list = []
+for index in range(len(col_img)):
+    image = col_img[index]
+    gt = col_gt[index]
+    gauss_img = preprocessing.convolution(image, kernel)
 
-for i in range(len(clipped_images)):
-    dice.append(evaluation.dice(clipped_images[i], gt_list[i]))
-    msd.append(evaluation.msd(clipped_images[i], gt_list[i]))
-    hausdorff_list.append(evaluation.hausdorff(clipped_images[i], gt_list[i]))
+    thresholds = otsu.otsu_twolevel(gauss_img)
+    clipped_image =otsu.clipping_twolevel(gauss_img, thresholds)
+    dice.append(evaluation.dice(clipped_image, gt))
+    msd.append(evaluation.msd(clipped_image, gt))
+    hausdorff_list.append(evaluation.hausdorff(clipped_image, gt))
 
 print(dice)
 print(msd)
