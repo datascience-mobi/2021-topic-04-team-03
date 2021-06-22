@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
+import pandas as pd
+import seaborn as sns
 
 def border_image(image, border_pixels, width=5):
     '''
@@ -69,4 +71,33 @@ if __name__ == '__main__':
     plt.show()
 
     plt.imshow(gt)
+    plt.show()
+
+def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH']):
+    '''
+    Plots a swarmplot, that shows evaluation scores for single images
+    sorted by preprocessing methods. It also draws a line through the mean value.
+    :param scores: list in which every element is a list with scores for an image
+    :param x_label: List of preprocessing methods (same order as in scores)
+    :return: none
+    '''
+
+    dataframe = pd.DataFrame(data=np.transpose(scores), columns=x_label)
+    ax = sns.swarmplot(data=dataframe,
+                       size=7,
+                       palette='magma_r')
+    ax = sns.boxplot(showmeans=True,
+                     meanline=True,
+                     meanprops={'color': 'k', 'ls': '-', 'lw': 1},
+                     medianprops={'visible': False},
+                     whiskerprops={'visible': False},
+                     zorder=10,
+                     data=dataframe,
+                     showfliers=False,
+                     showbox=False,
+                     showcaps=False,
+                     ax=ax)
+    ax.set(xlabel='Preprocessing',
+           ylabel='Dice Score',
+           title='Comparison of different preprocessing methods')
     plt.show()
