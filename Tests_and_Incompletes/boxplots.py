@@ -12,4 +12,15 @@ x = ['H', 'MH']
 dataframe = pd.DataFrame(data = np.transpose(dice_scores), columns=x)
 print(dataframe)
 ax = sns.swarmplot(data = dataframe)
+ax = sns.boxplot(showmeans=True,
+                 meanline=True,
+                 meanprops={'color': 'k', 'ls': '-', 'lw': 2},
+                 medianprops={'visible': False},
+                 whiskerprops={'visible': False},
+                 zorder=10,
+                 data=dataframe,
+                 showfliers=False,
+                 showbox=False,
+                 showcaps=False,
+                 ax=ax)
 plt.show()
