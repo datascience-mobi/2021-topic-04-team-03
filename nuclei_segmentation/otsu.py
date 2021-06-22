@@ -107,6 +107,28 @@ def complete_segmentation (img, intensity_lvls=256):
 
     return workimg
 
+
+def clipping_twolevel(img, thresholds):
+    '''
+    This function corrects bright reflections on image by setting pixels
+    with intensity above the higher threshold black. Thresholds can be obtained
+    by two-level Otsu algorithm.
+
+    :param img: Image to be processed
+    :param thresholds: List/array containing two thresholds
+    :return: Corrected image
+    '''
+
+    workimg = np.zeros(img.shape)
+    threshold_1 = min(thresholds)
+    threshold_2 = max(thresholds)
+
+    workimg[img > threshold_1] = 1
+    workimg[img > threshold_2] = 0
+
+    return workimg
+
+
 def intensity_value(path_to_image_collection):
     """
     This function returns the total number of possible intensity values

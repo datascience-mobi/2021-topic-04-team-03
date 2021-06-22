@@ -100,25 +100,6 @@ def median_filter(img, filter_size=5):
     return workimg
 
 
-def two_level_reflection(img, thresholds):
-    '''
-    This function corrects bright reflections on image by setting pixels
-    with intensity above the higher threshold black. Thresholds can be obtained
-    by two-level Otsu algorithm.
-
-    :param img: Image to be processed
-    :param thresholds: List/array containing two thresholds
-    :return: Corrected image
-    '''
-
-    workimg = np.zeros(img.shape)
-    threshold_1 = min(thresholds)
-    threshold_2 = max(thresholds)
-
-    workimg[img > threshold_1] = 1
-    workimg[img > threshold_2] = 0
-
-    return workimg
 
 def binarize(img):
     '''
