@@ -93,7 +93,7 @@ def msd(segmentation,ground_truth):
 
     return mean_surface_distance
 
-def haussdorf(segmentation,ground_truth):
+def hausdorff(segmentation,ground_truth):
     '''
     This function computes Haussdorf distance between the segmentation and the ground truth.
     To accelerate the process, we used scipy.spatial.KDTree:
