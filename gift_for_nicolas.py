@@ -91,8 +91,8 @@ visualisation.border_image(cell_counting_sample, border, width= 0.3)
 # plot of original and ground truth
 
 
-img_NIH3T3 = imread(str(pl.Path('../Data/NIH3T3/img/dna-42.png')))
-gt_NIH3T3 = imread(str(pl.Path('../Data/NIH3T3/gt/42.png')))
+img_NIH3T3 = imread(str(pl.Path('./Data/NIH3T3/img/dna-42.png')))
+gt_NIH3T3 = imread(str(pl.Path('./Data/NIH3T3/gt/42.png')))
 
 plt.imshow(img_NIH3T3)
 plt.title("Original")
