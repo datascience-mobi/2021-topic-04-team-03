@@ -7,6 +7,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from nuclei_segmentation import visualisation
 from nuclei_segmentation import metrics
+from skimage.io import imread
+from skimage.io import imread
+import matplotlib.pyplot as plt
+import pathlib as pl
+from nuclei_segmentation import otsu
+from nuclei_segmentation import evaluation
 
 
 def comparison_plot (image, processed_image, image_seg, gt, dice_score):
@@ -89,6 +95,10 @@ visualisation.border_image(cell_counting_sample, border, width= 0.3)
 
 # plot of original and ground truth
 
+
+img_NIH3T3 = imread(str(pl.Path('../Data/NIH3T3/img/dna-42.png')))
+gt_NIH3T3 = imread(str(pl.Path('../Data/NIH3T3/gt/42.png')))
+
 plt.imshow(img_NIH3T3)
 plt.title("Original")
 plt.show()
@@ -120,6 +130,3 @@ print("Two level Otsu (reflection correction): " + str(dc_two_level_NIH3T3))
 plt.imshow(two_level_clipped_NIH3T3)
 plt.title("Two level clipped")
 plt.show()
-
-
-
