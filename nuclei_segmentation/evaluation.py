@@ -101,7 +101,7 @@ def haussdorf(segmentation,ground_truth):
 
     :param segmentation: Segmented, binary picture
     :param ground_truth: Ground Truth
-    :return: Haussdorf Distance
+    :return: Hausdorff Distance
     '''
     seg_pixels = []
     for index in np.ndindex(segmentation.shape):
@@ -131,9 +131,9 @@ def haussdorf(segmentation,ground_truth):
     # maximum value in set of minimal distances
     max_gt_seg = np.max(mindist_gt_seg)
 
-    haussdorf_distance = max(max_gt_seg,max_seg_gt)
+    hausdorff_distance = max(max_gt_seg,max_seg_gt)
 
-    return haussdorf_distance
+    return hausdorff_distance
 
 
 if __name__ == "__main__":
