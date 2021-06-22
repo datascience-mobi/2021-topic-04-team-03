@@ -93,7 +93,7 @@ def msd(segmentation,ground_truth):
 
     return mean_surface_distance
 
-def haussdorf(segmentation,ground_truth):
+def hausdorff(segmentation,ground_truth):
     '''
     This function computes Haussdorf distance between the segmentation and the ground truth.
     To accelerate the process, we used scipy.spatial.KDTree:
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     gt = imread(str(pl.Path('../Data/NIH3T3/gt/29.png')))
 
     mean_surface_dist = msd(our_img,gt)
-    hd = haussdorf(our_img,gt)
+    hd = hausdorff(our_img,gt)
     print(hd)
     print(mean_surface_dist)
 
