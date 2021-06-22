@@ -87,6 +87,26 @@ def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'M
     plt.show()
 
 
+def comparison_plot (image1, image2, image3, image4,
+                     title1, title2, title3, title4,
+                     figure_title):
+    fig, ax = plt.subplots(2, 2)
+    fig.suptitle(figure_title)
+    ax[0][0].imshow(image1, 'gray')
+    ax[0][0].set_title(title1)
+    ax[0][1].imshow(image2, 'gray')
+    ax[0][1].set_title(title2)
+    ax[1][0].imshow(image3, 'gray')
+    ax[1][0].set_title(title3)
+    ax[1][1].imshow(image4, 'gray')
+    ax[1][1].set_title(title4)
+    ax[0][0].set_axis_off()
+    ax[0][1].set_axis_off()
+    ax[1][0].set_axis_off()
+    ax[1][1].set_axis_off()
+    fig.show()
+
+
 
 
 if __name__ == '__main__':
