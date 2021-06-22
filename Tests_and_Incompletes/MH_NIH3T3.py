@@ -58,28 +58,3 @@ print('Dice: ' + str(np.mean(dice_list)))
 print('Hausdorff: ' + str(np.mean(hausdorff_list)))
 print('MSD: ' + str(np.mean(msd_list)))
 
-
-#### Test for the best filter size ----> 3 ####
-
-# dice_list = []
-# for image_index in range(len(GOWT1_img_collection)):
-#     image = GOWT1_img_collection[image_index].copy()
-#
-#     gt = GOWT1_gt_collection[image_index]
-#     gt[gt>0] = 1
-#     dice_list.append([])
-#     for i in range (3, 70, 7):
-#         image_seg = mh(image, 2 ** 16, i)
-#         dice_score = evaluation.dice(image_seg, gt)
-#         dice_list[image_index].append(dice_score)
-#     #comparison_plot(image, image_seg, gt, dice_score)
-#
-# x = range(3, 70, 7)
-#
-# plt.plot(x, dice_list[0], '-o', color = 'black')
-# plt.plot(x, dice_list[1], '-o', color = 'pink')
-# plt.plot(x, dice_list[2], '-o', color = 'red')
-# plt.plot(x, dice_list[3], '-o', color = 'blue')
-# plt.plot(x, dice_list[4], '-o', color = 'green')
-# plt.plot(x, dice_list[5], '-o', color = 'orange')
-# plt.show()
