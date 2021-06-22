@@ -19,11 +19,10 @@ def otsu(image, intensity_lvls=256):
     class_mean = np.cumsum(histogram[0] * np.arange(intensity_lvls))
     total_mean = np.mean(image)
 
-    try:
+    with np.errstate(divide='ignore'):
         inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
                 class_probability * (1 - class_probability))
-    except ZeroDivisionError:
-        inbetween_variance = np.nan
+
 
     # Inf values are invalid
     inbetween_variance[inbetween_variance == np.inf] = np.nan
@@ -62,16 +61,15 @@ def otsu_twolevel(img, intensity_lvls=256):
     inbetween_variance = np.zeros((intensity_lvls, intensity_lvls))
     for first_threshold in range(intensity_lvls):
         for second_threshold in range(first_threshold + 1, intensity_lvls - 1):
-            with np.errstate(all='ignore'):
+            means_c1 = Means[0, first_threshold]
+            means_c2 = Means[first_threshold + 1, second_threshold]
+            means_c3 = Means[second_threshold + 1, intensity_lvls - 1]
 
-                means_c1 = Means[0, first_threshold]
-                means_c2 = Means[first_threshold + 1, second_threshold]
-                means_c3 = Means[second_threshold + 1, intensity_lvls - 1]
+            probs_c1 = Probabilities[0, first_threshold]
+            probs_c2 = Probabilities[first_threshold + 1, second_threshold]
+            probs_c3 = Probabilities[second_threshold + 1, intensity_lvls - 1]
 
-                probs_c1 = Probabilities[0, first_threshold]
-                probs_c2 = Probabilities[first_threshold + 1, second_threshold]
-                probs_c3 = Probabilities[second_threshold + 1, intensity_lvls - 1]
-
+            with np.errstate(divide='ignore'):
                 inbetween_variance[first_threshold, second_threshold] = means_c1 ** 2 / probs_c1 + \
                                                                         means_c2 ** 2 / probs_c2 + \
                                                                         means_c3 ** 2 / probs_c3
@@ -166,9 +164,9 @@ if __name__ == '__main__':
     from matplotlib import pyplot as plt
     import pathlib
     image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
-    threshold, goodness = otsu(image_test)
+    threshold = otsu(image_test)
     clipped_img = clipping(image_test, threshold)
-    print(threshold,goodness)
+    print(threshold)
 
 
     plt.imshow(clipped_img, 'gray')
