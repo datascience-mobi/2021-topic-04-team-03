@@ -14,8 +14,26 @@ read_NIH3T3_gt = imread_collection(NIH3T3_gt)
 read_NIH3T3_img = imread_collection(NIH3T3_im)
 
 median_list = []
+dice_list = []
+msd_list = []
+hausdorff_list = []
 
 for index in range(len(read_NIH3T3_img)):
+    image = read_NIH3T3_img[index].copy()
+
+    gt = read_NIH3T3_img[index]
+    gt[gt > 0] = 1
+    image_fil = preprocessing.median_filter(image, 9)
+    thresholds_NIH3T3 = otsu.otsu_twolevel(image_fil)
+    image_seg = otsu.clipping_twolevel(image_fil, thresholds_NIH3T3)
+    dice_score = evaluation.dice(image_seg, gt)
+    dice_list.append(dice_score)
+    print(dice_score)
+
+    hausdorff_list.append(evaluation.hausdorff(image_seg, gt))
+    msd_list.append(evaluation.msd(image_seg, gt))
+
+    '''
     median_filter_NIH3T3 = preprocessing.median_filter(read_NIH3T3_img[index])
     plt.imshow(median_filter_NIH3T3, 'gray')
     plt.show()
@@ -30,3 +48,5 @@ for index in range(len(read_NIH3T3_img)):
     median_list.append(msd)
 
 print(median_list)
+'''
+print(dice_list)
