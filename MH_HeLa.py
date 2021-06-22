@@ -28,6 +28,8 @@ HeLa_img_collection = io.imread_collection(str(pl.Path('Data/N2DL-HeLa/img/*.tif
 HeLa_gt_collection = io.imread_collection(str(pl.Path('Data/N2DL-HeLa/gt/*.tif')))
 
 dice_list = []
+hausdorff_list = []
+msd_list = []
 for image_index in range(len(HeLa_img_collection)):
     image = HeLa_img_collection[image_index].copy()
 
@@ -40,4 +42,9 @@ for image_index in range(len(HeLa_img_collection)):
     print(dice_score)
     comparison_plot(image, image_seg, gt, dice_score)
 
-print('Median: ' + str(np.mean(dice_list)))
+    hausdorff_list.append(evaluation.hausdorff(image_seg, gt))
+    msd_list.append(evaluation.msd(image_seg, gt))
+
+print('Dice: ' + str(np.mean(dice_list)))
+print('Hausdorff: ' + str(np.mean(hausdorff_list)))
+print('MSD: ' + str(np.mean(msd_list)))
