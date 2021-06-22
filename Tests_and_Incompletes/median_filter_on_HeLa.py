@@ -15,8 +15,9 @@ read_N2DL_HeLa_gt = imread_collection(N2DL_HeLa_gt)
 read_N2DL_HeLa_img = imread_collection(N2DL_HeLa_im)
 
 
-median_list = []
-
+dice_list = []
+iou_list = []
+hausdorff_list = []
 for index in range(len(read_N2DL_HeLa_img)):
     median_filter_N2DL_HeLa = preprocessing.median_filter(read_N2DL_HeLa_img[index])
     plt.imshow(median_filter_N2DL_HeLa, 'gray')
@@ -26,8 +27,10 @@ for index in range(len(read_N2DL_HeLa_img)):
     iou = evaluation.iou(segmented_N2DL_HeLa, read_N2DL_HeLa_gt[index])
     msd = evaluation.msd(segmented_N2DL_HeLa, read_N2DL_HeLa_gt[index])
 
-    median_list.append(dsc)
-    median_list.append(iou)
-    median_list.append(msd)
+    dice_list.append(dsc)
+    iou_list.append(iou)
+    hausdorff_list.append(msd)
 
-print(median_list)
+print(dice_list)
+print(iou_list)
+print(hausdorff_list)
