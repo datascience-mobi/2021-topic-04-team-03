@@ -165,11 +165,11 @@ if __name__ == "__main__":
 
     # without preprocessing
 
-    without_preprocessing_GOWT1 = all_functions.without_preprocessing_function_application(col_img_GOWT1, col_gt_GOWT1,
+    without_preprocessing_GOWT1 = without_preprocessing_function_application(col_img_GOWT1, col_gt_GOWT1,
                                                                                            intensity_lvls=2 ** 16)
-    without_preprocessing_HeLa = all_functions.without_preprocessing_function_application(col_img_HeLa, col_gt_HeLa,
+    without_preprocessing_HeLa = without_preprocessing_function_application(col_img_HeLa, col_gt_HeLa,
                                                                                           intensity_lvls=2 ** 16)
-    without_preprocessing_NIH3T3 = all_functions.without_preprocessing_function_application(col_img_NIH3T3,
+    without_preprocessing_NIH3T3 = without_preprocessing_function_application(col_img_NIH3T3,
                                                                                             col_gt_NIH3T3)
 
     print(without_preprocessing_GOWT1)
@@ -178,9 +178,9 @@ if __name__ == "__main__":
 
     # gauss function - values for dice, msd and hsd
 
-    gauss_GOWT1 = all_functions.gauss_function_application(col_img_GOWT1, col_gt_GOWT1, intensity_lvls=2 ** 16)
-    gauss_HeLa = all_functions.gauss_function_application(col_img_HeLa, col_gt_HeLa, intensity_lvls=2 ** 16)
-    gauss_NIH3T3 = all_functions.gauss_function_application(col_img_NIH3T3, col_gt_NIH3T3)
+    gauss_GOWT1 = gauss_function_application(col_img_GOWT1, col_gt_GOWT1, intensity_lvls=2 ** 16)
+    gauss_HeLa = gauss_function_application(col_img_HeLa, col_gt_HeLa, intensity_lvls=2 ** 16)
+    gauss_NIH3T3 = gauss_function_application(col_img_NIH3T3, col_gt_NIH3T3)
 
     print(gauss_GOWT1)
     print(gauss_HeLa)
@@ -188,9 +188,9 @@ if __name__ == "__main__":
 
     # median function - values for dice, msd and hsd
 
-    median_GOWT1 = all_functions.median_function_application(col_img_GOWT1, col_gt_GOWT1, intensity_lvls=2 ** 16)
-    median_HeLa = all_functions.median_function_application(col_img_HeLa, col_gt_HeLa, intensity_lvls=2 ** 16)
-    median_NIH3T3 = all_functions.median_function_application(col_img_NIH3T3, col_gt_NIH3T3)
+    median_GOWT1 = median_function_application(col_img_GOWT1, col_gt_GOWT1, intensity_lvls=2 ** 16)
+    median_HeLa = median_function_application(col_img_HeLa, col_gt_HeLa, intensity_lvls=2 ** 16)
+    median_NIH3T3 = median_function_application(col_img_NIH3T3, col_gt_NIH3T3)
 
     print(median_GOWT1)
     print(median_HeLa)
@@ -198,11 +198,11 @@ if __name__ == "__main__":
 
     # histogram stretching function - values for dice, msd and hsd
 
-    histogram_stretching_GOWT1 = all_functions.histogram_stretching_function_application(col_img_GOWT1, col_gt_GOWT1,
+    histogram_stretching_GOWT1 = histogram_stretching_function_application(col_img_GOWT1, col_gt_GOWT1,
                                                                                          intensity_lvls=2 ** 16)
-    histogram_stretching_HeLa = all_functions.histogram_stretching_function_application(col_img_HeLa, col_gt_HeLa,
+    histogram_stretching_HeLa = histogram_stretching_function_application(col_img_HeLa, col_gt_HeLa,
                                                                                         intensity_lvls=2 ** 16)
-    histogram_stretching_NIH3T3 = all_functions.histogram_stretching_function_application(col_img_NIH3T3, col_gt_NIH3T3)
+    histogram_stretching_NIH3T3 = histogram_stretching_function_application(col_img_NIH3T3, col_gt_NIH3T3)
 
     print(histogram_stretching_GOWT1)
     print(histogram_stretching_HeLa)
@@ -210,13 +210,13 @@ if __name__ == "__main__":
 
     # median and histogram stretching function - values for dice, msd and hsd
 
-    median_histogram_stretching_GOWT1 = all_functions.median_histogram_stretching_function_application(col_img_GOWT1,
+    median_histogram_stretching_GOWT1 = median_histogram_stretching_function_application(col_img_GOWT1,
                                                                                                        col_gt_GOWT1,
                                                                                                        intensity_lvls=2 ** 16)
-    median_histogram_stretching_HeLa = all_functions.median_histogram_stretching_function_application(col_img_HeLa,
+    median_histogram_stretching_HeLa = median_histogram_stretching_function_application(col_img_HeLa,
                                                                                                       col_gt_HeLa,
                                                                                                       intensity_lvls=2 ** 16)
-    median_histogram_stretching_NIH3T3 = all_functions.median_histogram_stretching_function_application(col_img_NIH3T3,
+    median_histogram_stretching_NIH3T3 = median_histogram_stretching_function_application(col_img_NIH3T3,
                                                                                                         col_gt_NIH3T3)
 
     print(median_histogram_stretching_GOWT1)
@@ -225,13 +225,13 @@ if __name__ == "__main__":
 
     # median and histogram stretching function - values for dice, msd and hsd
 
-    gauss_histogram_stretching_GOWT1 = all_functions.gauss_histogram_stretching_function_application(col_img_GOWT1,
+    gauss_histogram_stretching_GOWT1 = gauss_histogram_stretching_function_application(col_img_GOWT1,
                                                                                                      col_gt_GOWT1,
                                                                                                      intensity_lvls=2 ** 16)
-    gauss_histogram_stretching_HeLa = all_functions.gauss_histogram_stretching_function_application(col_img_HeLa,
+    gauss_histogram_stretching_HeLa = gauss_histogram_stretching_function_application(col_img_HeLa,
                                                                                                     col_gt_HeLa,
                                                                                                     intensity_lvls=2 ** 16)
-    gauss_histogram_stretching_NIH3T3 = all_functions.gauss_histogram_stretching_function_application(col_img_NIH3T3,
+    gauss_histogram_stretching_NIH3T3 = gauss_histogram_stretching_function_application(col_img_NIH3T3,
                                                                                                       col_gt_NIH3T3)
 
     print(gauss_histogram_stretching_GOWT1)
