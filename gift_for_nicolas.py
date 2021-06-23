@@ -29,8 +29,8 @@ def comparison_plot (image, processed_image, image_seg, gt, dice_score):
     #     ax_i.set_axis_off()
     fig.show()
 
-col_dir_img_nih = str(pl.Path('Data/N2DL-HeLa/img/*.tif'))
-col_dir_gt_nih = str(pl.Path('Data/N2DL-HeLa/gt/*.tif'))
+col_dir_img_nih = str(pl.Path('./Data/N2DL-HeLa/img/*.tif'))
+col_dir_gt_nih = str(pl.Path('./Data/N2DL-HeLa/gt/*.tif'))
 
 N2DL_img_collection = imread_collection(col_dir_img_nih)
 N2DL_gt_collection = imread_collection(col_dir_gt_nih)
