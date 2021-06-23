@@ -54,7 +54,10 @@ for index in range(len(N2DL_img_collection)):
     dice_list.append(dice_score)
     msd_list.append(evaluation.msd(clipped_image, gt))
     hausdorff_list.append(evaluation.hausdorff(clipped_image, gt))
-    comparison_plot(image, stretched_image, clipped_image, gt, dice_score)
+
+    visualisation.comparison_plot(image, stretched_image, clipped_image, gt,
+                    title1='Original image', title2='Preprocessed image', title3='Segmented image', title4='Ground truth',
+                    figure_title=('Dice Score: ' + str(dice_score)))
 
 print('Mean Dice Score of the N2DL-HeLa dataset: ' +str(np.mean(dice_list)))
 
@@ -94,13 +97,6 @@ visualisation.border_image(cell_counting_sample, border, width= 0.3)
 img_NIH3T3 = imread(str(pl.Path('./Data/NIH3T3/img/dna-42.png')))
 gt_NIH3T3 = imread(str(pl.Path('./Data/NIH3T3/gt/42.png')))
 
-plt.imshow(img_NIH3T3)
-plt.title("Original")
-plt.show()
-
-plt.imshow(gt_NIH3T3)
-plt.title("Ground truth")
-plt.show()
 
 # One level Otsu
 
@@ -110,10 +106,6 @@ clipped_NIH3T3 = otsu.clipping(img_NIH3T3, threshold_NIH3T3)
 dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)
 print("One level Otsu: " + str(dc_clipped_NIH3T3))
 
-plt.imshow(clipped_NIH3T3)
-plt.title("One level clipped")
-plt.show()
-
 # Two level Otsu for reflection correction
 
 two_level_threshold_NIH3T3 = otsu.otsu_twolevel(img_NIH3T3)
@@ -122,7 +114,6 @@ two_level_clipped_NIH3T3 = otsu.clipping_twolevel(img_NIH3T3, two_level_threshol
 dc_two_level_NIH3T3 = evaluation.dice(two_level_clipped_NIH3T3, gt_NIH3T3)
 print("Two level Otsu (reflection correction): " + str(dc_two_level_NIH3T3))
 
-plt.imshow(two_level_clipped_NIH3T3)
-plt.title("Two level clipped")
-plt.show()
-
+visualisation.comparison_plot(img_NIH3T3, gt_NIH3T3, clipped_NIH3T3, two_level_clipped_NIH3T3,
+                    title1='Original Image', title2='Ground Truth', title3='One Level Clipped', title4= 'Two Level Clipped',
+                    figure_title='Comparison of One and Two Level Otsu')
