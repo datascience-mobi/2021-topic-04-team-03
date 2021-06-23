@@ -26,16 +26,11 @@ def gauss_function_application(col_img, col_gt, intensity_lvls = 256):
 
     kernel = preprocessing.gaussian_kernel(11, 5)
     gauss_list = []
-    a = 0
     for image in col_img:
         gauss_list.append(preprocessing.convolution(image, kernel))
-        print(a)
-        a += 1
-    print(len(gauss_list))
     clipped_images = []
     for gauss_img in gauss_list:
         clipped_images.append(otsu.complete_segmentation(gauss_img, intensity_lvls))
-    print(len(clipped_images))
     gt_list = []
     for gt_image in col_gt:
         gt_list.append(gt_image)
