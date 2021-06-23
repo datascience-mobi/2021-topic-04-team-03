@@ -70,6 +70,11 @@ def cell_counting (img):
 
     return len(cells)
 
+def cell_counting_evaluation (ground_truth):
+    return len(np.unique(ground_truth))-1
+
+
+
 if __name__ == '__main__':
     from matplotlib import pyplot as plt
     from skimage.io import imread
