@@ -63,6 +63,8 @@ def convolution(image, kernel):
     :return: Filtered Image
     """
 
+    kernel = np.fliplr(np.flipud(kernel))
+
     border_width = np.shape(kernel)[0]//2
 
     padded_picture = np.pad(image, (border_width, border_width), 'reflect')
