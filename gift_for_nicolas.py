@@ -1,13 +1,8 @@
 from skimage.io import imread_collection
-from nuclei_segmentation import otsu
-from nuclei_segmentation import evaluation
-import pathlib as pl
 from nuclei_segmentation import preprocessing
 import numpy as np
-import matplotlib.pyplot as plt
 from nuclei_segmentation import visualisation
 from nuclei_segmentation import metrics
-from skimage.io import imread
 from skimage.io import imread
 import matplotlib.pyplot as plt
 import pathlib as pl
@@ -34,8 +29,8 @@ def comparison_plot (image, processed_image, image_seg, gt, dice_score):
     #     ax_i.set_axis_off()
     fig.show()
 
-col_dir_img_nih = str(pl.Path('Data/N2DL-HeLa/img/*.tif'))
-col_dir_gt_nih = str(pl.Path('Data/N2DL-HeLa/gt/*.tif'))
+col_dir_img_nih = str(pl.Path('./Data/N2DL-HeLa/img/*.tif'))
+col_dir_gt_nih = str(pl.Path('./Data/N2DL-HeLa/gt/*.tif'))
 
 N2DL_img_collection = imread_collection(col_dir_img_nih)
 N2DL_gt_collection = imread_collection(col_dir_gt_nih)
@@ -59,7 +54,10 @@ for index in range(len(N2DL_img_collection)):
     dice_list.append(dice_score)
     msd_list.append(evaluation.msd(clipped_image, gt))
     hausdorff_list.append(evaluation.hausdorff(clipped_image, gt))
-    comparison_plot(image, stretched_image, clipped_image, gt, dice_score)
+
+    visualisation.comparison_plot(image, stretched_image, clipped_image, gt,
+                    title1='Original image', title2='Preprocessed image', title3='Segmented image', title4='Ground truth',
+                    figure_title=('Dice Score: ' + str(dice_score)))
 
 print('Mean Dice Score of the N2DL-HeLa dataset: ' +str(np.mean(dice_list)))
 
@@ -96,16 +94,9 @@ visualisation.border_image(cell_counting_sample, border, width= 0.3)
 # plot of original and ground truth
 
 
-img_NIH3T3 = imread(str(pl.Path('../Data/NIH3T3/img/dna-42.png')))
-gt_NIH3T3 = imread(str(pl.Path('../Data/NIH3T3/gt/42.png')))
+img_NIH3T3 = imread(str(pl.Path('./Data/NIH3T3/img/dna-42.png')))
+gt_NIH3T3 = imread(str(pl.Path('./Data/NIH3T3/gt/42.png')))
 
-plt.imshow(img_NIH3T3)
-plt.title("Original")
-plt.show()
-
-plt.imshow(gt_NIH3T3)
-plt.title("Ground truth")
-plt.show()
 
 # One level Otsu
 
@@ -115,10 +106,6 @@ clipped_NIH3T3 = otsu.clipping(img_NIH3T3, threshold_NIH3T3)
 dc_clipped_NIH3T3 = evaluation.dice(clipped_NIH3T3, gt_NIH3T3)
 print("One level Otsu: " + str(dc_clipped_NIH3T3))
 
-plt.imshow(clipped_NIH3T3)
-plt.title("One level clipped")
-plt.show()
-
 # Two level Otsu for reflection correction
 
 two_level_threshold_NIH3T3 = otsu.otsu_twolevel(img_NIH3T3)
@@ -127,6 +114,6 @@ two_level_clipped_NIH3T3 = otsu.clipping_twolevel(img_NIH3T3, two_level_threshol
 dc_two_level_NIH3T3 = evaluation.dice(two_level_clipped_NIH3T3, gt_NIH3T3)
 print("Two level Otsu (reflection correction): " + str(dc_two_level_NIH3T3))
 
-plt.imshow(two_level_clipped_NIH3T3)
-plt.title("Two level clipped")
-plt.show()
+visualisation.comparison_plot(img_NIH3T3, gt_NIH3T3, clipped_NIH3T3, two_level_clipped_NIH3T3,
+                    title1='Original Image', title2='Ground Truth', title3='One Level Clipped', title4= 'Two Level Clipped',
+                    figure_title='Comparison of One and Two Level Otsu')
