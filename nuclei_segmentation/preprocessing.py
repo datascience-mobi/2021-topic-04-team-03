@@ -63,6 +63,8 @@ def convolution(image, kernel):
     :return: Filtered Image
     """
 
+    kernel = np.fliplr(np.flipud(kernel))
+
     border_width = np.shape(kernel)[0]//2
 
     padded_picture = np.pad(image, (border_width, border_width), 'reflect')
@@ -118,7 +120,7 @@ if __name__ == '__main__':
     png = imread(r'..\Data\NIH3T3\im\dna-0.png')
     image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
 
-    stretchy = stretch(image_test_tif, 256)
+    stretchy = histogram_stretching(image_test_tif, 256)
 
     plt.imshow(image_test_tif, 'gray')
     plt.show()
