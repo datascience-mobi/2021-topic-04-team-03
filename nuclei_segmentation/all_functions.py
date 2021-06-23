@@ -1,141 +1,162 @@
-from nuclei_segmentation import preprocessing
-from nuclei_segmentation import otsu
-from nuclei_segmentation import evaluation
+from nuclei_segmentation import preprocessing, otsu, evaluation
 import pathlib as pl
 from skimage.io import imread_collection
 
-def without_preprocessing_function_application(col_img, col_gt, intensity_lvls = 256):
+def without_preprocessing_function_application(col_img, col_gt, intensity_lvls = 256, mode = "one_level"):
     dice_list = []
     msd_list = []
     hausdorff_list = []
-    for index in range(len(col_img)):
-        segmented_img = otsu.complete_segmentation(col_img[index], intensity_lvls)
-        dsc = evaluation.dice(segmented_img, col_gt[index])
-        msd = evaluation.msd(segmented_img, col_gt[index])
-        hausdorff = evaluation.hausdorff(segmented_img, col_gt[index])
 
-        dice_list.append(dsc)
-        msd_list.append(msd)
-        hausdorff_list.append(hausdorff)
+    for index in range(len(col_img)):
+        if mode == "one_level":
+            segmented_img = otsu.complete_segmentation(col_img[index], intensity_lvls)
+        elif mode == "two_level":
+            segmented_img = otsu.complete_segmentation_twolevel(col_img[index], intensity_lvls)
+        else:
+            raise Exception("Invalid mode!")
+
+        dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
+        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
+
     return dice_list, msd_list, hausdorff_list
 
 
 
 
-def gauss_function_application(col_img, col_gt, intensity_lvls = 256):
+def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level"):
 
     kernel = preprocessing.gaussian_kernel(11, 5)
-    gauss_list = []
-    for image in col_img:
-        gauss_list.append(preprocessing.convolution(image, kernel))
-    clipped_images = []
-    for gauss_img in gauss_list:
-        clipped_images.append(otsu.complete_segmentation(gauss_img, intensity_lvls))
-    gt_list = []
-    for gt_image in col_gt:
-        gt_list.append(gt_image)
+
     dice_list = []
     msd_list = []
     hausdorff_list = []
-    for i in range(len(clipped_images)):
-        dice_list.append(evaluation.dice(clipped_images[i], gt_list[i]))
-        msd_list.append(evaluation.msd(clipped_images[i], gt_list[i]))
-        hausdorff_list.append(evaluation.hausdorff(clipped_images[i], gt_list[i]))
+
+    for index in range(len(col_img)):
+
+        gauss_filter_img = preprocessing.convolution(col_img[index], kernel)
+
+        if mode == "one_level":
+            segmented_img = otsu.complete_segmentation(gauss_filter_img, intensity_lvls)
+        elif mode == "two_level":
+            segmented_img = otsu.complete_segmentation_twolevel(gauss_filter_img, intensity_lvls)
+        else:
+            raise Exception("Invalid mode!")
+
+
+        dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
+        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
 
     return dice_list, msd_list, hausdorff_list
 
 
 
 
-def median_function_application(col_img, col_gt, intensity_lvls = 256):
+def median_function_application(col_img, col_gt, intensity_lvls = 256, mode = "one_level"):
+
     dice_list = []
     msd_list = []
     hausdorff_list = []
+
     for index in range(len(col_img)):
         median_filter_img = preprocessing.histogram_stretching(col_img[index])
-        segmented_img = otsu.complete_segmentation(median_filter_img, intensity_lvls)
-        dsc = evaluation.dice(segmented_img, col_gt[index])
-        msd = evaluation.msd(segmented_img, col_gt[index])
-        hausdorff = evaluation.iou(segmented_img, col_gt[index])
 
-        dice_list.append(dsc)
-        msd_list.append(msd)
-        hausdorff_list.append(hausdorff)
+        if mode == "one_level":
+            segmented_img = otsu.complete_segmentation(median_filter_img, intensity_lvls)
+        elif mode == "two_level":
+            segmented_img = otsu.complete_segmentation_twolevel(median_filter_img, intensity_lvls)
+        else:
+            raise Exception("Invalid mode!")
+
+        dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
+        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
+
     return dice_list, msd_list, hausdorff_list
 
 
 
 
-def histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256):
-    histogram_stretching_list = []
-    for index in range(len(col_img)):
-        histogram_stretching_img = preprocessing.histogram_stretching(col_img[index])
-        segmented_img = otsu.complete_segmentation(histogram_stretching_img, intensity_lvls)
-        dsc = evaluation.dice(segmented_img, col_gt[index])
-        iou = evaluation.iou(segmented_img, col_gt[index])
-        msd = evaluation.msd(segmented_img, col_gt[index])
+def histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level"):
 
-        histogram_stretching_list.append(dsc)
-        histogram_stretching_list.append(iou)
-        histogram_stretching_list.append(msd)
-    print(histogram_stretching_list)
-
-
-
-
-def median_histogram_stretching_function_application(col_img, col_gt, filter_size = 3, intensity_lvls = 256):
     dice_list = []
     msd_list = []
     hausdorff_list = []
-    for image_index in range(len(col_img)):
-        image = col_img[image_index].copy()
 
-        gt = col_gt[image_index]
-        gt[gt > 0] = 1
-        image = preprocessing.median_filter(image, filter_size)
-        image_filtered = preprocessing.histogram_stretching(image, intensity_lvls)
-        image_seg = otsu.complete_segmentation(image_filtered)
+    for index in range(len(col_img)):
 
-        dice_list.append(evaluation.dice(image_seg, gt))
-        msd_list.append(evaluation.msd(image_seg, gt))
-        hausdorff_list.append(evaluation.hausdorff(image_seg, gt))
+        histogram_stretching_img = preprocessing.histogram_stretching(col_img[index])
+
+        if mode == "one_level":
+            segmented_img = otsu.complete_segmentation(histogram_stretching_img, intensity_lvls)
+        elif mode == "two_level":
+            segmented_img = otsu.complete_segmentation_twolevel(histogram_stretching_img, intensity_lvls)
+        else:
+            raise Exception("Invalid mode!")
+
+        dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
+        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
+
     return dice_list, msd_list, hausdorff_list
 
 
 
-def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256):
+
+def median_histogram_stretching_function_application(col_img, col_gt, filter_size = 3, intensity_lvls = 256,
+                                                     mode="one_level"):
+
+    dice_list = []
+    msd_list = []
+    hausdorff_list = []
+
+    for index in range(len(col_img)):
+
+        median_filter_image = preprocessing.median_filter(col_img[index], filter_size)
+        median_filter_histogram_stretch_img = preprocessing.histogram_stretching(median_filter_image, intensity_lvls)
+
+        if mode == "one_level":
+            segmented_img = otsu.complete_segmentation(median_filter_histogram_stretch_img, intensity_lvls)
+        elif mode == "two_level":
+            segmented_img = otsu.complete_segmentation_twolevel(median_filter_histogram_stretch_img, intensity_lvls)
+        else:
+            raise Exception("Invalid mode!")
+
+        dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
+        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
+
+    return dice_list, msd_list, hausdorff_list
+
+
+
+def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level"):
 
     kernel = preprocessing.gaussian_kernel(5,1)
 
-    gauss_list = []
-    for image in col_img:
-        gauss_list.append(preprocessing.convolution(image, kernel))
-
-    stretch_list = []
-
-    for gauss_img in gauss_list:
-        stretch_list.append(preprocessing.histogram_stretching(gauss_img, intensity_lvls))
-
-    clipped_images = []
-
-    for stretch_img in stretch_list:
-        clipped_images.append(otsu.complete_segmentation(stretch_img, intensity_lvls))
-
-    gt_list = []
-
-    for gt_image in col_gt:
-        gt_list.append(gt_image)
-
     dice_list = []
     msd_list = []
     hausdorff_list = []
 
-    for i in range(len(clipped_images)):
-        dice_list.append(evaluation.dice(clipped_images[i], gt_list[i]))
-        msd_list.append(evaluation.msd(clipped_images[i],gt_list[i]))
-        hausdorff_list.append(evaluation.hausdorff(clipped_images[i],gt_list[i]))
+    for index in range(len(col_img)):
+
+        gauss_filter_image = preprocessing.convolution(col_img[index], kernel)
+        gauss_filter_histogram_stretch_img = preprocessing.histogram_stretching(gauss_filter_image, intensity_lvls)
+
+        if mode == "one_level":
+            segmented_img = otsu.complete_segmentation(gauss_filter_histogram_stretch_img, intensity_lvls)
+        elif mode == "two_level":
+            segmented_img = otsu.complete_segmentation_twolevel(gauss_filter_histogram_stretch_img, intensity_lvls)
+        else:
+            raise Exception("Invalid mode!")
+
+        dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
+        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
 
     return dice_list, msd_list, hausdorff_list
+
 
 
 if __name__ == "__main__":

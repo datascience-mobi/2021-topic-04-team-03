@@ -110,7 +110,6 @@ def complete_segmentation (img, intensity_lvls=256):
 
     return workimg
 
-
 def clipping_twolevel(img, thresholds):
     '''
     This function corrects bright reflections on image by setting pixels
@@ -130,6 +129,13 @@ def clipping_twolevel(img, thresholds):
     workimg[img > threshold_2] = 0
 
     return workimg
+
+def complete_segmentation_twolevel (img, intensity_lvls=256):
+
+    thresholds = otsu_twolevel(img, intensity_lvls=intensity_lvls)
+    segmented_img = clipping_twolevel(img, thresholds)
+
+    return segmented_img
 
 
 def intensity_value(path_to_image_collection):
