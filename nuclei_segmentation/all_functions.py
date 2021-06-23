@@ -135,6 +135,25 @@ def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_l
 
     kernel = preprocessing.gaussian_kernel(5,1)
 
+    gauss_list = []
+    for image in col_img:
+        gauss_list.append(preprocessing.convolution(image, kernel))
+
+    stretch_list = []
+
+    for gauss_img in gauss_list:
+        stretch_list.append(preprocessing.histogram_stretching(gauss_img, intensity_lvls))
+
+    clipped_images = []
+
+    for stretch_img in stretch_list:
+        clipped_images.append(otsu.complete_segmentation(stretch_img, intensity_lvls))
+
+    gt_list = []
+
+    for gt_image in col_gt:
+        gt_list.append(gt_image)
+
     dice_list = []
     msd_list = []
     hausdorff_list = []
@@ -239,9 +258,9 @@ if __name__ == "__main__":
     # median and histogram stretching function - values for dice, msd and hsd
 
     gauss_histogram_stretching_GOWT1 = gauss_histogram_stretching_function_application(col_img_GOWT1, col_gt_GOWT1,
-                                                                                                     intensity_lvls=2 ** 16)
+                                                                                       intensity_lvls=2 ** 16)
     gauss_histogram_stretching_HeLa = gauss_histogram_stretching_function_application(col_img_HeLa, col_gt_HeLa,
-                                                                                                    intensity_lvls=2 ** 16)
+                                                                                      intensity_lvls=2 ** 16)
     gauss_histogram_stretching_NIH3T3 = gauss_histogram_stretching_function_application(col_img_NIH3T3, col_gt_NIH3T3)
 
     print(gauss_histogram_stretching_GOWT1)
