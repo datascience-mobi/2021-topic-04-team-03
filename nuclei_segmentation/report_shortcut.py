@@ -2,6 +2,12 @@ import json
 import numpy as np
 
 def result_evaluation(json_file, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2DL-HeLa"]):
+    '''
+
+    :param json_file: File to save the data
+    :param dataset_names: Names of the datasets
+    :return: Prints mean dsc, msd and hd for best preprocessing method of every dataset
+    '''
     with open(json_file, "r") as read_file:
         data = json.load(read_file)
         methods = [name for name in data]

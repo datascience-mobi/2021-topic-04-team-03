@@ -131,6 +131,14 @@ def clipping_twolevel(img, thresholds):
     return workimg
 
 def complete_segmentation_twolevel (img, intensity_lvls=256):
+    '''
+    Performs complete image segmentation using Two-Level Otsu thresholding.
+    The purpose is to eliminate reflections.
+
+    :param img: Image (with reflections)
+    :param intensity_lvls: Total number of intensity levels
+    :return: Segmented binary image
+    '''
 
     thresholds = otsu_twolevel(img, intensity_lvls=intensity_lvls)
     segmented_img = clipping_twolevel(img, thresholds)

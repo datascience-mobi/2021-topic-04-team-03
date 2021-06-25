@@ -61,6 +61,7 @@ def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'M
     '''
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
+
     :param scores: list in which every element is a list with scores for an image
     :param x_label: List of preprocessing methods (same order as in scores)
     :return: none
@@ -90,6 +91,21 @@ def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'M
 def comparison_plot (image1, image2, image3, image4,
                      title1, title2, title3, title4,
                      figure_title):
+    '''
+    Neat plot of four images + title
+
+    :param image1: Image 1
+    :param image2: Image 2
+    :param image3: Image 3
+    :param image4: Image 4
+    :param title1: Title 1
+    :param title2: Title 2
+    :param title3: Title 3
+    :param title4: Title 4
+    :param figure_title: Heading
+    :return: Neat plot of the four images
+    '''
+
     fig, ax = plt.subplots(2, 2)
     fig.suptitle(figure_title)
     ax[0][0].imshow(image1, 'gray')
