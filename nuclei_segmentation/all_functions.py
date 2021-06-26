@@ -1,6 +1,7 @@
 from nuclei_segmentation import preprocessing, otsu, evaluation
 import pathlib as pl
 from skimage.io import imread_collection
+import json
 
 def without_preprocessing_function_application(col_img, col_gt, intensity_lvls = 256, mode = "one_level"):
     dice_list = []
@@ -24,9 +25,9 @@ def without_preprocessing_function_application(col_img, col_gt, intensity_lvls =
 
 
 
-def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level"):
+def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level", filter_size=11, sigma=5):
 
-    kernel = preprocessing.gaussian_kernel(11, 5)
+    kernel = preprocessing.gaussian_kernel(filter_size, sigma)
 
     dice_list = []
     msd_list = []
@@ -53,14 +54,14 @@ def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_
 
 
 
-def median_function_application(col_img, col_gt, intensity_lvls = 256, mode = "one_level"):
+def median_function_application(col_img, col_gt, intensity_lvls = 256, filter_size=3, mode = "one_level"):
 
     dice_list = []
     msd_list = []
     hausdorff_list = []
 
     for index in range(len(col_img)):
-        median_filter_img = preprocessing.histogram_stretching(col_img[index])
+        median_filter_img = preprocessing.median_filter(col_img[index], filter_size=filter_size)
 
         if mode == "one_level":
             segmented_img = otsu.complete_segmentation(median_filter_img, intensity_lvls)
@@ -131,28 +132,10 @@ def median_histogram_stretching_function_application(col_img, col_gt, filter_siz
 
 
 
-def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level"):
+def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level",
+                                                    filter_size=5, sigma=1):
 
-    kernel = preprocessing.gaussian_kernel(5,1)
-
-    gauss_list = []
-    for image in col_img:
-        gauss_list.append(preprocessing.convolution(image, kernel))
-
-    stretch_list = []
-
-    for gauss_img in gauss_list:
-        stretch_list.append(preprocessing.histogram_stretching(gauss_img, intensity_lvls))
-
-    clipped_images = []
-
-    for stretch_img in stretch_list:
-        clipped_images.append(otsu.complete_segmentation(stretch_img, intensity_lvls))
-
-    gt_list = []
-
-    for gt_image in col_gt:
-        gt_list.append(gt_image)
+    kernel = preprocessing.gaussian_kernel(filter_size, sigma)
 
     dice_list = []
     msd_list = []
@@ -176,6 +159,24 @@ def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_l
 
     return dice_list, msd_list, hausdorff_list
 
+def write_in_json(file_path, combinations, dataset, scores):
+
+    with open(file_path, "r") as file:
+        json_object = json.load(file)
+    for index in range(len(combinations)):
+        # create dictionary
+        if combinations[index] in json_object:
+            data = json_object[combinations[index]]
+        else:
+            data = {}
+        data[dataset] = {"Dice Score": scores[index][0],
+                          "MSD": scores[index][1],
+                          "Hausdorff": scores[index][2]}
+
+        json_object[combinations[index]] = data
+
+    with open(file_path, "w") as file:
+        json.dump(json_object, file, indent=3)
 
 
 if __name__ == "__main__":
@@ -243,12 +244,12 @@ if __name__ == "__main__":
     print(histogram_stretching_HeLa)
     print(histogram_stretching_NIH3T3)
 
-    # median and histogram stretching function - values for dice, msd and hsd
+    #median and histogram stretching function - values for dice, msd and hsd
 
     median_histogram_stretching_GOWT1 = median_histogram_stretching_function_application(col_img_GOWT1, col_gt_GOWT1,
-                                                                                                intensity_lvls=2 ** 16)
+                                                                                         intensity_lvls=2 ** 16)
     median_histogram_stretching_HeLa = median_histogram_stretching_function_application(col_img_HeLa, col_gt_HeLa,
-                                                                                                intensity_lvls=2 ** 16)
+                                                                                        intensity_lvls=2 ** 16)
     median_histogram_stretching_NIH3T3 = median_histogram_stretching_function_application(col_img_NIH3T3, col_gt_NIH3T3)
 
     print(median_histogram_stretching_GOWT1)
