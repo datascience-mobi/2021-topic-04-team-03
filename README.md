@@ -2,7 +2,7 @@
 
 Supervisor:
 
-*PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)
+* PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)
 *Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)
 *Roman Spilger (roman.spilger@bioquant.uni-heidelberg.de)
 *Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)
