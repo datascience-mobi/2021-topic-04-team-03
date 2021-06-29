@@ -46,8 +46,8 @@ def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_
 
 
         dice_list.append(evaluation.dice(segmented_img, col_gt[index]))
-        msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
-        hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
+        #msd_list.append(evaluation.msd(segmented_img, col_gt[index]))
+        #hausdorff_list.append(evaluation.hausdorff(segmented_img, col_gt[index]))
 
     return dice_list, msd_list, hausdorff_list
 
