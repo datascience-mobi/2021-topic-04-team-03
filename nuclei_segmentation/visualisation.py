@@ -17,7 +17,10 @@ def border_image(image, border_pixels, width=5):
     '''
 
     fig, ax = plt.subplots()
+
     ax.imshow(image, 'gray')
+    ax.set_axis_off()
+    ax.set_title('Cell Border Visualization')
     x, y = zip(*border_pixels)
     ax.scatter(y, x, c='deeppink', s=width)
 
