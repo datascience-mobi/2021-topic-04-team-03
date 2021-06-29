@@ -4,6 +4,17 @@ from skimage.io import imread_collection
 import json
 
 def without_preprocessing_function_application(col_img, col_gt, intensity_lvls = 256, mode = "one_level"):
+    '''
+    This function takes all images of a dataset and ground truth images and uses the Otsu algorithm on it. Afterwards
+    the Dice score, the mean surface distance (msd) and the hausdorff distance.
+
+    :param col_img: collection of images of a dataset
+    :param col_gt: collection of ground truth of the dataset
+    :param intensity_lvls: gives the number of intensity levels in an image used for Otsu's algorithm
+    :param mode: defines whether one-level or two-level Otsu is used on the dataset
+    :return: lists of dice, msd and hausdorff values for this dataset
+    '''
+
     dice_list = []
     msd_list = []
     hausdorff_list = []
@@ -26,7 +37,19 @@ def without_preprocessing_function_application(col_img, col_gt, intensity_lvls =
 
 
 def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level", filter_size=11, sigma=5):
+    '''
+    This function takes all images of a dataset and ground truth images, preprocesses them by using a gauss filter
+    and uses the Otsu algorithm on it. Afterwards the Dice score, the mean surface distance (msd) and the
+    hausdorff distance.
 
+    :param col_img: collection of images of a dataset
+    :param col_gt: collection of ground truth of the dataset
+    :param intensity_lvls: gives the number of intensity levels in an image used for Otsu's algorithm
+    :param mode: defines whether one-level or two-level Otsu is used on the dataset
+    :param filter_size: defines the filter size of the gaussian filter
+    :param sigma: standard deviation of the gaussian filter
+    :return: lists of dice, msd and hausdorff values for this dataset
+    '''
     kernel = preprocessing.gaussian_kernel(filter_size, sigma)
 
     dice_list = []
@@ -55,7 +78,18 @@ def gauss_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_
 
 
 def median_function_application(col_img, col_gt, intensity_lvls = 256, filter_size=3, mode = "one_level"):
+    '''
+    This function takes all images of a dataset and ground truth images, preprocesses them by using the median filter
+    and uses the Otsu algorithm on it. Afterwards the Dice score, the mean surface distance (msd) and the
+    hausdorff distance.
 
+    :param col_img: collection of images of a dataset
+    :param col_gt: collection of ground truth of the dataset
+    :param intensity_lvls: gives the number of intensity levels in an image used for Otsu's algorithm
+    :param filter_size: defines the filter size of the median filter
+    :param mode: defines whether one-level or two-level Otsu is used on the dataset
+    :return: lists of dice, msd and hausdorff values for this dataset
+    '''
     dice_list = []
     msd_list = []
     hausdorff_list = []
@@ -80,7 +114,17 @@ def median_function_application(col_img, col_gt, intensity_lvls = 256, filter_si
 
 
 def histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level"):
+    '''
+    This function takes all images of a dataset and ground truth images and preprocesses them with histogram stretching
+    and uses the Otsu algorithm on it. Afterwards the Dice score, the mean surface distance (msd) and the
+    hausdorff distance.
 
+    :param col_img: collection of images of a dataset
+    :param col_gt: collection of ground truth of the dataset
+    :param intensity_lvls: gives the number of intensity levels in an image used for Otsu's algorithm
+    :param mode: defines whether one-level or two-level Otsu is used on the dataset
+    :return: lists of dice, msd and hausdorff values for this dataset
+    '''
     dice_list = []
     msd_list = []
     hausdorff_list = []
@@ -107,7 +151,18 @@ def histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 
 
 def median_histogram_stretching_function_application(col_img, col_gt, filter_size = 3, intensity_lvls = 256,
                                                      mode="one_level"):
+    '''
+    This function takes all images of a dataset and ground truth images, preprocesses them by using the median filter
+    and histogram stretching and uses the Otsu algorithm on it. Afterwards the Dice score, the mean surface distance
+    (msd) and the hausdorff distance.
 
+    :param col_img: collection of images of a dataset
+    :param col_gt: collection of ground truth of the dataset
+    :param filter_size: defines the filter size of the median filter
+    :param intensity_lvls: gives the number of intensity levels in an image used for Otsu's algorithm
+    :param mode: defines whether one-level or two-level Otsu is used on the dataset
+    :return: lists of dice, msd and hausdorff values for this dataset
+    '''
     dice_list = []
     msd_list = []
     hausdorff_list = []
@@ -134,7 +189,19 @@ def median_histogram_stretching_function_application(col_img, col_gt, filter_siz
 
 def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 256, mode="one_level",
                                                     filter_size=5, sigma=1):
+    '''
+    This function takes all images of a dataset and ground truth images, preprocesses them by using the gaussian filter
+    and the histogram stretching function and uses the Otsu algorithm on it. Afterwards the Dice score, the mean surface
+    distance (msd) and the hausdorff distance.
 
+    :param col_img: collection of images of a dataset
+    :param col_gt: collection of ground truth of the dataset
+    :param intensity_lvls: gives the number of intensity levels in an image used for Otsu's algorithm
+    :param mode: defines whether one-level or two-level Otsu is used on the dataset
+    :param filter_size: defines the filter size of the gaussian filter
+    :param sigma: standard deviation of the gaussian filter
+    :return: lists of dice, msd and hausdorff values for this dataset
+    '''
     kernel = preprocessing.gaussian_kernel(filter_size, sigma)
 
     dice_list = []
@@ -160,7 +227,14 @@ def gauss_histogram_stretching_function_application(col_img, col_gt, intensity_l
     return dice_list, msd_list, hausdorff_list
 
 def write_in_json(file_path, combinations, dataset, scores):
+    '''
 
+    :param file_path: this is the path to the file that is opened
+    :param combinations: this
+    :param dataset:
+    :param scores:
+    :return:
+    '''
     with open(file_path, "r") as file:
         json_object = json.load(file)
     for index in range(len(combinations)):
