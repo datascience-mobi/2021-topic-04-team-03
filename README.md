@@ -14,19 +14,19 @@ Our project, "Otsu's Thresholding" is a useful method for detecting the ideal th
 
 # Description of datasets
 
-N2DH-GOWT1 cells
+**N2DH-GOWT1 cells**
 
 The dataset N2DH-GOWT1 of the cell tracking challenge (Bártová et al., 2011) contains images of GFP-GOWT1 mouse
 embryonic stem cells that have been derived with time-lapse confocal microscopy with a Leica TCS SP5 microscope.
 The varying brightness of the cells makes it hard to distinguish all the cells from the background.
 
-N2HL-HeLa cells
+**N2HL-HeLa cells**
 
 The dataset N2DL-HeLa of the cell tracking challenge (Neumann et al., 2010) contains images of human epithelial cells
 of cervical cancer. Those images have been derived with an Olympus IX81 microscope used for live imaging of
 fluorescently labelled chromosomes. The challenge in these images is the variety of brightness of the cells.
 
-NIH3T3 cells
+**NIH3T3 cells**
 
 The dataset NIH3T3 (Coelho et al., 2009) contains images of several mouse embryonic fibroblast cells. These images
 have also been derived with fluorescence microscopy images and the difficulty in segmenting these images mainly
