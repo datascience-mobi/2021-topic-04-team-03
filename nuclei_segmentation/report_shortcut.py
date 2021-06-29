@@ -30,3 +30,7 @@ def result_evaluation(json_file, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2DL-
 if __name__ == '__main__':
 
     result_evaluation('../Tests_and_Incompletes/values.json')
+
+    print('')
+
+    result_evaluation('../Results/new_values.json', dataset_names = [ "N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
