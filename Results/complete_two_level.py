@@ -37,7 +37,7 @@ col_gt_NIH3T3 = imread_collection(str(pl.Path('../Data/NIH3T3/gt/*.png')))
     #                  filter_size,
     #                  [median_scores])
 
-for filter_size in range(3, 50, 7):
+for filter_size in range(11, 50, 10):
     for sigma in range(1, 50, 10):
 
         sigma = sigma / 5

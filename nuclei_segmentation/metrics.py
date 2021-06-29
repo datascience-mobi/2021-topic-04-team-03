@@ -70,15 +70,15 @@ def cell_counting (img):
 
     return len(cells)
 
-def cell_counting_evaluation (ground_truth):
+def cell_counting_ground_truth (ground_truth_image):
     '''
     # (shades of gray in the ground truth) = # (number of cells) - 1
     datasets: N2DH-GOWT1 and N2DL-HeLa
 
-    :param ground_truth: Ground truth image
+    :param ground_truth_image: Ground truth image
     :return:Number of cells
     '''
-    return len(np.unique(ground_truth))-1
+    return len(np.unique(ground_truth_image)) - 1
 
 
 
