@@ -3,11 +3,11 @@
 Supervisor:
 
 * PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)
-*Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)
-*Roman Spilger (roman.spilger@bioquant.uni-heidelberg.de)
-*Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)
-*Svenja Reith (svenja.reith@bioquant.uni-heidelberg.de)
-*Qi Gao (qi.gao@bioquant.uni-heidelberg.de)
+* Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)
+* Roman Spilger (roman.spilger@bioquant.uni-heidelberg.de)
+* Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)
+* Svenja Reith (svenja.reith@bioquant.uni-heidelberg.de)
+* Qi Gao (qi.gao@bioquant.uni-heidelberg.de)
 
 # Introduction
 Our project, "Otsu's Thresholding" is a useful method for detecting the ideal threshold of an image. It is therefore used frequently in image segmentation for biological and medical purposes. Here we are going to use the implementation of this algorithm for segmentation of cell nuclei from three different datasets. For pre-processing the images, we implemented histogram stretching for images with low resolution, a gaussian filter, and a median filter as well as two-level Otsu thresholding for excluding reflections in some images. The implemented Otsu algorithm used on the pre-processed images was then evaluated with the Dice score, the median surface distance function and the Hausdorff metric.
