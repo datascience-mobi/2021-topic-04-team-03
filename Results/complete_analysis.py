@@ -50,4 +50,4 @@ for i in range(len(img_col_list)):
     print("gauss + hs")
     all_scores = [no_preprocessing_scores, median_filter_scores, gauss_filter_scores, histogram_stretching_socres,
                   median_and_hist_scores, gauss_and_hist_scores]
-    af.write_in_json(str(pl.Path("new_values.json")), combinations, col_names[i], all_scores)
+    af.write_in_json(str(pl.Path("values.json")), combinations, col_names[i], all_scores)

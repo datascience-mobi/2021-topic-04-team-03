@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+
 def border_image(image, border_pixels, width=5):
     '''
     This Function takes a binary image and a list with the position of the border pixels of the image
@@ -26,7 +27,8 @@ def border_image(image, border_pixels, width=5):
 
     fig.show()
 
-def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of groundtruth and test image'):
+
+def overlay(test_image, ground_truth, intensity_lvls=256, title='Overlay of groundtruth and test image'):
     '''
     This function plots overlay of ground truth and a test image.
     False negatives are shown in red, while false positives in blue.
@@ -37,7 +39,7 @@ def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of 
     :param title: Title of the plot
     :return: None
     '''
-    test_image_corrected = test_image.copy()*intensity_lvls
+    test_image_corrected = test_image.copy() * intensity_lvls
     false_pixels = np.ma.masked_where(ground_truth == test_image_corrected, test_image_corrected)
     false_negatives = np.ma.masked_where(ground_truth == 0, false_pixels)
     false_positives = np.ma.masked_where(ground_truth == intensity_lvls - 1, false_pixels)
@@ -60,20 +62,26 @@ def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of 
     plt.show()
 
 
-def comparison_preprocessing(scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH'], y_label = 'Dice Score'):
+def comparison_swarmplot(scores,
+                         x_label=['No preprocessing', 'Gaussian filter', 'Median filter',
+                                  'Histogram stretching', 'Gauss filter and\nhistogram stretching',
+                                  'Median filter and\nhistogram stretching'],
+                         y_label='Dice Score'):
     '''
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
 
-    :param scores: list in which every element is a list with scores for an image
+    :param scores: List in which every element is a list with scores for the image
     :param x_label: List of preprocessing methods (same order as in scores)
+    :param y_label: Description pof the y axis
     :return: none
     '''
 
     dataframe = pd.DataFrame(data=np.transpose(scores), columns=x_label)
+    fig, ax = plt.subplots()
     ax = sns.swarmplot(data=dataframe,
                        size=7,
-                       palette='magma_r')
+                       palette='PuRd')
     ax = sns.boxplot(showmeans=True,
                      meanline=True,
                      meanprops={'color': 'k', 'ls': '-', 'lw': 1},
@@ -85,15 +93,46 @@ def comparison_preprocessing(scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH
                      showbox=False,
                      showcaps=False,
                      ax=ax)
-    ax.set(xlabel='Preprocessing',
-           ylabel=y_label,
+    ax.set(ylabel=y_label,
            title='Comparison of different preprocessing methods')
+    ax.set_xticklabels(ax.get_xticklabels(),
+                       rotation=30,
+                       horizontalalignment='right')
+    fig.tight_layout()
     plt.show()
 
 
-def comparison_plot (image1, image2, image3, image4,
-                     title1, title2, title3, title4,
-                     figure_title):
+def comparison_boxplot(scores,
+                       x_label=['No preprocessing', 'Gaussian filter', 'Median filter',
+                                'Histogram stretching', 'Gauss filter and\nhistogram stretching',
+                                'Median filter and\nhistogram stretching'],
+                       y_label='Dice Score'):
+    """
+    Plots a boxplot, that shows evaluation scores for single images
+    sorted by preprocessing methods.
+
+    :param scores: List in which every element is a list with scores for the image
+    :param x_label: List of preprocessing methods (same order as in scores)
+    :param y_label: Description pof the y axis
+    :return:
+    """
+
+    dataframe = pd.DataFrame(data=np.transpose(scores), columns=x_label)
+    fig, ax = plt.subplots()
+
+    ax = sns.boxplot(data=dataframe, palette='PuRd')
+    ax.set(ylabel=y_label,
+           title='Comparison of different preprocessing methods')
+    ax.set_xticklabels(ax.get_xticklabels(),
+                       rotation=30,
+                       horizontalalignment='right')
+    fig.tight_layout()
+    plt.show()
+
+
+def comparison_plot(image1, image2, image3, image4,
+                    title1, title2, title3, title4,
+                    figure_title):
     '''
     Neat plot of four images + title
 
@@ -125,6 +164,7 @@ def comparison_plot (image1, image2, image3, image4,
     ax[1][1].set_axis_off()
     fig.show()
 
+
 def two_img_plot(image1, image2, title1, title2):
     fig, ax = plt.subplots(1, 2)
     ax[0].imshow(image1, 'gray')
@@ -135,6 +175,7 @@ def two_img_plot(image1, image2, title1, title2):
     ax[1].set_axis_off()
     plt.tight_layout()
     fig.show()
+
 
 if __name__ == '__main__':
     from nuclei_segmentation import otsu
@@ -152,4 +193,3 @@ if __name__ == '__main__':
 
     plt.imshow(gt)
     plt.show()
-

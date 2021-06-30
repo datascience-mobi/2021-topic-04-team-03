@@ -70,7 +70,7 @@ gs_dc_gowt = [0.7891630367381934, 0.774270861172657, 0.7936481543066178, 0.77882
 dice_mh_GOWT1 = [0.8479139784946237, 0.7897543357524959, 0.7991618631153515, 0.7936914767322101, 0.8372021654002431, 0.83254629515168]
 
 dice_scores = np.array([dc_gowt, g_dc_gowt, m_dc_gowt, hs_dc_gowt, gs_dc_gowt, dice_mh_GOWT1])
-visualisation.comparison_preprocessing(dice_scores)
+visualisation.comparison_swarmplot(dice_scores)
 
 
 msd_gowt = [93.14500783281446, 138.74403266791705, 150.45660270160226, 137.00494187548546, 72.56997880215009, 81.213996269387]
@@ -81,7 +81,7 @@ g_msd_gowt = [24.26923556237997, 49.406291084433015, 35.86219047128074, 34.78361
 msd_mh_GOWT1 = [2.8858543997286246, 13.547702014094002, 14.179070113137572, 13.396876081690408, 2.0279260699536343, 2.5968995136705164]
 
 msd_scores = np.array([msd_gowt, g_msd_gowt, m_msd_gowt, hs_msd_gowt, gs_msd_gowt, msd_mh_GOWT1])
-visualisation.comparison_preprocessing(msd_scores, y_label= 'MSD Value')
+visualisation.comparison_swarmplot(msd_scores, y_label='MSD Value')
 
 # Example for cell counting
 cell_number = metrics.cell_counting(cell_counting_sample)

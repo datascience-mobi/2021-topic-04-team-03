@@ -14,7 +14,7 @@ dice_scores = np.array([dc_gowt, g_dc_gowt, m_dc_gowt, hs_dc_gowt, gs_dc_gowt, d
 x = ['None', 'G', 'M', 'H', 'GH', 'MH']
 from nuclei_segmentation import visualisation
 
-visualisation.comparison_preprocessing(dice_scores, x_label=x)
+visualisation.comparison_swarmplot(dice_scores, x_label=x)
 # Seaborn requires a dataframe
 # dataframe = pd.DataFrame(data = np.transpose(dice_scores), columns=x)
 # print(dataframe)
