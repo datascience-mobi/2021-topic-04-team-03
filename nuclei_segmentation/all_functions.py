@@ -1,7 +1,8 @@
-from nuclei_segmentation import preprocessing, otsu, evaluation
+from nuclei_segmentation import preprocessing, otsu, evaluation, metrics
 import pathlib as pl
 from skimage.io import imread_collection
 import json
+import numpy as np
 
 def without_preprocessing_function_application(col_img, col_gt, intensity_lvls = 256, mode = "one_level"):
     dice_list = []
@@ -177,6 +178,23 @@ def write_in_json(file_path, combinations, dataset, scores):
 
     with open(file_path, "w") as file:
         json.dump(json_object, file, indent=3)
+
+
+def cell_counting_analysis (collection):
+    detected_number_list = []
+    gt_number_list = []
+    relative_differences = []
+    absolute_differences =[]
+    for image in collection:
+        detected_number = metrics.cell_counting(image)
+        gt_number = metrics.cell_counting_ground_truth(image)
+        absolute_differences.append(detected_number-gt_number)
+        relative_differences.append((detected_number-gt_number)/gt_number)
+        detected_number_list.append(detected_number)
+        gt_number_list.append(gt_number)
+    return detected_number_list, gt_number_list, absolute_differences, relative_differences
+
+
 
 
 if __name__ == "__main__":
