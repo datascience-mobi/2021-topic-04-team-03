@@ -125,7 +125,15 @@ def comparison_plot (image1, image2, image3, image4,
     ax[1][1].set_axis_off()
     fig.show()
 
-
+def two_img_plot(image1, image2, title1, title2):
+    fig, ax = plt.subplots(1, 2)
+    ax[0].imshow(image1, 'gray')
+    ax[0].set_title(title1, pad=20)
+    ax[1].imshow(image2, 'gray')
+    ax[1].set_title(title2, pad=20)
+    ax[0].set_axis_off()
+    ax[1].set_axis_off()
+    fig.show()
 
 if __name__ == '__main__':
     from nuclei_segmentation import otsu
