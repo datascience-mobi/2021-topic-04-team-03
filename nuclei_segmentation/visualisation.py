@@ -57,7 +57,7 @@ def overlay (test_image, ground_truth, intensity_lvls = 256, title ='Overlay of 
     plt.show()
 
 
-def comparison_preprocessing (scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH'], y_label = 'Dice Score'):
+def comparison_preprocessing(scores, x_label = ['None', 'G', 'M', 'H', 'GH', 'MH'], y_label = 'Dice Score'):
     '''
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
@@ -121,7 +121,6 @@ def comparison_plot (image1, image2, image3, image4,
     ax[1][0].set_axis_off()
     ax[1][1].set_axis_off()
     fig.show()
-
 
 
 

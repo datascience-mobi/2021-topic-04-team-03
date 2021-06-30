@@ -12,7 +12,7 @@ col_img_NIH3T3 = imread_collection(str(pl.Path('../Data/NIH3T3/img/*.png')))
 col_gt_NIH3T3 = imread_collection(str(pl.Path('../Data/NIH3T3/gt/*.png')))
 
 img_col_list = [col_img_GOWT1, col_img_HeLa, col_img_NIH3T3]
-gt_col_list = [col_img_GOWT1, col_gt_HeLa, col_gt_NIH3T3]
+gt_col_list = [col_gt_GOWT1, col_gt_HeLa, col_gt_NIH3T3]
 col_names = ["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"]
 intensity_lvls_list = [2 ** 16, 2 ** 16, 256]
 median_filter_sizes = [3, 9, 3]
