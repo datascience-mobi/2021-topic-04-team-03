@@ -39,17 +39,20 @@ def overlay(test_image, ground_truth, intensity_lvls=256, title='Overlay of grou
     :param title: Title of the plot
     :return: None
     '''
-    test_image_corrected = test_image.copy() * intensity_lvls
-    false_pixels = np.ma.masked_where(ground_truth == test_image_corrected, test_image_corrected)
-    false_negatives = np.ma.masked_where(ground_truth == 0, false_pixels)
-    false_positives = np.ma.masked_where(ground_truth == intensity_lvls - 1, false_pixels)
+
+    ground_truth_corrected = np.zeros(ground_truth.shape)
+    ground_truth_corrected[ground_truth>0] = 1
+
+    false_pixels = np.ma.masked_where(ground_truth_corrected == test_image, test_image)
+    false_negatives = np.ma.masked_where(ground_truth_corrected == 0, false_pixels)
+    false_positives = np.ma.masked_where(ground_truth_corrected == 1, false_pixels)
 
     cmap_false_negatives = colors.ListedColormap(['red', 'none'])
     cmap_false_positives = colors.ListedColormap(['blue', 'none'])
 
     plt.figure()
 
-    plt.imshow(test_image_corrected, 'gray', alpha=0.8)
+    plt.imshow(test_image, 'gray', alpha=0.8)
     plt.imshow(false_negatives, cmap=cmap_false_negatives)
     plt.imshow(false_positives, cmap=cmap_false_positives)
 
