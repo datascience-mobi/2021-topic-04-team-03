@@ -138,7 +138,8 @@ def comparison_boxplot(scores,
            title='Comparison of different preprocessing methods',
            )
     h, l = ax.get_legend_handles_labels()
-    ax.legend(h[0:2], l[0:2], bbox_to_anchor=(1.05, 0.6))
+    position = ax.get_position()
+    ax.legend(h[0:2], l[0:2], bbox_to_anchor=(position.width + 0.5, 0.6))
     ax.set_xticklabels(ax.get_xticklabels(),
                        rotation=30,
                        horizontalalignment='right')
