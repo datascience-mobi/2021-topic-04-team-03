@@ -87,8 +87,8 @@ def comparison_swarmplot(scores,
                        palette='PuRd')
     ax = sns.boxplot(showmeans=True,
                      meanline=True,
-                     meanprops={'color': 'k', 'ls': '-', 'lw': 1},
-                     medianprops={'visible': False},
+                     meanprops={'color': 'k', 'ls': '-', 'lw': 1, 'label': 'Mean'},
+                     medianprops={'visible': True, 'color': 'lightslategray', 'linestyle': '--', 'label': 'Median'},
                      whiskerprops={'visible': False},
                      zorder=10,
                      data=dataframe,
@@ -96,6 +96,8 @@ def comparison_swarmplot(scores,
                      showbox=False,
                      showcaps=False,
                      ax=ax)
+    h, l = ax.get_legend_handles_labels()
+    ax.legend(h[0:2], l[0:2], bbox_to_anchor=(1.05, 0.6))
     ax.set(ylabel=y_label,
            title='Comparison of different preprocessing methods')
     ax.set_xticklabels(ax.get_xticklabels(),
@@ -123,9 +125,18 @@ def comparison_boxplot(scores,
     dataframe = pd.DataFrame(data=np.transpose(scores), columns=x_label)
     fig, ax = plt.subplots()
 
-    ax = sns.boxplot(data=dataframe, palette='PuRd')
+    ax = sns.boxplot(data=dataframe,
+                     showmeans=True,
+                     meanline=True,
+                     palette='PuRd',
+                     meanprops={'visible': True, 'color': 'k', 'ls': '-', 'lw': 1, 'label': 'Mean'},
+                     medianprops={'visible': True, 'color': 'lightslategray', 'linestyle': '--', 'label': 'Median'},
+                     )
     ax.set(ylabel=y_label,
-           title='Comparison of different preprocessing methods')
+           title='Comparison of different preprocessing methods',
+           )
+    h, l = ax.get_legend_handles_labels()
+    ax.legend(h[0:2], l[0:2], bbox_to_anchor=(1.05, 0.6))
     ax.set_xticklabels(ax.get_xticklabels(),
                        rotation=30,
                        horizontalalignment='right')
