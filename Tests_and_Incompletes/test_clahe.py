@@ -39,8 +39,8 @@ def stretch(img, threshold1, threshold2, intensity_lvls=256):
 
     return stretched_image
 
-img_NIH3T3 = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-42.png')))
-gt_NIH3T3 = imread(str(pl.Path(r'..\Data\NIH3T3\gt\42.png')))
+img_NIH3T3 = imread(str(pl.Path(r'../Data/NIH3T3/img/dna-42.png')))
+gt_NIH3T3 = imread(str(pl.Path(r'../Data/NIH3T3/gt/42.png')))
 #
 thresholds = otsu.otsu_twolevel(img_NIH3T3)
 # img_stretched = stretch(img_NIH3T3, min(thresholds), max(thresholds))
