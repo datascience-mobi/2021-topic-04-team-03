@@ -23,31 +23,31 @@ combinations = ["No preprocessing", "Median filter", "Gaussian filter", "Histogr
                 "Median filter and histogram stretching", "Gauss filter and histogram stretching"]
 
 for i in range(len(img_col_list)):
-    print("Started with "+col_names[i])
+    # print("Started with "+col_names[i])
     no_preprocessing_scores = af.without_preprocessing_function_application(img_col_list[i], gt_col_list[i],
                                                                             intensity_lvls=intensity_lvls_list[i])
-    print("no preprocessing")
+    # print("no preprocessing")
     median_filter_scores = af.median_function_application(img_col_list[i], gt_col_list[i],
                                                           intensity_lvls=intensity_lvls_list[i],
                                                           filter_size=median_filter_sizes[i])
-    print("median")
+    # print("median")
     gauss_filter_scores = af.gauss_function_application(img_col_list[i], gt_col_list[i],
                                                         intensity_lvls=intensity_lvls_list[i],
                                                         filter_size=gauss_filter_sizes[i],
                                                         sigma=sigma_list[i])
-    print("gauss")
+    # print("gauss")
     histogram_stretching_socres = af.histogram_stretching_function_application(img_col_list[i], gt_col_list[i],
                                                                                intensity_lvls=intensity_lvls_list[i])
-    print("hs")
+    # print("hs")
     median_and_hist_scores = af.median_histogram_stretching_function_application(img_col_list[i], gt_col_list[i],
                                                                                  intensity_lvls=intensity_lvls_list[i],
                                                                                  filter_size=median_filter_sizes[i])
-    print("median + hs")
+    # print("median + hs")
     gauss_and_hist_scores = af.gauss_histogram_stretching_function_application(img_col_list[i], gt_col_list[i],
                                                                                intensity_lvls=intensity_lvls_list[i],
                                                                                filter_size=gauss_filter_sizes[i],
                                                                                sigma=sigma_list[i])
-    print("gauss + hs")
+    # print("gauss + hs")
     all_scores = [no_preprocessing_scores, median_filter_scores, gauss_filter_scores, histogram_stretching_socres,
                   median_and_hist_scores, gauss_and_hist_scores]
     af.write_in_json(str(pl.Path("values.json")), combinations, col_names[i], all_scores)
