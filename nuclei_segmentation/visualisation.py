@@ -28,14 +28,15 @@ def border_image(image, border_pixels, width=5):
     fig.show()
 
 
-def overlay(test_image, ground_truth, intensity_lvls=256, title='Overlay of groundtruth and test image'):
+def overlay(test_image, ground_truth,
+            title='Overlay of groundtruth and test image',
+            plot = True):
     '''
     This function plots overlay of ground truth and a test image.
     False negatives are shown in red, while false positives in blue.
 
     :param test_image: Image to be compared with ground truth
     :param ground_truth: Ground truth image
-    :param intensity_lvls: Total number of intensity levels of the images
     :param title: Title of the plot
     :return: None
     '''
@@ -64,14 +65,19 @@ def overlay(test_image, ground_truth, intensity_lvls=256, title='Overlay of grou
     ax.set(title=title)
 
     fig.tight_layout()
-    fig.show()
+    if plot:
+        fig.show()
+    else:
+        return fig
 
 
 def comparison_swarmplot(scores,
                          x_label=['No preprocessing', 'Gaussian filter', 'Median filter',
                                   'Histogram stretching', 'Gauss filter and\nhistogram stretching',
                                   'Median filter and\nhistogram stretching'],
-                         y_label='Dice Score'):
+                         y_label='Dice Score',
+                         plot = True,
+                         additional_coloration = None):
     '''
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
@@ -83,6 +89,7 @@ def comparison_swarmplot(scores,
     '''
 
     dataframe = pd.DataFrame(data=np.transpose(scores), columns=x_label)
+
     fig, ax = plt.subplots()
     ax = sns.swarmplot(data=dataframe,
                        size=7,
@@ -108,7 +115,10 @@ def comparison_swarmplot(scores,
                        rotation=30,
                        horizontalalignment='right')
     fig.tight_layout()
-    plt.show()
+    if plot:
+        fig.show()
+    else:
+        return fig
 
 
 def comparison_boxplot(scores,

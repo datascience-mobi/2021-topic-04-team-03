@@ -39,7 +39,7 @@ def get_all_two_level_results(path_to_file, dataset):
 from nuclei_segmentation import visualisation
 
 scores = get_all_two_level_results("two_lvl.json", "NIH3T3")
-visualisation.comparison_boxplot(scores,
+visualisation.comparison_swarmplot(scores,
                                  x_label=["No preprocessing", "Histogram stretching","Median filter",
                                           "Median filter and\nhistogram stretching", "Gaussian filter"])
 
