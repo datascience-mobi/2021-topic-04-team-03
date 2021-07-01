@@ -50,19 +50,21 @@ def overlay(test_image, ground_truth, intensity_lvls=256, title='Overlay of grou
     cmap_false_negatives = colors.ListedColormap(['red', 'none'])
     cmap_false_positives = colors.ListedColormap(['blue', 'none'])
 
-    plt.figure()
+    fig, ax = plt.subplots()
 
-    plt.imshow(test_image, 'gray', alpha=0.8)
-    plt.imshow(false_negatives, cmap=cmap_false_negatives)
-    plt.imshow(false_positives, cmap=cmap_false_positives)
+    ax.imshow(test_image, 'gray', alpha=0.8)
+    ax.imshow(false_negatives, cmap=cmap_false_negatives)
+    ax.imshow(false_positives, cmap=cmap_false_positives)
 
-    plt.plot(0, 0, ".", c='red', label='False negatives')
-    plt.plot(0, 0, ".", c='blue', label='False positives')
-    plt.legend()
+    ax.plot(0, 0, ".", c='red', label='False negatives')
+    ax.plot(0, 0, ".", c='blue', label='False positives')
+    h, l = ax.get_legend_handles_labels()
+    ax.legend(h, l, bbox_to_anchor=(1.5, 0.6))
 
-    plt.title(title)
+    ax.set(title=title)
 
-    plt.show()
+    fig.tight_layout()
+    fig.show()
 
 
 def comparison_swarmplot(scores,
@@ -141,7 +143,7 @@ def comparison_boxplot(scores,
                        rotation=30,
                        horizontalalignment='right')
     fig.tight_layout()
-    plt.show()
+    fig.show()
 
 
 def comparison_plot(image1, image2, image3, image4,
@@ -202,8 +204,3 @@ if __name__ == '__main__':
 
     overlay(our_img, gt)
 
-    plt.imshow(our_img)
-    plt.show()
-
-    plt.imshow(gt)
-    plt.show()
