@@ -48,8 +48,8 @@ def overlay(test_image, ground_truth,
     false_negatives = np.ma.masked_where(ground_truth_corrected == 0, false_pixels)
     false_positives = np.ma.masked_where(ground_truth_corrected == 1, false_pixels)
 
-    cmap_false_negatives = colors.ListedColormap(['red', 'none'])
-    cmap_false_positives = colors.ListedColormap(['blue', 'none'])
+    cmap_false_negatives = colors.ListedColormap(['palevioletred', 'none'])
+    cmap_false_positives = colors.ListedColormap(['cornflowerblue', 'none'])
 
     fig, ax = plt.subplots()
 
@@ -57,8 +57,8 @@ def overlay(test_image, ground_truth,
     ax.imshow(false_negatives, cmap=cmap_false_negatives)
     ax.imshow(false_positives, cmap=cmap_false_positives)
 
-    ax.plot(0, 0, ".", c='red', label='False negatives')
-    ax.plot(0, 0, ".", c='blue', label='False positives')
+    ax.plot(0, 0, ".", c='palevioletred', label='False negatives')
+    ax.plot(0, 0, ".", c='cornflowerblue', label='False positives')
     h, l = ax.get_legend_handles_labels()
     ax.legend(h, l, bbox_to_anchor=(1.5, 0.6))
 
@@ -76,8 +76,7 @@ def comparison_swarmplot(scores,
                                   'Histogram stretching', 'Gauss filter and\nhistogram stretching',
                                   'Median filter and\nhistogram stretching'],
                          y_label='Dice Score',
-                         plot = True,
-                         additional_coloration = None):
+                         plot = True):
     '''
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
@@ -125,7 +124,8 @@ def comparison_boxplot(scores,
                        x_label=['No preprocessing', 'Gaussian filter', 'Median filter',
                                 'Histogram stretching', 'Gauss filter and\nhistogram stretching',
                                 'Median filter and\nhistogram stretching'],
-                       y_label='Dice Score'):
+                       y_label='Dice Score',
+                       plot=True):
     """
     Plots a boxplot, that shows evaluation scores for single images
     sorted by preprocessing methods.
@@ -156,7 +156,10 @@ def comparison_boxplot(scores,
                        rotation=30,
                        horizontalalignment='right')
     fig.tight_layout()
-    fig.show()
+    if plot:
+        fig.show()
+    else:
+        return fig
 
 
 def comparison_plot(image1, image2, image3, image4,
