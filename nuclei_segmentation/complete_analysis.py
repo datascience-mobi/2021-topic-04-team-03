@@ -135,7 +135,6 @@ def result_evaluation(json_file, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2DL-
                 methods[np.argmin(msd_scores)]))
             print(
                 dataset + ' (hd) ' + ': ' + str(round(np.min(hd_scores),3)) + '   --->   ' + str(methods[np.argmin(hd_scores)]))
-            print("")
 
 
 def recalculation_desired(recalculate_data = False, path_to_data = "Results/values.json"):
@@ -155,7 +154,8 @@ def recalculation_desired(recalculate_data = False, path_to_data = "Results/valu
             file.write(data)
     else:
         with open(str(result_json_path_one_level), "r") as file:
-            data_one_level = json.load(file)
+            data = json.load(file)
+    return data
 
 
 if __name__ == '__main__':
