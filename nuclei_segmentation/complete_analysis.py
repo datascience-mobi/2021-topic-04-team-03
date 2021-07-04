@@ -135,8 +135,30 @@ def result_evaluation(json_file, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2DL-
                 methods[np.argmin(msd_scores)]))
             print(
                 dataset + ' (hd) ' + ': ' + str(round(np.min(hd_scores),3)) + '   --->   ' + str(methods[np.argmin(hd_scores)]))
+            print("")
+
+
+def recalculation_desired(recalculate_data = False, path_to_data = "Results/values.json"):
+    '''
+    If recalculation of the data in the respective json files is desired, the parameter recalculate_data can be set to True.
+
+    :param recalculate_data: True if data is wanted to be recalculated
+    :param path_to_data: Path to the json file
+    :return: -
+    '''
+    recalculate_one_level = False
+
+    result_json_path_one_level = pl.Path(path_to_data)
+    if recalculate_one_level or not result_json_path_one_level.exists():
+        data = one_level_complete_calculation()
+        with open(result_json_path_one_level) as file:
+            file.write(data)
+    else:
+        with open(str(result_json_path_one_level), "r") as file:
+            data_one_level = json.load(file)
 
 
 if __name__ == '__main__':
 
     result_evaluation('../Results/values.json', dataset_names = ["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
+    recalculation_desired(recalculate_data=False, path_to_data='../Results/values.json')
