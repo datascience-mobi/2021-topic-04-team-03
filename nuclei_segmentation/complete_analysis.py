@@ -55,6 +55,13 @@ def get_one_lvl_msd(data_one_level, dataset = 'NIH3T3'):
         dice_scores.append(data_one_level[method][dataset]["MSD"])
     return dice_scores
 
+def get_one_lvl_hd(data_one_level, dataset = 'NIH3T3'):
+    dice_scores = []
+    for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
+                   "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
+        dice_scores.append(data_one_level[method][dataset]["Hausdorff"])
+    return dice_scores
+
 def one_level_complete_calculation():
     col_img_GOWT1 = imread_collection(str(pl.Path('../Data/N2DH-GOWT1/img/*.tif')))
     col_gt_GOWT1 = imread_collection(str(pl.Path('../Data/N2DH-GOWT1/gt/*.tif')))
