@@ -132,7 +132,7 @@ def histogram_stretching_function_application(col_img, col_gt, intensity_lvls = 
 
     for index in range(len(col_img)):
 
-        histogram_stretching_img = preprocessing.histogram_stretching(col_img[index], intensity_lvls=2**16)
+        histogram_stretching_img = preprocessing.histogram_stretching(col_img[index], intensity_lvls)
 
         if mode == "one_level":
             segmented_img = otsu.complete_segmentation(histogram_stretching_img, intensity_lvls)
