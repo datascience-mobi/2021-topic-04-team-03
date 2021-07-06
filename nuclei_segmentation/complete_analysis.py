@@ -118,30 +118,36 @@ def one_level_complete_calculation():
 
 
 
-def result_evaluation(json_file, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2DL-HeLa"]):
+def result_evaluation(file_pathway, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2DL-HeLa"], return_data=False):
     '''
 
-    :param json_file: File to save the data
+    :param file_pathway: File with saved the data
     :param dataset_names: Names of the datasets
     :return: Prints mean dsc, msd and hd for best preprocessing method of every dataset
     '''
-    with open(json_file, "r") as read_file:
+    with open(file_pathway, "r") as read_file:
         data = json.load(read_file)
-        methods = [name for name in data]
-        for dataset in dataset_names:
-            dice_scores = []
-            msd_scores = []
-            hd_scores = []
-            for combination in data:
-                dice_scores.append(np.mean(data[combination][dataset]["Dice Score"]))
-                msd_scores.append(np.mean(data[combination][dataset]["MSD"]))
-                hd_scores.append(np.mean(data[combination][dataset]["Hausdorff"]))
-            print(dataset + ' (dice) ' + ': ' + str(round(np.max(dice_scores),3)) + '   --->   ' + str(
-                methods[np.argmax(dice_scores)]))
-            print(dataset + ' (msd) ' + ': ' + str(round(np.min(msd_scores),3)) + '   --->   ' + str(
-                methods[np.argmin(msd_scores)]))
-            print(
-                dataset + ' (hd) ' + ': ' + str(round(np.min(hd_scores),3)) + '   --->   ' + str(methods[np.argmin(hd_scores)]))
+    methods = [name for name in data]
+    if return_data:
+        all_scores = [[], [], []]
+    for dataset in dataset_names:
+        dice_scores = []
+        msd_scores = []
+        hd_scores = []
+        for combination in data:
+            dice_scores.append(np.mean(data[combination][dataset]["Dice Score"]))
+            msd_scores.append(np.mean(data[combination][dataset]["MSD"]))
+            hd_scores.append(np.mean(data[combination][dataset]["Hausdorff"]))
+            if return_data:
+                all_scores[0].append(data[combination][dataset]["Dice Score"])
+                all_scores[1].append(data[combination][dataset]["MSD"])
+                all_scores[2].append(data[combination][dataset]["Hausdorff"])
+        print(dataset + ' (dice) ' + ': ' + str(round(np.max(dice_scores),3)) + '   --->   ' + str(
+            methods[np.argmax(dice_scores)]))
+        print(dataset + ' (msd) ' + ': ' + str(round(np.min(msd_scores),3)) + '   --->   ' + str(
+            methods[np.argmin(msd_scores)]))
+        print(
+            dataset + ' (hd) ' + ': ' + str(round(np.min(hd_scores),3)) + '   --->   ' + str(methods[np.argmin(hd_scores)]))
 
 
 def recalculation_desired(recalculate_data = False, path_to_data = "Results/values.json"):
@@ -164,8 +170,9 @@ def recalculation_desired(recalculate_data = False, path_to_data = "Results/valu
             data = json.load(file)
     return data
 
+    if return_data:
+        return all_scores
 
 if __name__ == '__main__':
-
-    result_evaluation('../Results/values.json', dataset_names = ["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
+    result_evaluation('../Results/values.json', dataset_names=["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
     recalculation_desired(recalculate_data=False, path_to_data='../Results/values.json')

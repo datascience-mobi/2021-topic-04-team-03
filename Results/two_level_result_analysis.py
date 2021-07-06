@@ -1,6 +1,7 @@
 import json
 import numpy as np
 
+
 def optimal_combination_filter_size(path_to_file, method):
     with open(path_to_file, "r") as file:
         json_object = json.load(file)
@@ -12,6 +13,7 @@ def optimal_combination_filter_size(path_to_file, method):
 
     return filter_sizes[np.argmax(scores)], np.max(scores)
 
+
 def optimal_combination_no_filter_size(path_to_file, evaluation_method, dataset):
     with open(path_to_file, "r") as file:
         json_object = json.load(file)
@@ -22,6 +24,7 @@ def optimal_combination_no_filter_size(path_to_file, evaluation_method, dataset)
         if dataset in json_object[method]:
             scores.append(np.mean(json_object[method][dataset][evaluation_method]))
     return methods[np.argmax(scores)], max(scores)
+
 
 def get_all_two_level_results(path_to_file, dataset):
     scores = []
@@ -36,16 +39,20 @@ def get_all_two_level_results(path_to_file, dataset):
 
     return scores
 
-from nuclei_segmentation import visualisation
 
-scores = get_all_two_level_results("two_lvl.json", "NIH3T3")
-visualisation.comparison_swarmplot(scores,
-                                 x_label=["No preprocessing", "Histogram stretching","Median filter",
-                                          "Median filter and\nhistogram stretching", "Gaussian filter"])
+if __name__ == "__main__":
+    from nuclei_segmentation import visualisation, complete_analysis
 
+    scores = get_all_two_level_results("two_lvl.json", "NIH3T3")
+    print(np.argmax([np.mean(i) for i in scores]))
+    scores_one_lvl = complete_analysis.result_evaluation("values.json", dataset_names=["NIH3T3"], return_data=True)
 
+    ax1 = visualisation.comparison_swarmplot(scores,
+                                             x_label=["No preprocessing", "Histogram stretching", "Median filter",
+                                                      "Median filter and\nhistogram stretching", "Gaussian filter"],
+                                             plot=False)
 
-
-
-
-
+    ax2 = visualisation.comparison_boxplot(scores,
+                                           x_label=["No preprocessing", "Histogram stretching", "Median filter",
+                                                    "Median filter and\nhistogram stretching", "Gaussian filter"],
+                                           plot=False)
