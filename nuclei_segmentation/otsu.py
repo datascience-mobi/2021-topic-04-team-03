@@ -203,27 +203,31 @@ if __name__ == '__main__':
     from matplotlib import pyplot as plt
     import pathlib
     image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
-    threshold = otsu(image_test)
-    clipped_img = clipping(image_test, threshold)
-    print(threshold)
 
-
-    plt.imshow(clipped_img, 'gray')
+    seg_img = complete_segmentation(image_test)
+    plt.imshow(seg_img)
     plt.show()
-    plt.imshow(image_test, 'gray')
-    plt.show()
-
-
-    # Testing whether the output is the same as in the skimage function
-    from skimage.filters import threshold_otsu
-
-    t_skimage = threshold_otsu(image_test)
-
-    print(threshold, t_skimage)
-
-    # Testing whether twolevel_otsu is the same as the skimage funktion
-    from skimage.filters import threshold_multiotsu
-
-    t_twolevel_skimage = otsu_twolevel(image_test)
-
-    print(t_twolevel_skimage)
+    # threshold = otsu(image_test)
+    # clipped_img = clipping(image_test, threshold)
+    # print(threshold)
+    #
+    #
+    # plt.imshow(clipped_img, 'gray')
+    # plt.show()
+    # plt.imshow(image_test, 'gray')
+    # plt.show()
+    #
+    #
+    # # Testing whether the output is the same as in the skimage function
+    # from skimage.filters import threshold_otsu
+    #
+    # t_skimage = threshold_otsu(image_test)
+    #
+    # print(threshold, t_skimage)
+    #
+    # # Testing whether twolevel_otsu is the same as the skimage funktion
+    # from skimage.filters import threshold_multiotsu
+    #
+    # t_twolevel_skimage = otsu_twolevel(image_test)
+    #
+    # print(t_twolevel_skimage)
