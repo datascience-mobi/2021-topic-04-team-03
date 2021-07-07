@@ -1,6 +1,7 @@
 import numpy as np
 from contextlib import suppress
 
+
 def otsu(image, intensity_lvls=256):
     """
     This function takes an image and calculates the probability of class occurrence and the mean value for all pixels to
@@ -12,7 +13,6 @@ def otsu(image, intensity_lvls=256):
     :return: Threshold and goodness of the image
     """
 
-    #img = image.copy().flatten()
     histogram = np.histogram(image, bins=np.arange(intensity_lvls + 1), density=True)
 
     class_probability = np.cumsum(histogram[0])
@@ -23,12 +23,9 @@ def otsu(image, intensity_lvls=256):
         inbetween_variance = (total_mean * class_probability - class_mean) ** 2 / (
                 class_probability * (1 - class_probability))
 
-
     # Inf values are invalid
     inbetween_variance[inbetween_variance == np.inf] = np.nan
     optimal_threshold = np.nanargmax(inbetween_variance)
-    total_variance = np.var(image)
-    goodness = inbetween_variance[optimal_threshold] / total_variance
 
     return optimal_threshold
 
@@ -98,7 +95,8 @@ def clipping(img, threshold):
 
     return workimg
 
-def complete_segmentation (img, intensity_lvls=256):
+
+def complete_segmentation(img, intensity_lvls=256):
     '''
     Performs complete image segmentation using Otsu threshold.
 
@@ -109,6 +107,7 @@ def complete_segmentation (img, intensity_lvls=256):
     workimg = clipping(img, threshold)
 
     return workimg
+
 
 def clipping_twolevel(img, thresholds):
     '''
@@ -130,7 +129,8 @@ def clipping_twolevel(img, thresholds):
 
     return workimg
 
-def complete_segmentation_twolevel (img, intensity_lvls=256):
+
+def complete_segmentation_twolevel(img, intensity_lvls=256):
     '''
     Performs complete image segmentation using Two-Level Otsu thresholding.
     The purpose is to eliminate reflections.
@@ -164,7 +164,8 @@ def intensity_value(path_to_image_collection):
 
     return intensity
 
-def alternative_reflection_otsu(img, intensity_lvls = 256):
+
+def alternative_reflection_otsu(img, intensity_lvls=256):
     '''
     This is alternative for handling reflections in the images.
     It first calculates two thresholds with two-level Otsu.
@@ -196,12 +197,14 @@ def alternative_reflection_otsu(img, intensity_lvls = 256):
 
     return img_clipped
 
+
 # Just for testing. Delete later #
 if __name__ == '__main__':
     from skimage.io import imread
     from skimage.io import imshow
     from matplotlib import pyplot as plt
     import pathlib
+
     image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
 
     seg_img = complete_segmentation(image_test)
