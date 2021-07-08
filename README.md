@@ -48,7 +48,5 @@ There are several folders to arrange the project clearly:
 7. Results
 8. Tests_and_incompletes
 
-# Literature 
-
 
 
