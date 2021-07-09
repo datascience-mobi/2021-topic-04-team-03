@@ -72,12 +72,12 @@ def overlay(test_image, ground_truth,
 
 
 def comparison_swarmplot(scores,
-                         x_label=['No preprocessing', 'Gaussian filter', 'Median filter',
-                                  'Histogram stretching', 'Gauss filter and\nhistogram stretching',
-                                  'Median filter and\nhistogram stretching'],
+                         x_label=['No preprocessing', 'Median filter', 'Gaussian filter',
+                                'Histogram stretching', 'Median filter and\nhistogram stretching',
+                                'Gauss filter and\nhistogram stretching'],
                          y_label='Dice Score',
                          plot = True):
-    '''
+    """
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
 
@@ -85,7 +85,7 @@ def comparison_swarmplot(scores,
     :param x_label: List of preprocessing methods (same order as in scores)
     :param y_label: Description pof the y axis
     :return: none
-    '''
+    """
 
     dataframe = pd.DataFrame(data=np.transpose(scores), columns=x_label)
 
@@ -121,9 +121,9 @@ def comparison_swarmplot(scores,
 
 
 def comparison_boxplot(scores,
-                       x_label=['No preprocessing', 'Gaussian filter', 'Median filter',
-                                'Histogram stretching', 'Gauss filter and\nhistogram stretching',
-                                'Median filter and\nhistogram stretching'],
+                       x_label=['No preprocessing', 'Median filter', 'Gaussian filter',
+                                'Histogram stretching', 'Median filter and\nhistogram stretching',
+                                'Gauss filter and\nhistogram stretching'],
                        y_label='Dice Score',
                        plot=True):
     """
