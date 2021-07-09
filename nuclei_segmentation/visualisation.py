@@ -29,7 +29,7 @@ def border_image(image, border_pixels, width=5):
 
 
 def overlay(test_image, ground_truth,
-            title='Overlay of groundtruth and test image',
+            title='Overlay of ground truth and test image',
             plot = True):
     '''
     This function plots overlay of ground truth and a test image.
@@ -63,6 +63,7 @@ def overlay(test_image, ground_truth,
     ax.legend(h, l, bbox_to_anchor=(1.5, 0.6))
 
     ax.set(title=title)
+    ax.set_axis_off()
 
     fig.tight_layout()
     if plot:
