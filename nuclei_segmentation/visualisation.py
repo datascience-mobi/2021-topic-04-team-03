@@ -60,7 +60,8 @@ def overlay(test_image, ground_truth,
     ax.plot(0, 0, ".", c='palevioletred', label='False negatives')
     ax.plot(0, 0, ".", c='cornflowerblue', label='False positives')
     h, l = ax.get_legend_handles_labels()
-    ax.legend(h, l, bbox_to_anchor=(1.5, 0.6))
+    position = ax.get_position()
+    ax.legend(h, l, bbox_to_anchor=(position.width + 0.8, 0.6))
 
     ax.set(title=title)
     ax.set_axis_off()
