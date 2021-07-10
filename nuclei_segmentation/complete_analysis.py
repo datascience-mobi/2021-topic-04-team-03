@@ -149,8 +149,33 @@ def result_evaluation(file_pathway, dataset_names = ["NIH3T3", "N2DH-GOWT1", "N2
         print(
             dataset + ' (hd) ' + ': ' + str(round(np.min(hd_scores),3)) + '   --->   ' + str(methods[np.argmin(hd_scores)]))
 
+def two_level_complete_calculation():
+    col_img_NIH3T3 = imread_collection(str(pl.Path('../Data/NIH3T3/img/*.png')))
+    col_gt_NIH3T3 = imread_collection(str(pl.Path('../Data/NIH3T3/gt/*.png')))
+    for filter_size in range(11, 50, 10):
+        for sigma in range(1, 50, 10):
+            sigma = sigma / 5
+            print(filter_size, sigma)
+            gauss_scores = af.gauss_function_application(col_img_NIH3T3, col_gt_NIH3T3,
+                                                         intensity_lvls=256,
+                                                         mode="two_level",
+                                                         filter_size=filter_size,
+                                                         sigma=sigma)
+            print("gauss")
 
-def recalculation_desired(recalculate_data = False, path_to_data = "Results/values.json"):
+            # gauss_hs_scores = af.gauss_histogram_stretching_function_application(col_img_NIH3T3, col_gt_NIH3T3,
+            #                                                                            intensity_lvls=256,
+            #                                                                            mode="two_level",
+            #                                                                            filter_size=filter_size,
+            #                                                                            sigma=sigma)
+            # print("gauss and hs")
+            af.write_in_json(str(pl.Path("two_lvl.json")),
+                             ["Gaussian filter"],
+                             (str(filter_size) + ", " + str(sigma)),
+                             [gauss_scores])
+
+
+def recalculation_desired_one_lvl(recalculate_one_level = False, path_to_data = "Results/values.json"):
     '''
     If recalculation of the data in the respective json files is desired, the parameter recalculate_data can be set to True.
 
@@ -158,7 +183,7 @@ def recalculation_desired(recalculate_data = False, path_to_data = "Results/valu
     :param path_to_data: Path to the json file
     :return: -
     '''
-    recalculate_one_level = False
+    # recalculate_one_level = False
 
     result_json_path_one_level = pl.Path(path_to_data)
     if recalculate_one_level or not result_json_path_one_level.exists():
@@ -173,6 +198,32 @@ def recalculation_desired(recalculate_data = False, path_to_data = "Results/valu
     if return_data:
         return all_scores
 
+def recalculation_desired_two_lvl(recalculate_two_level = False, path_to_data = "Results/two_lvl.json"):
+    '''
+    If recalculation of the data in the respective json files is desired, the parameter recalculate_data can be set to True.
+
+    :param recalculate_data: True if data is wanted to be recalculated
+    :param path_to_data: Path to the json file
+    :return: -
+    '''
+    # recalculate_one_level = False
+
+    result_json_path_two_level = pl.Path(path_to_data)
+    if recalculate_two_level or not result_json_path_two_level.exists():
+        data = two_level_complete_calculation()
+        with open(result_json_path_two_level) as file:
+            file.write(data)
+    else:
+        with open(str(result_json_path_two_level), "r") as file:
+            data = json.load(file)
+    return data
+
+    if return_data:
+        return scores
+
+
 if __name__ == '__main__':
     result_evaluation('../Results/values.json', dataset_names=["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
-    recalculation_desired(recalculate_data=False, path_to_data='../Results/values.json')
+    x = recalculation_desired_one_lvl(recalculate_one_level=False, path_to_data='../Results/values.json')
+    y = recalculation_desired_two_lvl(recalculate_two_level=False, path_to_data= '../Results/two_lvl.json')
+    print(y)
