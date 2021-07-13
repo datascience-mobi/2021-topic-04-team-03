@@ -6,7 +6,7 @@ import seaborn as sns
 
 
 def border_image(image, border_pixels, width=5):
-    '''
+    """
     This Function takes a binary image and a list with the position of the border pixels of the image
     and plots an image with cell borders of custom width.
     To recieve the border pixels use 'find_border' in metrics
@@ -15,7 +15,7 @@ def border_image(image, border_pixels, width=5):
     :param border_pixels: List of border pixels of input image
     :param width: border width
     :return:Plots the image with cell borders
-    '''
+    """
 
     fig, ax = plt.subplots()
 
@@ -30,19 +30,20 @@ def border_image(image, border_pixels, width=5):
 
 def overlay(test_image, ground_truth,
             title='Overlay of ground truth and test image',
-            plot = True):
-    '''
+            plot=True):
+    """
     This function plots overlay of ground truth and a test image.
     False negatives are shown in red, while false positives in blue.
 
+    :param plot: if False it will return the figure instead of plotting
     :param test_image: Image to be compared with ground truth
     :param ground_truth: Ground truth image
     :param title: Title of the plot
     :return: None
-    '''
+    """
 
     ground_truth_corrected = np.zeros(ground_truth.shape)
-    ground_truth_corrected[ground_truth>0] = 1
+    ground_truth_corrected[ground_truth > 0] = 1
 
     false_pixels = np.ma.masked_where(ground_truth_corrected == test_image, test_image)
     false_negatives = np.ma.masked_where(ground_truth_corrected == 0, false_pixels)
@@ -75,14 +76,15 @@ def overlay(test_image, ground_truth,
 
 def comparison_swarmplot(scores,
                          x_label=['No preprocessing', 'Median filter', 'Gaussian filter',
-                                'Histogram stretching', 'Median filter and\nhistogram stretching',
-                                'Gauss filter and\nhistogram stretching'],
+                                  'Histogram stretching', 'Median filter and\nhistogram stretching',
+                                  'Gauss filter and\nhistogram stretching'],
                          y_label='Dice Score',
-                         plot = True):
+                         plot=True):
     """
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
 
+    :param plot: if False it will return the figure instead of plotting
     :param scores: List in which every element is a list with scores for the image
     :param x_label: List of preprocessing methods (same order as in scores)
     :param y_label: Description pof the y axis
@@ -167,7 +169,7 @@ def comparison_boxplot(scores,
 def comparison_plot(image1, image2, image3, image4,
                     title1, title2, title3, title4,
                     figure_title):
-    '''
+    """
     Neat plot of four images + title
 
     :param image1: Image 1
@@ -180,7 +182,7 @@ def comparison_plot(image1, image2, image3, image4,
     :param title4: Title 4
     :param figure_title: Heading
     :return: Neat plot of the four images
-    '''
+    """
 
     fig, ax = plt.subplots(2, 2)
     fig.suptitle(figure_title)
@@ -210,6 +212,7 @@ def two_img_plot(image1, image2, title1, title2):
     plt.tight_layout()
     fig.show()
 
+
 def three_img_plot(image1, image2, image3, title1, title2, title3):
     fig, ax = plt.subplots(1, 3)
     ax[0].imshow(image1, 'gray')
@@ -235,4 +238,3 @@ if __name__ == '__main__':
     gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\47.png')))
 
     overlay(our_img, gt)
-

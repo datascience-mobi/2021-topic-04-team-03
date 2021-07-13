@@ -31,7 +31,7 @@ def histogram_stretching(img, intensity_lvls=256, quantile=2):
     return stretched_image
 
 
-def gaussian_kernel(length = 5, sigma = 1):
+def gaussian_kernel(length=5, sigma=1):
     """
     The function returns a square shaped gaussian filter mask of desired size and standard deviation.
     Only odd values for the filter size are possible.
@@ -43,12 +43,12 @@ def gaussian_kernel(length = 5, sigma = 1):
     if length % 2 == 0:
         raise Exception('Only odd numbers!')
 
-    border_width = length//2
-    kernel_1D = np.linspace(-border_width, border_width, length)
-    xx, yy = np.meshgrid(kernel_1D, kernel_1D)
-    kernel_2D = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
+    border_width = length // 2
+    kernel_1d = np.linspace(-border_width, border_width, length)
+    xx, yy = np.meshgrid(kernel_1d, kernel_1d)
+    kernel_2d = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
 
-    kernel_normalized = kernel_2D/np.sum(kernel_2D)
+    kernel_normalized = kernel_2d / np.sum(kernel_2d)
 
     return kernel_normalized
 
@@ -65,7 +65,7 @@ def convolution(image, kernel):
 
     kernel = np.fliplr(np.flipud(kernel))
 
-    border_width = np.shape(kernel)[0]//2
+    border_width = np.shape(kernel)[0] // 2
 
     padded_picture = np.pad(image, (border_width, border_width), 'reflect')
 
@@ -73,25 +73,28 @@ def convolution(image, kernel):
 
     for p in np.ndindex(padded_picture.shape):
 
-        if p[0] >= border_width and p[0] < padded_picture.shape[0] - border_width and p[1] >= border_width and p[1] < padded_picture.shape[1] - border_width:
-            neighborhood = padded_picture[p[0] - border_width:p[0] + border_width + 1, p[1] - border_width:p[1] + border_width + 1]
+        if p[0] >= border_width and p[0] < padded_picture.shape[0] - border_width \
+                and p[1] >= border_width and p[1] < padded_picture.shape[1] - border_width:
+            neighborhood = padded_picture[p[0] - border_width:p[0] + border_width + 1,
+                           p[1] - border_width:p[1] + border_width + 1]
             neighborhood_array = neighborhood * kernel
             filtered_image[p] = int(math.floor(np.sum(neighborhood_array)))
 
-    final_image = filtered_image[border_width:filtered_image.shape[0] - border_width, border_width:filtered_image.shape[1] - border_width]
+    final_image = filtered_image[border_width:filtered_image.shape[0] - border_width,
+                  border_width:filtered_image.shape[1] - border_width]
 
     return final_image
 
 
 def median_filter(img, filter_size=5):
-    '''
+    """
     This function applies median filter to a given image.
     To calculate the values for border pixels, the image array is extended by reflecting the values.
 
     :param img: Input image
     :param filter_size: The length of the square filter mask
     :return: Filtered image
-    '''
+    """
 
     workimg = img.copy()
     workimg = np.pad(workimg, pad_width=filter_size // 2, mode='reflect')
@@ -102,54 +105,14 @@ def median_filter(img, filter_size=5):
     return workimg
 
 
-
 def binarize(img):
-    '''
+    """
     Transforms non-binary images to binary by setting values above 0 to 1.
 
     :param img: Image to be transformed
     :return: Transformed image
-    '''
+    """
 
     workimg = img.copy()
-    workimg [img > 0] = 1
+    workimg[img > 0] = 1
     return workimg
-
-if __name__ == '__main__':
-    from skimage.io import imread
-    png = imread(r'..\Data\NIH3T3\im\dna-0.png')
-    image_test_tif = imread(r'..\Data\N2DH-GOWT1\img\t01.tif')
-
-    stretchy = histogram_stretching(image_test_tif, 256)
-
-    plt.imshow(image_test_tif, 'gray')
-    plt.show()
-
-    plt.imshow(stretchy, 'gray')
-    plt.show()
-
-    import matplotlib.pyplot as plt
-
-    from skimage.io import imread
-
-
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from skimage.io import imread
-    import pathlib as pl
-
-    x = gaussian_kernel(21,10)
-    png = imread(str(pl.Path(r'..\Data\NIH3T3\img\dna-26.png')))
-    conv = convolution(png,x)
-
-    plt.imshow(conv)
-    plt.show()
-
-
-    print(conv.shape)
-    print(png.shape)
-
-    #Testing median filter
-    #from scipy import ndimage
-    #ref_median = ndimage.median_filter(png, size = 3, mode = 'mirror')
-    #test_median = median_filter(png, 3)

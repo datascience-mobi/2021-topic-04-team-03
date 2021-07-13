@@ -1,5 +1,4 @@
 import numpy as np
-from contextlib import suppress
 
 
 def otsu(image, intensity_lvls=256):
@@ -97,12 +96,13 @@ def clipping(img, threshold):
 
 
 def complete_segmentation(img, intensity_lvls=256):
-    '''
+    """
     Performs complete image segmentation using Otsu threshold.
 
+    :param intensity_lvls: Number of intensity values
     :param img: Image to be segmented
     :return: Segmented binary image
-    '''
+    """
     threshold = otsu(img, intensity_lvls)
     workimg = clipping(img, threshold)
 
@@ -110,15 +110,15 @@ def complete_segmentation(img, intensity_lvls=256):
 
 
 def clipping_twolevel(img, thresholds):
-    '''
+    """
     This function corrects bright reflections on image by setting pixels
     with intensity above the higher threshold black. Thresholds can be obtained
-    by two-level Otsu algorithm.
+    by two-level Otsu's algorithm.
 
     :param img: Image to be processed
     :param thresholds: List/array containing two thresholds
     :return: Corrected image
-    '''
+    """
 
     workimg = np.zeros(img.shape)
     threshold_1 = min(thresholds)
@@ -131,14 +131,14 @@ def clipping_twolevel(img, thresholds):
 
 
 def complete_segmentation_twolevel(img, intensity_lvls=256):
-    '''
+    """
     Performs complete image segmentation using Two-Level Otsu thresholding.
     The purpose is to eliminate reflections.
 
     :param img: Image (with reflections)
     :param intensity_lvls: Total number of intensity levels
     :return: Segmented binary image
-    '''
+    """
 
     thresholds = otsu_twolevel(img, intensity_lvls=intensity_lvls)
     segmented_img = clipping_twolevel(img, thresholds)
@@ -163,74 +163,3 @@ def intensity_value(path_to_image_collection):
         raise Exception('Not a tif or png!')
 
     return intensity
-
-
-def alternative_reflection_otsu(img, intensity_lvls=256):
-    '''
-    This is alternative for handling reflections in the images.
-    It first calculates two thresholds with two-level Otsu.
-    Than the values below the lower and above the higher threshold
-    are set to the value of the lower threshold.
-    The image is than stretched. A new threshold is calculated with one-level Otsu.
-    The image is clipped with the new threshold.
-
-    :param img: Input image
-    :return: Segmented image
-    '''
-    two_lvl_thresholds = otsu_twolevel(img)
-    threshold1, threshold2 = min(two_lvl_thresholds), max(two_lvl_thresholds)
-
-    workimg = img.copy()
-    workimg[workimg < threshold1] = threshold1
-    workimg[workimg > threshold2] = threshold1
-
-    min_intensity_output = 0
-    max_intensity_output = intensity_lvls
-    min_intensity_input = int(np.min(workimg))
-    max_intensity_input = int(np.max(workimg))
-
-    stretched_image = (workimg - min_intensity_input) * (max_intensity_output - min_intensity_output) / \
-                      (max_intensity_input - min_intensity_input)
-
-    one_lvl_threshold = otsu(stretched_image)
-    img_clipped = clipping(stretched_image, one_lvl_threshold)
-
-    return img_clipped
-
-
-# Just for testing. Delete later #
-if __name__ == '__main__':
-    from skimage.io import imread
-    from skimage.io import imshow
-    from matplotlib import pyplot as plt
-    import pathlib
-
-    image_test = imread(pathlib.Path(r'..\Data\NIH3T3\img\dna-27.png'))
-
-    seg_img = complete_segmentation(image_test)
-    plt.imshow(seg_img)
-    plt.show()
-    # threshold = otsu(image_test)
-    # clipped_img = clipping(image_test, threshold)
-    # print(threshold)
-    #
-    #
-    # plt.imshow(clipped_img, 'gray')
-    # plt.show()
-    # plt.imshow(image_test, 'gray')
-    # plt.show()
-    #
-    #
-    # # Testing whether the output is the same as in the skimage function
-    # from skimage.filters import threshold_otsu
-    #
-    # t_skimage = threshold_otsu(image_test)
-    #
-    # print(threshold, t_skimage)
-    #
-    # # Testing whether twolevel_otsu is the same as the skimage funktion
-    # from skimage.filters import threshold_multiotsu
-    #
-    # t_twolevel_skimage = otsu_twolevel(image_test)
-    #
-    # print(t_twolevel_skimage)
