@@ -251,6 +251,26 @@ def recalculation_desired_two_lvl(recalculate_two_level=False, path_to_data="Res
         data = json.load(file)
     return data
 
+def get_one_lvl_dice_scores(data_one_level, dataset = 'NIH3T3'):
+    dice_scores = []
+    for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
+                   "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
+        dice_scores.append(data_one_level[method][dataset]["Dice Score"])
+    return dice_scores
+
+def get_one_lvl_msd(data_one_level, dataset = 'NIH3T3'):
+    dice_scores = []
+    for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
+                   "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
+        dice_scores.append(data_one_level[method][dataset]["MSD"])
+    return dice_scores
+
+def get_one_lvl_hd(data_one_level, dataset = 'NIH3T3'):
+    dice_scores = []
+    for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
+                   "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
+        dice_scores.append(data_one_level[method][dataset]["Hausdorff"])
+    return dice_scores
 
 if __name__ == '__main__':
     result_evaluation('../Results/values.json', dataset_names=["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
