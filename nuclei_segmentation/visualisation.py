@@ -3,7 +3,7 @@ from matplotlib import colors
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
+from nuclei_segmentation import complete_analysis
 
 def border_image(image, border_pixels, width=5):
     """
@@ -79,7 +79,8 @@ def comparison_swarmplot(scores,
                                   'Histogram stretching', 'Median filter and\nhistogram stretching',
                                   'Gauss filter and\nhistogram stretching'],
                          y_label='Dice Score',
-                         plot=True):
+                         plot=True,
+                         scale_axis = 0):
     """
     Plots a swarmplot, that shows evaluation scores for single images
     sorted by preprocessing methods. It also draws a line through the mean value.
@@ -96,7 +97,7 @@ def comparison_swarmplot(scores,
     fig, ax = plt.subplots()
     ax = sns.swarmplot(data=dataframe,
                        size=7,
-                       palette='PuRd')
+                       palette='Set2')
     ax = sns.boxplot(showmeans=True,
                      meanline=True,
                      meanprops={'color': 'k', 'ls': '-', 'lw': 1, 'label': 'Mean'},
@@ -118,6 +119,8 @@ def comparison_swarmplot(scores,
                        rotation=30,
                        horizontalalignment='right')
     fig.tight_layout()
+    if scale_axis==1:
+        ax.set_ylim([0,1.1])
     if plot:
         fig.show()
     else:
@@ -129,7 +132,7 @@ def comparison_boxplot(scores,
                                 'Histogram stretching', 'Median filter and\nhistogram stretching',
                                 'Gauss filter and\nhistogram stretching'],
                        y_label='Dice Score',
-                       plot=True):
+                       plot=True, scale_axis = 0):
     """
     Plots a boxplot, that shows evaluation scores for single images
     sorted by preprocessing methods.
@@ -146,7 +149,7 @@ def comparison_boxplot(scores,
     ax = sns.boxplot(data=dataframe,
                      showmeans=True,
                      meanline=True,
-                     palette='PuRd',
+                     palette='Set2',
                      meanprops={'visible': True, 'color': 'k', 'ls': '-', 'lw': 1, 'label': 'Mean'},
                      medianprops={'visible': True, 'color': 'lightslategray', 'linestyle': '--', 'label': 'Median'},
                      )
@@ -159,6 +162,8 @@ def comparison_boxplot(scores,
     ax.set_xticklabels(ax.get_xticklabels(),
                        rotation=30,
                        horizontalalignment='right')
+    if scale_axis==1:
+        ax.set_ylim([0,1])
     fig.tight_layout()
     if plot:
         fig.show()
@@ -237,4 +242,8 @@ if __name__ == '__main__':
     our_img = otsu.complete_segmentation(img)
     gt = imread(str(pl.Path(r'..\Data\NIH3T3\gt\47.png')))
 
-    overlay(our_img, gt)
+    data_one_level = complete_analysis.recalculation_desired_one_lvl(recalculate_one_level=False,
+                                                                     path_to_data=str(pl.Path(r'..\Results\values.json')))
+
+    comparison_boxplot(complete_analysis.get_one_lvl_dice_scores(data_one_level, dataset="N2DH-GOWT1"),
+                                       y_label="Hausdorff", scale_axis=1)
