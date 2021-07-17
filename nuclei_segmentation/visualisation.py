@@ -206,7 +206,7 @@ def comparison_plot(image1, image2, image3, image4,
     fig.show()
 
 
-def two_img_plot(image1, image2, title1, title2):
+def two_img_plot(image1, image2, title1, title2, plot=True):
     fig, ax = plt.subplots(1, 2)
     ax[0].imshow(image1, 'gray')
     ax[0].set_title(title1, pad=20, loc="left")
@@ -215,7 +215,10 @@ def two_img_plot(image1, image2, title1, title2):
     ax[0].set_axis_off()
     ax[1].set_axis_off()
     plt.tight_layout()
-    fig.show()
+    if plot:
+        fig.show()
+    else:
+        return fig
 
 
 def three_img_plot(image1, image2, image3, title1, title2, title3):
