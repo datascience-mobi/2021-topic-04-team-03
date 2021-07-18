@@ -2,10 +2,10 @@
 
 Supervisors:
 
-*PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)
-*Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)
-*Carola Krug (carola.krug@bioquant.uni-heidelberg.de)
-*Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)
+-PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)/
+-Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)/
+-Carola Krug (carola.krug@bioquant.uni-heidelberg.de)/
+-Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)/
 
 # Overview
 Thresholding is a useful method that is frequently used in the context of
