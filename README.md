@@ -1,4 +1,5 @@
 # Implementation and evaluation of Otsu’s thresholding
+Elizaveta Chernova, Veronika Schuler, Laura Wächter, Hannah WInter
 
 Supervisors:
 
