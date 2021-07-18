@@ -1,16 +1,24 @@
 # Implementation and evaluation of Otsu’s thresholding
+Elizaveta Chernova, Veronika Schuler, Laura Wächter, Hannah WInter
 
-Supervisor:
+Supervisors:
 
-* PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)
-* Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)
-* Roman Spilger (roman.spilger@bioquant.uni-heidelberg.de)
-* Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)
-* Svenja Reith (svenja.reith@bioquant.uni-heidelberg.de)
-* Qi Gao (qi.gao@bioquant.uni-heidelberg.de)
+- PD Dr. Karl Rohr (k.rohr@uni-heidelberg.de)
+- Christian Ritter (christian.ritter@bioquant.uni-heidelberg.de)
+- Carola Krug (carola.krug@bioquant.uni-heidelberg.de)
+- Leonid Kostrykin (leonid.kostrykin@bioquant.uni-heidelberg.de)
 
-# Introduction
-Our project, "Otsu's Thresholding" is a useful method for detecting the ideal threshold of an image. It is therefore used frequently in image segmentation for biological and medical purposes. Here we are going to use the implementation of this algorithm for segmentation of cell nuclei from three different datasets. For pre-processing the images, we implemented histogram stretching for images with low resolution, a gaussian filter, and a median filter as well as two-level Otsu thresholding for excluding reflections in some images. The implemented Otsu algorithm used on the pre-processed images was then evaluated with the Dice score, the median surface distance function and the Hausdorff metric.
+# Overview
+Thresholding is a useful method that is frequently used in the context of
+image segmentation.
+In this project, we used Otsu's thresholding algorithm in order to find the optimal threshold value,
+that optimizes the image segmentation.
+The algorithm was applied to a number of images from different datasets (N2DH-GOWT1, N2DL-HeLa, NIH3T3).
+To improve the results, several preprocessing methods (mainly filters) were used.
+The final segmentations were compared to reference images and evaluated with several methods (Dice Score, MSD, Hausdorff Distance).
+The different datasets are characterized by different features, like reflections or low contrast.
+For this reason, it is likely that different preprocessing methods will lead to the optimal result.
+Our overall analysis confirmed this hypothesis.
 
 # Description of datasets
 
@@ -35,18 +43,13 @@ a threshold between the brightness of the cells and the background and not betwe
 and the cells.
 
 # Packages 
-The most important packages that defintely need to be installed are skimage, pathlib and numpy. 
-
-There are several folders to arrange the project clearly: 
-
-1. .ipynb_checkpoints
-2. Data
-3. histograms
-4. Meetings
-5. nuclei segmentation 
-6. proposals
-7. Results
-8. Tests_and_incompletes
+1. all_functions.py
+2. complete_analysis.py
+3. evaluation.py
+4. metrics.py
+5. otsu.py
+6. preprocessing.py
+7. visualisation.py
 
 
 
