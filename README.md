@@ -1,5 +1,5 @@
 # Implementation and evaluation of Otsu’s thresholding
-Elizaveta Chernova, Veronika Schuler, Laura Wächter, Hannah WInter
+Elizaveta Chernova, Veronika Schuler, Laura Wächter, Hannah Winter
 
 Supervisors:
 
@@ -11,7 +11,7 @@ Supervisors:
 # Overview
 Thresholding is a useful method that is frequently used in the context of image segmentation. In this project, we used Otsu's thresholding algorithm in order to find the optimal threshold value, that optimizes image segmentation. The algorithm was applied to a number of images from different datasets (N2DH-GOWT1, N2DL-HeLa, NIH3T3). In order to improve the results, several preprocessing methods (mainly filters) were used. The final segmentations were compared to reference images and evaluated with several methods (Dice Score, MSD, Hausdorff Distance). The different datasets are characterized by different features, like reflections or low contrast. For this reason, we hypothesized that for the seperate datasets different preprocessing methods would lead to the optimal segmentation result. This was confirmed by our overall analysis. In addition, a cell nuclei counting algorithm was developed.
 
-# Description of datasets
+# Description of the datasets
 
 **N2DH-GOWT1 cells**
 
