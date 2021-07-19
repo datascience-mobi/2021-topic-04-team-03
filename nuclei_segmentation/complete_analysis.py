@@ -251,29 +251,68 @@ def recalculation_desired_two_lvl(recalculate_two_level=False, path_to_data="Res
         data = json.load(file)
     return data
 
-def get_one_lvl_dice_scores(data_one_level, dataset = 'NIH3T3'):
+
+def get_one_lvl_dice_scores(data_one_level, dataset='NIH3T3'):
     dice_scores = []
     for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
                    "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
         dice_scores.append(data_one_level[method][dataset]["Dice Score"])
     return dice_scores
 
-def get_one_lvl_msd(data_one_level, dataset = 'NIH3T3'):
+
+def get_one_lvl_msd(data_one_level, dataset='NIH3T3'):
     dice_scores = []
     for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
                    "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
         dice_scores.append(data_one_level[method][dataset]["MSD"])
     return dice_scores
 
-def get_one_lvl_hd(data_one_level, dataset = 'NIH3T3'):
+
+def get_one_lvl_hd(data_one_level, dataset='NIH3T3'):
     dice_scores = []
     for method in ["No preprocessing", "Median filter", "Gaussian filter", "Histogram stretching",
                    "Median filter and histogram stretching", "Gauss filter and histogram stretching"]:
         dice_scores.append(data_one_level[method][dataset]["Hausdorff"])
     return dice_scores
 
-if __name__ == '__main__':
-    result_evaluation('../Results/values.json', dataset_names=["N2DH-GOWT1", "N2DL-HeLa", "NIH3T3"])
-    x = recalculation_desired_one_lvl(recalculate_one_level=False, path_to_data='../Results/values.json')
-    y = recalculation_desired_two_lvl(recalculate_two_level=False, path_to_data='../Results/two_lvl.json')
-    print(y)
+
+def recalculation_desired_cell_counting(recalculate=False,
+                                        result_json_path=str(pl.Path("Results/cell_counting_results.json"))):
+    """
+    If recalculation of the data in the respective json files is desired, the parameter recalculate_data can be set to
+    True.
+
+    :param recalculate_two_level: True if data is wanted to be recalculated
+    :param result_json_path: Path to the json file
+    :return: None
+    """
+
+    if recalculate:
+        col_gt_img_GOWT1 = imread_collection(str(pl.Path('../Data/N2DH-GOWT1/gt/*.tif')))
+        col_gt_img_HeLa = imread_collection(str(pl.Path('../Data/N2DL-HeLa/gt/*.tif')))
+
+        calculated_number_GOWT1, gt_number_GOWT1, absolute_differences_GOWT1_gt, relative_differences_GOWT1_gt = all_functions.cell_counting_analysis(
+            col_gt_img_GOWT1)
+        calculated_number_HeLa, gt_number_HeLa, absolute_differences_HeLa_gt, relative_differences_HeLa_gt = all_functions.cell_counting_analysis(
+            col_gt_img_HeLa)
+
+        json_object = {
+            "N2DH-GOWT1": {
+                "Calculated number": calculated_number_GOWT1,
+                "Ground truth number": gt_number_GOWT1,
+                "Absolute difference": absolute_differences_GOWT1_gt,
+                "Relative difference": relative_differences_GOWT1_gt
+            },
+            "N2DL-HeLa": {
+                "Calculated number": calculated_number_HeLa,
+                "Ground truth number": gt_number_HeLa,
+                "Absolute difference": absolute_differences_HeLa_gt,
+                "Relative difference": relative_differences_HeLa_gt
+            }
+        }
+        with open(result_json_path, 'w') as json_file:
+            json.dump(json_object, json_file, indent=3)
+
+    with open(str(result_json_path), "r") as file:
+        data = json.load(file)
+    return data

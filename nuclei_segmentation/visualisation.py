@@ -221,7 +221,7 @@ def two_img_plot(image1, image2, title1, title2, plot=True):
         return fig
 
 
-def three_img_plot(image1, image2, image3, title1, title2, title3):
+def three_img_plot(image1, image2, image3, title1, title2, title3, plot=True):
     fig, ax = plt.subplots(1, 3)
     ax[0].imshow(image1, 'gray')
     ax[0].set_title(title1, pad=20, loc="left")
@@ -233,7 +233,11 @@ def three_img_plot(image1, image2, image3, title1, title2, title3):
     ax[1].set_axis_off()
     ax[2].set_axis_off()
     plt.tight_layout()
-    fig.show()
+    if plot:
+        fig.show()
+    else:
+        return fig
+
 
 
 if __name__ == '__main__':

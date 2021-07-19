@@ -2,3 +2,4 @@ from nuclei_segmentation import complete_analysis
 
 complete_analysis.one_level_complete_calculation()
 complete_analysis.two_level_complete_calculation()
+complete_analysis.recalculation_desired_cell_counting(recalculate=True)
